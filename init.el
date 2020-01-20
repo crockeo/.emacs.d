@@ -18,15 +18,41 @@
 
 ;;;;;;;;;;;;;;;;;;
 ;; Package List ;;
-(use-package evil :ensure t) ; Provides a vim-like interface
-(use-package evil-nerd-commenter :ensure t) ; Provides NerdCommenter support for Emacs
-(use-package helm :ensure t) ; Provides Ctrl-P like interface
-(use-package monokai-theme :ensure t) ; Provides the monokai theme (from TextMate)
+
+;; Provides vim-like experience
+(use-package evil
+  :ensure t)
+
+;; Adds multi-line commenting
+(use-package evil-nerd-commenter
+  :ensure t) ; Provides NerdCommenter support for Emacs
+
+;; Allows for fuzzy search
+(use-package helm
+  :ensure t)
+
+;; Speeds up helm
+(use-package helm-ag
+  :after helm
+  :ensure t)
+
+;; Makes helm + projectile play nice
+(use-package helm-projectile
+  :after helm projectile
+  :ensure t)
+
+;; Makes emacs pretty
+(use-package monokai-theme
+  :ensure t)
+
+;; Allows for Ctrl-P like searching in projects
+(use-package projectile
+  :ensure t)
 
 ;; Language-specific packages
 (use-package markdown-mode :ensure t) ; Markdown
 (use-package lean-mode :ensure t) ; Lean
-;; TODO: Find and install language-specific packages
+(use-package python-mode :ensure t) ; Python
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Loading Configurations ;;
@@ -34,7 +60,8 @@
 
 (load-library "evil") ; evil-mode config
 (load-library "helm") ; helm-mode config
-(load-library "hotkeys") ; Hotkeys used across emacs
+(load-library "hotkeys") ; Hotkeys used across emacsa
+(load-library "projectile") ; projectile-mode config
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Misc Configurations ;;
@@ -62,7 +89,7 @@
  ;; If there is more than one, they won't work right.
  '(package-selected-packages
    (quote
-    (evil-nerd-commenter lean-mode markdown-mode use-package helm evil-visual-mark-mode))))
+    (projectile evil-nerd-commenter lean-mode markdown-mode use-package helm evil-visual-mark-mode))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.

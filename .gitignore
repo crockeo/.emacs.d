@@ -3,3 +3,6 @@ elpa/
 
 # Ignoring backup files
 backup/
+
+# Ignore projectile bookmarks
+projectile-bookmarks.eld
