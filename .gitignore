@@ -1,0 +1,5 @@
+# Ignoring packages
+elpa/
+
+# Ignoring backup files
+backup/
