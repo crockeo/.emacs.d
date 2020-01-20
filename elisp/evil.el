@@ -1,8 +1,11 @@
-; Escaping from INSERT mode more easily
+;; Enabling evil-mode by default
+(evil-mode)
+
+;; Escaping from INSERT mode more easily
 (evil-define-key nil evil-insert-state-map
   "\C-f" 'evil-normal-state)
 
-; Moving to the beginning / end of a line.
+;; Moving to the beginning / end of a line.
 (defun get-line ()
   (buffer-substring
    (line-beginning-position)
@@ -22,3 +25,6 @@
 (evil-define-key nil evil-normal-state-map
   "\C-a" 'evil-beginning-of-line
   "\C-e" 'evil-end-of-line)
+
+;; NerdCommenter
+(global-set-key (kbd "C-c C-c") 'evilnc-comment-or-uncomment-lines)
