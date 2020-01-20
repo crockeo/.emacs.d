@@ -2,4 +2,4 @@
 (projectile-mode)
 
 ;; Enabling fuzzy search
-(global-set-key (kbd "C-c p") 'projectile-find-file)
+(global-set-key (kbd "C-c C-f") 'projectile-find-file)
