@@ -23,6 +23,7 @@
 (use-package monokai-theme :ensure t) ; Provides the monokai theme (from TextMate)
 
 ; Language-specific packages
+(use-package markdown-mode :ensure t) ; Markdown
 ; TODO: Find and install language-specific packages
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -60,7 +61,9 @@
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- '(package-selected-packages (quote (use-package helm evil-visual-mark-mode))))
+ '(package-selected-packages
+   (quote
+    (markdown-mode use-package helm evil-visual-mark-mode))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
