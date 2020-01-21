@@ -1,6 +1,3 @@
-;; Enabling evil-mode by default
-(evil-mode)
-
 ;; Escaping from INSERT mode more easily
 (evil-define-key nil evil-insert-state-map
   "\C-f" 'evil-normal-state)

@@ -21,15 +21,22 @@
 
 ;; Provides vim-like experience
 (use-package evil
-  :ensure t)
+  :ensure t
+  :init (evil-mode))
 
 ;; Adds multi-line commenting
 (use-package evil-nerd-commenter
-  :ensure t) ; Provides NerdCommenter support for Emacs
+  :ensure t)
+
+;; Adds live syntax checking
+(use-package flycheck
+  :ensure t
+  :init (global-flycheck-mode))
 
 ;; Allows for fuzzy search
 (use-package helm
-  :ensure t)
+  :ensure t
+  :init (helm-mode))
 
 ;; Speeds up helm
 (use-package helm-ag
@@ -47,7 +54,8 @@
 
 ;; Allows for Ctrl-P like searching in projects
 (use-package projectile
-  :ensure t)
+  :ensure t
+  :init (projectile-mode))
 
 ;; Language-specific packages
 (use-package markdown-mode :ensure t) ; Markdown
@@ -89,7 +97,7 @@
  ;; If there is more than one, they won't work right.
  '(package-selected-packages
    (quote
-    (projectile evil-nerd-commenter lean-mode markdown-mode use-package helm evil-visual-mark-mode))))
+    (flychecker projectile evil-nerd-commenter lean-mode markdown-mode use-package helm evil-visual-mark-mode))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
