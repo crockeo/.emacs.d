@@ -19,6 +19,11 @@
 ;;;;;;;;;;;;;;;;;;
 ;; Package List ;;
 
+;; Provides autocomplete
+(use-package company
+  :ensure t
+  :init (global-company-mode))
+
 ;; Provides vim-like experience
 (use-package evil
   :ensure t
@@ -31,7 +36,9 @@
 ;; Adds live syntax checking
 (use-package flycheck
   :ensure t
-  :init (global-flycheck-mode))
+  :init
+  (setq-default flycheck-disabled-checkers '(emacs-lisp-checkdoc))
+  (global-flycheck-mode))
 
 ;; Allows for fuzzy search
 (use-package helm
@@ -57,19 +64,40 @@
   :ensure t
   :init (projectile-mode))
 
-;; Language-specific packages
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Language-Specific Configuration ;;
+
 (use-package markdown-mode :ensure t) ; Markdown
-(use-package lean-mode :ensure t) ; Lean
-(use-package python-mode :ensure t) ; Python
+
+;; Lean
+(use-package lean-mode
+  :ensure t)
+
+(use-package company-lean
+  :after company lean-mode
+  :ensure t)
+
+;; Python
+(use-package python-mode
+  :ensure t)
+
+(use-package jedi-core
+  :ensure t)
+
+(use-package company-jedi
+  :after company jedi-core
+  :ensure t)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Loading Configurations ;;
 (add-to-list 'load-path "~/.emacs.d/elisp/")
 
-(load-library "evil") ; evil-mode config
-(load-library "helm") ; helm-mode config
-(load-library "hotkeys") ; Hotkeys used across emacsa
-(load-library "projectile") ; projectile-mode config
+(load-library "evil")
+(load-library "helm")
+(load-library "hotkeys")
+(load-library "lean")
+(load-library "projectile")
+(load-library "python")
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Misc Configurations ;;
@@ -87,6 +115,9 @@
 ;; Setting tabs to spaces
 (setq-default indent-tabs-mode nil)
 
+;; Viewing (row,col) in while editing.
+(column-number-mode 1)
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Custom Configurations ;;
 
@@ -97,7 +128,7 @@
  ;; If there is more than one, they won't work right.
  '(package-selected-packages
    (quote
-    (flychecker projectile evil-nerd-commenter lean-mode markdown-mode use-package helm evil-visual-mark-mode))))
+    (company-lean company flychecker projectile evil-nerd-commenter lean-mode markdown-mode use-package helm evil-visual-mark-mode))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
