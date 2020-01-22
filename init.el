@@ -92,6 +92,7 @@
 ;; Loading Configurations ;;
 (add-to-list 'load-path "~/.emacs.d/elisp/")
 
+(load-library "company")
 (load-library "evil")
 (load-library "helm")
 (load-library "hotkeys")
