@@ -1,8 +1,5 @@
-# Ignoring packages
 elpa/
-
-# Ignoring backup files
 backup/
-
-# Ignore projectile bookmarks
 projectile-bookmarks.eld
+.python-environments/
+auto-save-list/

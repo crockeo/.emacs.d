@@ -81,11 +81,14 @@
 (use-package python-mode
   :ensure t)
 
-(use-package jedi-core
+(use-package blacken
   :ensure t)
 
 (use-package company-jedi
   :after company jedi-core
+  :ensure t)
+
+(use-package jedi-core
   :ensure t)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -118,6 +121,9 @@
 
 ;; Viewing (row,col) in while editing.
 (column-number-mode 1)
+
+;; Turning of Eldoc, because it spawns new buffers
+(global-eldoc-mode -1)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Custom Configurations ;;
