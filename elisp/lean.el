@@ -1,5 +1,6 @@
 ;; Opening the lean error and goal windows when we open a lean file.
 (defun open-lean-windows ()
+  (defvar original-buffer)
   (setq original-buffer (current-buffer))
   
   ;; Setting up our windows with those buffers live

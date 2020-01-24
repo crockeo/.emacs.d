@@ -66,6 +66,10 @@
 (use-package monokai-theme
   :ensure t)
 
+;; Back-end for making popup documentation
+(use-package pos-tip
+  :ensure t)
+
 ;; Allows for Ctrl-P like searching in projects
 (use-package projectile
   :ensure t
