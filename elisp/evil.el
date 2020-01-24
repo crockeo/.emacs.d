@@ -23,5 +23,9 @@
   "\C-a" 'evil-beginning-of-line
   "\C-e" 'evil-end-of-line)
 
+(evil-define-key nil evil-visual-state-map
+  "\C-a" 'evil-beginning-of-line
+  "\C-e" 'evil-end-of-line)
+
 ;; NerdCommenter
 (global-set-key (kbd "C-c C-c") 'evilnc-comment-or-uncomment-lines)
