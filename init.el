@@ -113,6 +113,7 @@
 (load-library "helm")
 (load-library "hotkeys")
 (load-library "lean")
+(load-library "pos-tip")
 (load-library "projectile")
 (load-library "python")
 

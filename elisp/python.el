@@ -2,16 +2,19 @@
 (require 'jedi-core)
 
 ;; Setting company-jedi with company-mode
-(defun add-company-jedi ()
-  (add-to-list 'company-backends 'company-jedi))
+(defun setup-python-mode ()
+  ;; Letting me use my comment command
+  (local-unset-key (kbd "C-c C-c"))
 
-(add-hook 'python-mode-hook 'add-company-jedi)
+  ;; Making jedi launch
+  (add-to-list 'company-backends 'company-jedi)
+  (jedi-mode)
 
-;; Making jedi try to autocomplete at the end of a dot.
-(setq jedi:complete-on-dot t)
-
-;; Auto-formatting with Black whenever we save.
-(defun register-hooks ()
+  ;; Formatting file with black on save
   (add-hook 'before-save-hook 'blacken-buffer))
 
-(add-hook 'python-mode-hook 'register-hooks)
+(add-hook 'python-mode-hook 'setup-python-mode)
+
+;; Fine-tuning jedi autocomplete
+(setq jedi:complete-on-dot t)
+(setq jedi:get-in-function-call-delay 250)
