@@ -27,9 +27,7 @@
 ;; Extends company to show function definitions.
 (use-package company-quickhelp
   :ensure t
-  :after company
-  :init (company-quickhelp-mode)
-  :config (setq company-quickhelp-delay 0))
+  :hook (company-mode . company-quickhelp-mode))
 
 ;; Provides
 (use-package dired-sidebar
@@ -47,9 +45,7 @@
 ;; Adds live syntax checking
 (use-package flycheck
   :ensure t
-  :init
-  (setq-default flycheck-disabled-checkers '(emacs-lisp-checkdoc))
-  (global-flycheck-mode))
+  :init (global-flycheck-mode))
 
 ;; Allows for fuzzy search
 (use-package helm
@@ -109,6 +105,7 @@
 (load-library "company")
 (load-library "dired-sidebar")
 (load-library "evil")
+(load-library "flycheck")
 (load-library "helm")
 (load-library "hotkeys")
 (load-library "lean")
