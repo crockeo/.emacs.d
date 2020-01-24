@@ -24,10 +24,16 @@
   :ensure t
   :init (global-company-mode))
 
+;; Extends company to show function definitions.
+(use-package company-quickhelp
+  :ensure t
+  :after company
+  :init (company-quickhelp-mode)
+  :config (setq company-quickhelp-delay 0))
+
 ;; Provides
 (use-package dired-sidebar
-  :ensure t
-  :commands (dired-sidebar-toggle-sidebar))
+  :ensure t)
 
 ;; Provides vim-like experience
 (use-package evil
@@ -101,6 +107,7 @@
 (add-to-list 'load-path "~/.emacs.d/elisp/")
 
 (load-library "company")
+(load-library "dired-sidebar")
 (load-library "evil")
 (load-library "helm")
 (load-library "hotkeys")
@@ -113,6 +120,10 @@
 
 ;; Moving all backups to a single directory
 (setq backup-directory-alist '(("" . "~/.emacs.d/backup")))
+
+;; Moving all autosaves to a single directory
+(setq auto-save-file-name-transforms
+      `((".*" "~/.emacs.d/backup/" t)))
 
 ;; Removing emacs menu bar / tool bar
 (tool-bar-mode -1)
@@ -140,7 +151,7 @@
  ;; If there is more than one, they won't work right.
  '(package-selected-packages
    (quote
-    (dired-sidebar company-lean company flychecker projectile evil-nerd-commenter lean-mode markdown-mode use-package helm evil-visual-mark-mode))))
+    (company-quickhelp dired-sidebar company-lean company flychecker projectile evil-nerd-commenter lean-mode markdown-mode use-package helm evil-visual-mark-mode))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
