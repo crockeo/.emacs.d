@@ -95,11 +95,7 @@
 (use-package blacken
   :ensure t)
 
-(use-package company-jedi
-  :after company jedi-core
-  :ensure t)
-
-(use-package jedi-core
+(use-package elpy
   :ensure t)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -111,11 +107,13 @@
 (load-library "evil")
 (load-library "flycheck")
 (load-library "helm")
-(load-library "hotkeys")
 (load-library "lean")
 (load-library "pos-tip")
-(load-library "projectile")
 (load-library "python")
+
+;; Defining and using a minor mode to override hotkeys.
+(load-library "crockeo-mode")
+(global-crockeo-mode 1)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Misc Configurations ;;
@@ -142,6 +140,9 @@
 
 ;; Turning of Eldoc, because it spawns new buffers
 (global-eldoc-mode -1)
+
+;; Turning off bell sound...because it sucks
+(setq ring-bell-function 'ignore)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Custom Configurations ;;

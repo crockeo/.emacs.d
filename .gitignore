@@ -1,5 +1,7 @@
-elpa/
-backup/
-projectile-bookmarks.eld
-.python-environments/
 auto-save-list/
+.python-environments/
+backup/
+elpa/
+elpy/
+projectile-bookmarks.eld
+url/
