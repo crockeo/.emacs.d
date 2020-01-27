@@ -26,8 +26,7 @@
   (add-to-list 'company-backends 'company-jedi)
 
   ;; Configuring black
-  (ensure-black)
-  (define-key python-mode-map (kbd "C-c C-s") 'blacken-buffer))
+  (ensure-black))
 
 (add-hook 'python-mode-hook 'setup-python-mode)
 

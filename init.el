@@ -1,7 +1,7 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Setting up Package Management ;;
 (require 'package)
- 
+
 (add-to-list 'package-archives '("org" . "http://orgmode.org/elpa/"))
 (add-to-list 'package-archives '("melpa" . "http://melpa.org/packages/"))
 (add-to-list 'package-archives '("melpa-stable" . "http://stable.melpa.org/packages/"))
@@ -127,6 +127,12 @@
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Misc Configurations ;;
+
+;; Indent when pressing return
+(global-set-key (kbd "RET") 'newline-and-indent)
+
+;; Remove trailing whitespace on save
+(add-hook 'before-save-hook 'delete-trailing-whitespace)
 
 ;; Moving all backups to a single directory
 (setq backup-directory-alist '(("" . "~/.emacs.d/backup")))
