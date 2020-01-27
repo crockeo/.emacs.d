@@ -1,5 +1,7 @@
 (require 'helm-projectile)
 
+(load-library "format")
+
 ;; Defining the crockeo-mode keymap.
 ;;
 ;; Divided up hotkeys into individual sections. Note that certain hotkeys, which
@@ -21,6 +23,7 @@
     ;; misc
     (define-key crockeo-mode-map (kbd "RET") 'newline-and-indent)
     (define-key crockeo-mode-map (kbd "C-c C-i") 'ibuffer)
+    (define-key crockeo-mode-map (kbd "C-c C-s") 'format-buffer)
 
     crockeo-mode-map))
 
