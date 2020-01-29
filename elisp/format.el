@@ -12,7 +12,9 @@
   (interactive)
   (let ((cmd (assoc major-mode format-formatters)))
     (if cmd
-        (funcall (cdr cmd))
+        (progn
+          (funcall (cdr cmd))
+          (save-buffer))
           (message "No formatter found for %s" major-mode))))
 
 (provide 'format-buffer)
