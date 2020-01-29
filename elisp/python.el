@@ -4,16 +4,37 @@
 (require 'projectile)
 (require 'pyvenv)
 
+;; Installing elpy dependencies in the virtualenv.
+(defun setup-venv-elpy ()
+  (apply 'start-process
+         "setup-venv-elpy" "setup-venv-elpy"
+         "pip"
+         "install"
+         "--upgrade"
+         (elpy-rpc--get-package-list)))
+
 ;; Automatically switches to the venv in a Python directory if it exists.
 (defun setup-venv ()
-  (let ((venv (concat (projectile-project-root) "venv")))
-    (if (file-exists-p venv)
-        (pyvenv-activate venv))))
+  (unless pyvenv-virtual-env-name
+    (let ((venv (concat (projectile-project-root) "venv")))
+      (if (file-exists-p venv)
+          (progn
+            (pyvenv-activate venv)
+            (message "Virtualenv activated in '%s'" venv)
+
+            (setup-venv-elpy)
+            (message "Elpy dependencies installed in '%s'" venv))
+        (message "No virtualenv found at '%s'" venv)))))
 
 ;; Ensuring we have black installed.
 (defun ensure-black ()
-  (if (not (executable-find "black"))
-      (shell-command "pip install black &")))
+  (unless (executable-find "black")
+    (progn
+      (start-process "ensure-black" "ensure-black"
+                     "pip"
+                     "install"
+                     "black")
+      (message "Black installed"))))
 
 ;; Setting company-jedi with company-mode
 (defun setup-python-mode ()
