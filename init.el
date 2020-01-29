@@ -29,6 +29,11 @@
   :ensure t
   :hook (company-mode . company-quickhelp-mode))
 
+;; Providing posframe support to company, instead of pos-tip.
+(use-package company-posframe
+  :ensure t
+  :hook (company-mode . company-posframe-mode))
+
 ;; Provides
 (use-package dired-sidebar
   :ensure t)
@@ -64,6 +69,10 @@
 
 ;; Makes emacs pretty
 (use-package monokai-theme
+  :ensure t)
+
+;; macOS friendly alternative to pos-tip.
+(use-package posframe
   :ensure t)
 
 ;; Back-end for making popup documentation
