@@ -3,5 +3,6 @@ auto-save-list/
 backup/
 elpa/
 elpy/
+eshell/
 projectile-bookmarks.eld
 url/
