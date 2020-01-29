@@ -4,6 +4,15 @@
 (require 'projectile)
 (require 'pyvenv)
 
+;;;;
+;; TODO:
+;;   * Indentation
+;;     * Make python-mode indent only one block, instead of 2 blocks, when in a
+;;       function declaration.
+;;
+;;     * Make python-mode indent to the last indentation level inside of a
+;;       multi-line string.
+
 ;; Installing elpy dependencies in the virtualenv.
 (defun setup-venv-elpy ()
   (apply 'start-process
