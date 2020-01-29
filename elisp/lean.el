@@ -6,6 +6,9 @@
   (defvar original-buffer)
   (setq original-buffer (current-buffer))
 
+  ;; Making sure we don't create a bunch new windows.
+  (delete-other-windows)
+
   ;; Setting up our windows with those buffers live
   (select-window (split-window-right 120))
   (switch-to-buffer "*Lean Goal*")
