@@ -6,8 +6,8 @@
 (setq company-dabbrev-downcase nil)
 
 ;; Making auto-complete appear while typing, instead of having to wait.
-(setq company-idle-delay 0.45)
-(setq company-quickhelp-delay 0.45)
+(setq company-idle-delay 0.001)
+(setq company-quickhelp-delay 0.001)
 
 (setq company-quickhelp-color-background "#272822")
 (setq company-quickhelp-color-foreground "#F8F8F2")
