@@ -89,6 +89,14 @@
 
 (use-package markdown-mode :ensure t) ; Markdown
 
+;; Go
+(use-package go-mode
+  :ensure t)
+
+(use-package company-go
+  :after company go-mode
+  :ensure t)
+
 ;; Lean
 (use-package lean-mode
   :ensure t)
@@ -106,16 +114,6 @@
 
 (use-package blacken
   :ensure t)
-
-;; (use-package company-jedi
-;;   :after company jedi-core
-;;   :ensure t)
-
-;; (use-package jedi-core
-;;   :ensure t)
-
-;; (use-package pyvenv
-;;   :ensure t)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Loading Configurations ;;
@@ -183,7 +181,7 @@
  ;; If there is more than one, they won't work right.
  '(package-selected-packages
    (quote
-    (jedi-company company-quickhelp dired-sidebar company-lean company flychecker projectile evil-nerd-commenter lean-mode markdown-mode use-package helm evil-visual-mark-mode))))
+    (company-go go-mode jedi-company company-quickhelp dired-sidebar company-lean company flychecker projectile evil-nerd-commenter lean-mode markdown-mode use-package helm evil-visual-mark-mode))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
