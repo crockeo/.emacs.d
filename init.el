@@ -6,9 +6,6 @@
 ;;   * Yellow "~" for modified a line
 ;;   * Red    "-" for removed  a line
 ;;
-;; * Paint max-line reminder. I.e. vertical bar at point 80 or 120 or something
-;;   to remind me when I'm over the line limit.
-;;
 ;; * Bind ";" to go to the last buffer when in normal mode. Makes it so I don't
 ;;   have to keep on pressing "C-x LEFT" or "C-x RIGHT" when I want to swap
 ;;   between files.
@@ -141,12 +138,13 @@
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Loading Configurations ;;
-(add-to-list 'load-path "~/.emacs.d/elisp/")
+(add-to-list 'load-path "~/.emacs.d/elisp")
 
 (load-library "company")
 (load-library "dired-sidebar")
 (load-library "evil")
 (load-library "flycheck")
+(load-library "fill-column-indicator-conf")
 (load-library "helm")
 (load-library "lean")
 (load-library "pos-tip")
@@ -205,7 +203,7 @@
  ;; If there is more than one, they won't work right.
  '(package-selected-packages
    (quote
-    (cider company-go go-mode jedi-company company-quickhelp dired-sidebar company-lean company flychecker projectile evil-nerd-commenter lean-mode markdown-mode use-package helm evil-visual-mark-mode))))
+    (fill-column-indicator cider company-go go-mode jedi-company company-quickhelp dired-sidebar company-lean company flychecker projectile evil-nerd-commenter lean-mode markdown-mode use-package helm evil-visual-mark-mode))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
