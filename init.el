@@ -5,6 +5,17 @@
 ;;   * Green  "+" for added    a line
 ;;   * Yellow "~" for modified a line
 ;;   * Red    "-" for removed  a line
+;;
+;; * Configure modeline to be something... interesting. Options:
+;;   * doom-modeline
+;;   * spaceline
+;;   * smart-mode-line
+;;   * See: http://www.holgerschurig.de/en/emacs-tayloring-the-built-in-mode-line/
+;;   * Git on modeline: https://gitlab.com/mark.feller/emacs.d/blob/master/modules/module-solarized.el#L36
+;;
+;; * Use smooth scrolling
+;;   * Right now: Emacs scrolls page-by-page
+;;   * Want: Emacs scrolls line-by-line, with a buffer of about 4 lines.
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Setting up Package Management ;;
@@ -146,6 +157,7 @@
 (load-library "evil")
 (load-library "flycheck")
 (load-library "fill-column-indicator-conf")
+(load-library "go")
 (load-library "helm")
 (load-library "lean")
 (load-library "pos-tip")
