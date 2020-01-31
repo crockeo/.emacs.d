@@ -23,6 +23,7 @@
     ;; misc
     (define-key crockeo-mode-map (kbd "C-c e") 'eshell)
     (define-key crockeo-mode-map (kbd "C-c i") 'ibuffer)
+    (define-key crockeo-mode-map (kbd "C-c k") 'kill-buffer-and-window)
     (define-key crockeo-mode-map (kbd "C-c s") 'format-buffer)
 
     crockeo-mode-map))

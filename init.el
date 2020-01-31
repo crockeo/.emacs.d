@@ -87,7 +87,12 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Language-Specific Configuration ;;
 
-(use-package markdown-mode :ensure t) ; Markdown
+;; Clojure
+(use-package clojure-mode
+  :ensure t)
+
+(use-package cider
+  :ensure t)
 
 ;; Go
 (use-package go-mode
@@ -103,6 +108,10 @@
 
 (use-package company-lean
   :after company lean-mode
+  :ensure t)
+
+;; Markdown
+(use-package markdown-mode
   :ensure t)
 
 ;; Python
@@ -181,7 +190,7 @@
  ;; If there is more than one, they won't work right.
  '(package-selected-packages
    (quote
-    (company-go go-mode jedi-company company-quickhelp dired-sidebar company-lean company flychecker projectile evil-nerd-commenter lean-mode markdown-mode use-package helm evil-visual-mark-mode))))
+    (cider company-go go-mode jedi-company company-quickhelp dired-sidebar company-lean company flychecker projectile evil-nerd-commenter lean-mode markdown-mode use-package helm evil-visual-mark-mode))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
