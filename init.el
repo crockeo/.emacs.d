@@ -9,6 +9,8 @@
 ;; * Bind ";" to go to the last buffer when in normal mode. Makes it so I don't
 ;;   have to keep on pressing "C-x LEFT" or "C-x RIGHT" when I want to swap
 ;;   between files.
+;;
+;; * Enable cross-language jump to definition.
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Setting up Package Management ;;
