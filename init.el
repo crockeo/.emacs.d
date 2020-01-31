@@ -9,8 +9,6 @@
 ;; * Bind ";" to go to the last buffer when in normal mode. Makes it so I don't
 ;;   have to keep on pressing "C-x LEFT" or "C-x RIGHT" when I want to swap
 ;;   between files.
-;;
-;; * Enable cross-language jump to definition.
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Setting up Package Management ;;
@@ -51,6 +49,11 @@
 ;; Provides
 (use-package dired-sidebar
   :ensure t)
+
+;; Provides jump-to-definition
+(use-package dumb-jump
+  :ensure t
+  :init (dumb-jump-mode))
 
 ;; Provides vim-like experience
 (use-package evil
@@ -205,7 +208,7 @@
  ;; If there is more than one, they won't work right.
  '(package-selected-packages
    (quote
-    (fill-column-indicator cider company-go go-mode jedi-company company-quickhelp dired-sidebar company-lean company flychecker projectile evil-nerd-commenter lean-mode markdown-mode use-package helm evil-visual-mark-mode))))
+    (dumb-jump fill-column-indicator cider company-go go-mode jedi-company company-quickhelp dired-sidebar company-lean company flychecker projectile evil-nerd-commenter lean-mode markdown-mode use-package helm evil-visual-mark-mode))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
