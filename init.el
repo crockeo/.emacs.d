@@ -1,3 +1,18 @@
+;;;;;;;;;;;
+;; TODOs ;;
+;;
+;; * Show git status of lines in side-bar, i.e.
+;;   * Green  "+" for added    a line
+;;   * Yellow "~" for modified a line
+;;   * Red    "-" for removed  a line
+;;
+;; * Paint max-line reminder. I.e. vertical bar at point 80 or 120 or something
+;;   to remind me when I'm over the line limit.
+;;
+;; * Bind ";" to go to the last buffer when in normal mode. Makes it so I don't
+;;   have to keep on pressing "C-x LEFT" or "C-x RIGHT" when I want to swap
+;;   between files.
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Setting up Package Management ;;
 (require 'package)
