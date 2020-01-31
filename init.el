@@ -5,10 +5,6 @@
 ;;   * Green  "+" for added    a line
 ;;   * Yellow "~" for modified a line
 ;;   * Red    "-" for removed  a line
-;;
-;; * Bind ";" to go to the last buffer when in normal mode. Makes it so I don't
-;;   have to keep on pressing "C-x LEFT" or "C-x RIGHT" when I want to swap
-;;   between files.
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Setting up Package Management ;;

@@ -28,3 +28,11 @@
 (evil-define-key nil evil-visual-state-map
   "\C-a" 'evil-beginning-of-line
   "\C-e" 'evil-end-of-line)
+
+;; Jumping to the last buffer that I was working on. Mirroring my vim config.
+(defun go-last-buffer ()
+  (interactive)
+  (switch-to-buffer (other-buffer (current-buffer) 1)))
+
+(evil-define-key nil evil-normal-state-map
+  ";" 'go-last-buffer)

@@ -16,8 +16,8 @@
     (define-key crockeo-mode-map (kbd "C-c d") 'dired-sidebar-toggle-sidebar)
 
     ;; dumb-jump
-    (define-key crockeo-mode-map (kbd "C-c g g") 'dumb-jump-go)
-    (define-key crockeo-mode-map (kbd "C-c g b") 'dumb-jump-back)
+    (define-key crockeo-mode-map (kbd "C-c q") 'dumb-jump-go)
+    (define-key crockeo-mode-map (kbd "C-c w") 'dumb-jump-back)
 
     ;; helm-projectile
     (define-key crockeo-mode-map (kbd "C-c a") 'helm-projectile-ag)
