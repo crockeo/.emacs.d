@@ -146,9 +146,11 @@
 
 (load-library "company")
 (load-library "dired-sidebar")
+(load-library "display-line-number-conf")
 (load-library "evil")
 (load-library "flycheck")
 (load-library "fill-column-indicator-conf")
+(load-library "git-gutter-fringe-conf")
 (load-library "go")
 (load-library "helm")
 (load-library "lean")
@@ -178,12 +180,6 @@
 ;; Removing emacs menu bar / tool bar
 (tool-bar-mode -1)
 (menu-bar-mode -1)
-
-;; Adding line numbers to the left
-(global-display-line-numbers-mode)
-
-(defvar display-line-numbers-width-start)
-(setq display-line-numbers-width-start 1)
 
 ;; Setting tabs to spaces
 (setq-default indent-tabs-mode nil)
