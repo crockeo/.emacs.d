@@ -7,6 +7,8 @@
 ;;   * smart-mode-line
 ;;   * See: http://www.holgerschurig.de/en/emacs-tayloring-the-built-in-mode-line/
 ;;   * Git on modeline: https://gitlab.com/mark.feller/emacs.d/blob/master/modules/module-solarized.el#L36
+;;
+;; * Move everything to its own files. Have init.el just load-library a bunch of other things.
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Setting up Package Management ;;
@@ -142,9 +144,9 @@
 (load-library "company")
 (load-library "dired-sidebar")
 (load-library "display-line-number-conf")
+(load-library "doom-modeline-conf")
 (load-library "evil")
 (load-library "flycheck")
-(load-library "fill-column-indicator-conf")
 (load-library "git-gutter-fringe-conf")
 (load-library "go")
 (load-library "helm")
