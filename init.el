@@ -1,11 +1,6 @@
 ;;;;;;;;;;;
 ;; TODOs ;;
 ;;
-;; * Show git status of lines in side-bar, i.e.
-;;   * Green  "+" for added    a line
-;;   * Yellow "~" for modified a line
-;;   * Red    "-" for removed  a line
-;;
 ;; * Configure modeline to be something... interesting. Options:
 ;;   * doom-modeline
 ;;   * spaceline

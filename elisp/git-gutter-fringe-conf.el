@@ -24,26 +24,6 @@
 (add-hook 'git-gutter-mode-on-hook 'add-fringe-margin)
 
 ;; Changing the icons to be more to my liking
-(fringe-helper-define 'git-gutter-fr:added nil
-  "...XX..."
-  "...XX..."
-  "...XX..."
-  "XXXXXXXX"
-  "XXXXXXXX"
-  "...XX..."
-  "...XX..."
-  "...XX...")
-
-(fringe-helper-define 'git-gutter-fr:deleted nil
-  "........"
-  "........"
-  "........"
-  "XXXXXXXX"
-  "XXXXXXXX"
-  "........"
-  "........"
-  "........")
-
 (fringe-helper-define 'git-gutter-fr:modified nil
   "........"
   "........"
