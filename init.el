@@ -182,6 +182,9 @@
 ;; Adding line numbers to the left
 (global-display-line-numbers-mode)
 
+(defvar display-line-numbers-width-start)
+(setq display-line-numbers-width-start 1)
+
 ;; Setting tabs to spaces
 (setq-default indent-tabs-mode nil)
 
