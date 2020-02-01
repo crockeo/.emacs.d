@@ -95,10 +95,6 @@
 (use-package posframe
   :ensure t)
 
-;; Back-end for making popup documentation
-(use-package pos-tip
-  :ensure t)
-
 ;; Allows for Ctrl-P like searching in projects
 (use-package projectile
   :ensure t
@@ -156,7 +152,6 @@
 (load-library "go")
 (load-library "helm")
 (load-library "lean")
-(load-library "pos-tip")
 (load-library "python")
 (load-library "scroll-conf")
 
