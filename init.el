@@ -12,10 +12,6 @@
 ;;   * smart-mode-line
 ;;   * See: http://www.holgerschurig.de/en/emacs-tayloring-the-built-in-mode-line/
 ;;   * Git on modeline: https://gitlab.com/mark.feller/emacs.d/blob/master/modules/module-solarized.el#L36
-;;
-;; * Use smooth scrolling
-;;   * Right now: Emacs scrolls page-by-page
-;;   * Want: Emacs scrolls line-by-line, with a buffer of about 4 lines.
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Setting up Package Management ;;
@@ -162,6 +158,7 @@
 (load-library "lean")
 (load-library "pos-tip")
 (load-library "python")
+(load-library "scroll-conf")
 
 ;; Defining and using a minor mode to override hotkeys.
 (load-library "crockeo-mode")
