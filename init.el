@@ -10,6 +10,11 @@
 ;;
 ;; * Move everything to its own files. Have init.el just load-library a bunch of other things.
 
+;; HEY, here's a reminder. Is Emacs running slowly? Do you want to fix that?
+;;
+;; * Start a profiler: M-x profiler-start
+;; * See the results:  M-x profiler-results
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Setting up Package Management ;;
 (require 'package)

@@ -47,6 +47,9 @@
   (jedi-mode)
   (add-to-list 'company-backends 'company-jedi)
 
+  ;; Removing highlight-indentation-mode from elpy
+  (highlight-indentation-mode 0)
+
   ;; Configuring black
   (ensure-black)
 
