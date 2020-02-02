@@ -1,5 +1,12 @@
+;; Install packages
+(use-package lean-mode
+  :ensure t)
+
+(use-package company-lean
+  :after company lean-mode
+  :ensure t)
+
 (require 'company)
-(require 'company-lean)
 
 ;; Opening the lean error and goal windows when we open a lean file.
 (defun open-lean-windows ()

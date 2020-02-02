@@ -1,9 +1,16 @@
+;; Installing packages
+(use-package python-mode
+  :ensure t)
+
+(use-package elpy
+  :ensure t)
+
+(use-package blacken
+  :ensure t)
+
 (require 'company)
-(require 'elpy)
 (require 'jedi-core)
 (require 'projectile)
-(require 'python)
-(require 'pyvenv)
 
 ;; Installing elpy dependencies in the virtualenv.
 (defun setup-venv-elpy ()

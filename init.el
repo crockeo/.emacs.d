@@ -105,46 +105,6 @@
   :ensure t
   :init (projectile-mode))
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; Language-Specific Configuration ;;
-
-;; Clojure
-(use-package clojure-mode
-  :ensure t)
-
-(use-package cider
-  :ensure t)
-
-;; Go
-(use-package go-mode
-  :ensure t)
-
-(use-package company-go
-  :after company go-mode
-  :ensure t)
-
-;; Lean
-(use-package lean-mode
-  :ensure t)
-
-(use-package company-lean
-  :after company lean-mode
-  :ensure t)
-
-;; Markdown
-(use-package markdown-mode
-  :ensure t)
-
-;; Python
-(use-package python-mode
-  :ensure t)
-
-(use-package elpy
-  :ensure t)
-
-(use-package blacken
-  :ensure t)
-
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Loading Configurations ;;
 (add-to-list 'load-path "~/.emacs.d/elisp")
@@ -156,11 +116,15 @@
 (load-library "evil")
 (load-library "flycheck")
 (load-library "git-gutter-fringe-conf")
-(load-library "go")
 (load-library "helm")
-(load-library "lean")
-(load-library "python")
 (load-library "scroll-conf")
+
+;; Language configuration
+(load-library "clojure-conf")
+(load-library "go-conf")
+(load-library "lean-conf")
+(load-library "python-conf")
+(load-library "markdown-conf")
 
 ;; Defining and using a minor mode to override hotkeys.
 (load-library "crockeo-mode")
