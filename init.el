@@ -1,13 +1,6 @@
 ;;;;;;;;;;;
 ;; TODOs ;;
 ;;
-;; * Configure modeline to be something... interesting. Options:
-;;   * doom-modeline
-;;   * spaceline
-;;   * smart-mode-line
-;;   * See: http://www.holgerschurig.de/en/emacs-tayloring-the-built-in-mode-line/
-;;   * Git on modeline: https://gitlab.com/mark.feller/emacs.d/blob/master/modules/module-solarized.el#L36
-;;
 ;; * Move everything to its own files. Have init.el just load-library a bunch of other things.
 ;;
 ;; * Make jedi put its in-function argument documentation into a posframe
@@ -125,6 +118,12 @@
 (load-library "lean-conf")
 (load-library "python-conf")
 (load-library "markdown-conf")
+
+;; Ya boy's custom emacs good good
+(load-library "format")
+
+(load-library "highlight-todo")
+(global-highlight-todo-mode 1)
 
 ;; Defining and using a minor mode to override hotkeys.
 (load-library "crockeo-mode")
