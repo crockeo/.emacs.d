@@ -12,6 +12,8 @@
 (require 'jedi-core)
 (require 'projectile)
 
+(load-library "jedi-posframe")
+
 ;; Installing elpy dependencies in the virtualenv.
 (defun setup-venv-elpy ()
   (apply 'start-process
@@ -53,6 +55,9 @@
   (elpy-mode)
   (jedi-mode)
   (add-to-list 'company-backends 'company-jedi)
+
+  ;; Making jedi render with posframe
+  (jedi-posframe-mode)
 
   ;; Removing highlight-indentation-mode from elpy
   (highlight-indentation-mode 0)
