@@ -106,6 +106,7 @@
 (load-library "dired-sidebar")
 (load-library "display-line-number-conf")
 (load-library "doom-modeline-conf")
+(load-library "eros-conf")
 (load-library "evil")
 (load-library "flycheck")
 (load-library "git-gutter-fringe-conf")
@@ -182,7 +183,7 @@
  ;; If there is more than one, they won't work right.
  '(package-selected-packages
    (quote
-    (dumb-jump fill-column-indicator cider company-go go-mode jedi-company company-quickhelp dired-sidebar company-lean company flychecker projectile evil-nerd-commenter lean-mode markdown-mode use-package helm evil-visual-mark-mode))))
+    (eros dumb-jump fill-column-indicator cider company-go go-mode jedi-company company-quickhelp dired-sidebar company-lean company flychecker projectile evil-nerd-commenter lean-mode markdown-mode use-package helm evil-visual-mark-mode))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
