@@ -165,6 +165,13 @@
 ;; crockeo-mode is enabled by default.
 (setq initial-buffer-choice t)
 
+;; Making Emacs GC more kindly
+(setq gc-cons-threshold (eval-when-compile (* 1024 1024 1024)))
+(run-with-idle-timer
+ 3
+ t
+ (lambda () (garbage-collect)))
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Custom Configurations ;;
 
