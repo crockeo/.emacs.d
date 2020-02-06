@@ -1,3 +1,7 @@
+;; Installing packages
+(use-package dired-sidebar
+  :ensure t)
+
 (require 'dired)
 
 ;; Toggling directories in dired sidebar

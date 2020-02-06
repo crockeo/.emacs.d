@@ -1,3 +1,12 @@
+;; Installing packages
+(use-package evil
+  :ensure t
+  :init (evil-mode))
+
+;; Adds multi-line commenting
+(use-package evil-nerd-commenter
+  :ensure t)
+
 (require 'evil)
 
 ;; Escaping from INSERT mode more easily
@@ -28,11 +37,3 @@
 (evil-define-key nil evil-visual-state-map
   "\C-a" 'evil-beginning-of-line
   "\C-e" 'evil-end-of-line)
-
-;; Jumping to the last buffer that I was working on. Mirroring my vim config.
-(defun go-last-buffer ()
-  (interactive)
-  (switch-to-buffer (other-buffer (current-buffer) 1)))
-
-(evil-define-key nil evil-normal-state-map
-  ";" 'go-last-buffer)

@@ -2,10 +2,13 @@
 (use-package python-mode
   :ensure t)
 
+(use-package blacken
+  :ensure t)
+
 (use-package elpy
   :ensure t)
 
-(use-package blacken
+(use-package jedi
   :ensure t)
 
 (require 'company)
