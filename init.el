@@ -2,9 +2,6 @@
 ;; TODOs ;;
 ;;
 ;; * Move everything to its own files. Have init.el just load-library a bunch of other things.
-;;
-;; * Make jedi put its in-function argument documentation into a posframe
-;;   instead of the pos-tip implementation thing.
 
 ;; HEY, here's a reminder. Is Emacs running slowly? Do you want to fix that?
 ;;
