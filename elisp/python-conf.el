@@ -11,6 +11,10 @@
 (use-package jedi
   :ensure t)
 
+(use-package company-jedi
+  :after jedi company
+  :ensure t)
+
 (require 'company)
 (require 'jedi-core)
 (require 'projectile)

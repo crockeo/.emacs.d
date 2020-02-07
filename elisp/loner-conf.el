@@ -3,7 +3,7 @@
   :ensure t
   :init (dumb-jump-mode))
 
-;; Loading package
+;; Evaluation at end of line
 (use-package eros
   :ensure t
   :init (eros-mode))

@@ -33,9 +33,6 @@
 ;; Loading Configurations ;;
 (add-to-list 'load-path "~/.emacs.d/elisp")
 
-;; Builtin configuration
-(load-library "builtin-conf")
-
 ;; Package configurations
 (load-library "company-conf")
 (load-library "dired-sidebar-conf")
@@ -45,6 +42,7 @@
 (load-library "flycheck-conf")
 (load-library "git-gutter-fringe-conf")
 (load-library "helm-conf")
+(load-library "projectile-conf")
 
 ;; Packges that only need a load-package, but nothing beyond that.
 (load-library "loner-conf")
@@ -65,6 +63,9 @@
 (load-library "crockeo-mode")
 (global-crockeo-mode 1)
 
+;; Builtin configuration
+(load-library "builtin-conf")
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Custom Configurations ;;
 
@@ -75,7 +76,7 @@
  ;; If there is more than one, they won't work right.
  '(package-selected-packages
    (quote
-    (jedi eros dumb-jump fill-column-indicator cider company-go go-mode jedi-company company-quickhelp dired-sidebar company-lean company flychecker projectile evil-nerd-commenter lean-mode markdown-mode use-package helm evil-visual-mark-mode))))
+    (company-jedi jedi eros dumb-jump fill-column-indicator cider company-go go-mode jedi-company company-quickhelp dired-sidebar company-lean company flychecker projectile evil-nerd-commenter lean-mode markdown-mode use-package helm evil-visual-mark-mode))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.

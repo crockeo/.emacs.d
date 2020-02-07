@@ -1,3 +1,4 @@
+(require 'jedi-core)
 (require 'posframe)
 
 (defvar-local jedi-posframe-buffer-name "jedi-posframe")
