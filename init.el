@@ -33,6 +33,9 @@
 ;; Loading Configurations ;;
 (add-to-list 'load-path "~/.emacs.d/elisp")
 
+;; Packges that only need a load-package, but nothing beyond that.
+(load-library "loner-conf")
+
 ;; Package configurations
 (load-library "company-conf")
 (load-library "dired-sidebar-conf")
@@ -43,9 +46,6 @@
 (load-library "git-gutter-fringe-conf")
 (load-library "helm-conf")
 (load-library "projectile-conf")
-
-;; Packges that only need a load-package, but nothing beyond that.
-(load-library "loner-conf")
 
 ;; Language configuration
 (load-library "clojure-conf")
