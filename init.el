@@ -1,8 +1,3 @@
-;;;;;;;;;;;
-;; TODOs ;;
-;;
-;; * Move everything to its own files. Have init.el just load-library a bunch of other things.
-
 ;; HEY, here's a reminder. Is Emacs running slowly? Do you want to fix that?
 ;;
 ;; * Start a profiler: M-x profiler-start
@@ -49,8 +44,10 @@
 
 ;; Language configuration
 (load-library "clojure-conf")
+(load-library "fennel-conf")
 (load-library "go-conf")
 (load-library "lean-conf")
+(load-library "lua-conf")
 (load-library "python-conf")
 (load-library "markdown-conf")
 
@@ -76,7 +73,7 @@
  ;; If there is more than one, they won't work right.
  '(package-selected-packages
    (quote
-    (company-jedi jedi eros dumb-jump fill-column-indicator cider company-go go-mode jedi-company company-quickhelp dired-sidebar company-lean company flychecker projectile evil-nerd-commenter lean-mode markdown-mode use-package helm evil-visual-mark-mode))))
+    (fennel fennel-mode lua-mode company-jedi jedi eros dumb-jump fill-column-indicator cider company-go go-mode jedi-company company-quickhelp dired-sidebar company-lean company flychecker projectile evil-nerd-commenter lean-mode markdown-mode use-package helm evil-visual-mark-mode))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
