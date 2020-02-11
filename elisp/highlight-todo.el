@@ -9,7 +9,8 @@
 (define-minor-mode highlight-todo-mode
   "Highlights TODOs when they appear in text."
   :lighter ""
-  (add-todo-highlight))
+  (unless (eq major-mode 'org-mode)
+    (add-todo-highlight)))
 
 ;; Globalized verison of highlight-todo-mode so that it happens everywhere.
 (define-global-minor-mode global-highlight-todo-mode

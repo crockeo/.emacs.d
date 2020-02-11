@@ -1,6 +1,5 @@
 ;; Installing the package
-(use-package git-gutter-fringe
-  :ensure t)
+(use-package git-gutter-fringe)
 
 (require 'fringe-helper)
 

@@ -1,19 +1,14 @@
 ;; Installing packages
-(use-package python-mode
-  :ensure t)
+(use-package python-mode)
 
-(use-package blacken
-  :ensure t)
+(use-package blacken)
 
-(use-package elpy
-  :ensure t)
+(use-package elpy)
 
-(use-package jedi
-  :ensure t)
+(use-package jedi)
 
 (use-package company-jedi
-  :after jedi company
-  :ensure t)
+  :after jedi company)
 
 (require 'company)
 (require 'jedi-core)

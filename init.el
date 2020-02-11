@@ -21,6 +21,8 @@
 (eval-when-compile
   (require 'use-package))
 
+(setq use-package-always-ensure t)
+
 ;;;;;;;;;;;;;;;;;;
 ;; Package List ;;
 
@@ -45,6 +47,7 @@
 ;; Language configuration
 (load-library "clojure-conf")
 (load-library "fennel-conf")
+(load-library "glsl-conf")
 (load-library "go-conf")
 (load-library "lean-conf")
 (load-library "lua-conf")
@@ -73,7 +76,7 @@
  ;; If there is more than one, they won't work right.
  '(package-selected-packages
    (quote
-    (fennel fennel-mode lua-mode company-jedi jedi eros dumb-jump fill-column-indicator cider company-go go-mode jedi-company company-quickhelp dired-sidebar company-lean company flychecker projectile evil-nerd-commenter lean-mode markdown-mode use-package helm evil-visual-mark-mode))))
+    (floobits glsl-mode fennel fennel-mode lua-mode company-jedi jedi eros dumb-jump fill-column-indicator cider company-go go-mode jedi-company company-quickhelp dired-sidebar company-lean company flychecker projectile evil-nerd-commenter lean-mode markdown-mode use-package helm evil-visual-mark-mode))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.

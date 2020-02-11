@@ -1,11 +1,9 @@
 ;; Installing packages
 (use-package evil
-  :ensure t
   :init (evil-mode))
 
 ;; Adds multi-line commenting
-(use-package evil-nerd-commenter
-  :ensure t)
+(use-package evil-nerd-commenter)
 
 (require 'evil)
 

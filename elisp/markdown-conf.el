@@ -1,6 +1,5 @@
 ;; Install packages
-(use-package markdown-mode
-  :ensure t)
+(use-package markdown-mode)
 
 ;; Setting fill mode
 (defun markdown-fill ()

@@ -1,6 +1,5 @@
 ;; Installing the package
 (use-package doom-modeline
-  :ensure t
   :hook (after-init . doom-modeline-mode))
 
 ;; Setting up doom-modline to play well with projectile

@@ -35,7 +35,7 @@
 
 ;; Making the initial buffer *scratch*, instead of *GNU Emacs*, so that
 ;; crockeo-mode is enabled by default.
-(setq initial-buffer-choice t)
+(setq initial-buffer-choice "~/home.org")
 
 ;; Making Emacs GC more kindly
 (setq gc-cons-threshold (eval-when-compile (* 1024 1024 1024)))

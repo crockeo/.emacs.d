@@ -1,14 +1,11 @@
 ;; Installng packages
 (use-package company
-  :ensure t
   :init (global-company-mode))
 
 (use-package company-quickhelp
-  :ensure t
   :hook (company-mode . company-quickhelp-mode))
 
 (use-package company-posframe
-  :ensure t
   :hook (company-mode . company-posframe-mode))
 
 ;; Forcing company to be case-sensitive

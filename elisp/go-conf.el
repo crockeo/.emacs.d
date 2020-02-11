@@ -1,10 +1,8 @@
 ;; Installing packages
-(use-package go-mode
-  :ensure t)
+(use-package go-mode)
 
 (use-package company-go
-  :after company go-mode
-  :ensure t)
+  :after company go-mode)
 
 ;; Customizing indentation in golang to be tabs of width 4.
 (defun custom-indentation ()

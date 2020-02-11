@@ -1,6 +1,5 @@
 ;; Installing packages
-(use-package dired-sidebar
-  :ensure t)
+(use-package dired-sidebar)
 
 (require 'dired)
 

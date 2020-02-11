@@ -1,15 +1,12 @@
 ;; Installing packages
 (use-package helm
-  :ensure t
   :init (helm-mode))
 
 (use-package helm-ag
-  :after helm
-  :ensure t)
+  :after helm)
 
 (use-package helm-projectile
-  :after helm projectile
-  :ensure t)
+  :after helm projectile)
 
 ;; Enable fuzzy match whenever helm-mode is enabled.
 (defvar helm-mode-fuzzy-match)

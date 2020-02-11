@@ -1,10 +1,8 @@
 ;; Install packages
-(use-package lean-mode
-  :ensure t)
+(use-package lean-mode)
 
 (use-package company-lean
-  :after company lean-mode
-  :ensure t)
+  :after company lean-mode)
 
 (require 'company)
 
