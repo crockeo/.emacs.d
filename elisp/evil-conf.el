@@ -35,3 +35,21 @@
 (evil-define-key nil evil-visual-state-map
   "\C-a" 'evil-beginning-of-line
   "\C-e" 'evil-end-of-line)
+
+;; Swapping back and forth between active *file* buffers.
+(defun get-other-file-buffer ()
+  "Returns the 'other' file buffer. Used to swap back and forth between buffers,
+  but only considers those which correspond to files."
+  (let ((file-buffers (seq-filter
+                       (lambda (buffer) (buffer-file-name buffer))
+                       (buffer-list))))
+    (when (> (length file-buffers) 1)
+      (nth 1 file-buffers))))
+
+(defun switch-to-other-file-buffer ()
+  "Switching to the last file buffer."
+  (interactive)
+  (switch-to-buffer (get-other-file-buffer)))
+
+(evil-define-key nil evil-normal-state-map
+  ";" 'switch-to-other-file-buffer)
