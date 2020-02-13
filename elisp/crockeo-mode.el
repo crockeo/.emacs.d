@@ -1,5 +1,6 @@
 (require 'helm-projectile)
 
+(load-library "buffer-queries")
 (load-library "format")
 
 ;; Defining the crockeo-mode keymap.
@@ -25,7 +26,8 @@
     (define-key crockeo-mode-map (kbd "C-c p") 'helm-projectile-switch-project)
 
     ;; misc
-    (define-key crockeo-mode-map (kbd "C-c e") 'eshell)
+    (define-key crockeo-mode-map (kbd "C-c e f") 'move-to-file-buffer)
+    (define-key crockeo-mode-map (kbd "C-c e i") 'move-to-irc-buffer)
     (define-key crockeo-mode-map (kbd "C-c i") 'ibuffer)
     (define-key crockeo-mode-map (kbd "C-c k") 'kill-buffer-and-window)
     (define-key crockeo-mode-map (kbd "C-c s") 'format-buffer)
