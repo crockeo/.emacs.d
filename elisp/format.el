@@ -1,10 +1,23 @@
 (require 'blacken)
 
+(defun indent-all ()
+  "Performs automatic indentation across an entire buffer. Used for certain file
+  types where matching indentation is sufficient."
+  (interactive)
+
+  (let ((cursor-pos (point)))
+    (mark-whole-buffer)
+    (evil-indent (region-beginning)
+                 (region-end))
+    (goto-char cursor-pos)))
+
 ;; The global definition of formatters.
 (defvar format-formatters)
 (setq
  format-formatters
- '((go-mode . gofmt)
+ '((emacs-lisp-mode . indent-all)
+   (funnel-mode . indent-all)
+   (go-mode . gofmt)
    (python-mode . blacken-buffer)))
 
 ;; Formats the current buffer. Uses a different formatter depending on the
@@ -16,6 +29,6 @@
         (progn
           (funcall (cdr cmd))
           (save-buffer))
-          (message "No formatter found for %s" major-mode))))
+      (message "No formatter found for %s" major-mode))))
 
 (provide 'format-buffer)
