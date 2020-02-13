@@ -11,3 +11,6 @@
 ;; Enable fuzzy match whenever helm-mode is enabled.
 (defvar helm-mode-fuzzy-match)
 (setq helm-mode-fuzzy-match t)
+
+;; Configuring the helm buffer view.
+(setq helm-buffers-column-separator " | ")
