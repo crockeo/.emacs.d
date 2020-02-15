@@ -2,36 +2,41 @@
 
 (load-library "buffer-queries")
 (load-library "format")
+(load-library "winpop")
 
-;; Defining the crockeo-mode keymap.
-;;
 ;; Divided up hotkeys into individual sections. Note that certain hotkeys, which
 ;; are not global across emacs, are stored in individual files according to
 ;; their (major|minor)-mode.
+(defvar crockeo-mode-hotkeys '())
+(setq crockeo-mode-hotkeys
+      '(("C-c a" helm-projectile-ag)
+        ("C-c c" evilnc-comment-or-uncomment-lines)
+        ("C-c d" dired-sidebar-toggle-sidebar)
+        ("C-c b b" switch-to-buffer)
+        ("C-c b f" move-to-file-buffer)
+        ("C-c b i" move-to-irc-buffer)
+        ("C-c p a" helm-projectile-ag)
+        ("C-c p f" helm-projectile-find-file)
+        ("C-c p p" helm-projectile-switch-project)
+        ("C-c g b" dumb-jump-back)
+        ("C-c g f" dumb-jump-go)
+        ("C-c i" ibuffer)
+        ("C-c k" kill-buffer-and-window)
+        ("C-c s" format-buffer)
+        ("C-c w b" winpop-pop)
+        ("C-c w f" winpop-push)
+        ("C-c w h" winpop-go-home)))
+
+;; Defining the crockeo-mode keymap.
 (defun make-crockeo-mode-keymap ()
   (let ((crockeo-mode-map (make-sparse-keymap)))
-    ;; evil-mode
-    (define-key crockeo-mode-map (kbd "C-c c") 'evilnc-comment-or-uncomment-lines)
-
-    ;; dired-sidebar
-    (define-key crockeo-mode-map (kbd "C-c d") 'dired-sidebar-toggle-sidebar)
-
-    ;; dumb-jump
-    (define-key crockeo-mode-map (kbd "C-c q") 'dumb-jump-go)
-    (define-key crockeo-mode-map (kbd "C-c w") 'dumb-jump-back)
-
-    ;; helm-projectile
-    (define-key crockeo-mode-map (kbd "C-c a") 'helm-projectile-ag)
-    (define-key crockeo-mode-map (kbd "C-c f") 'helm-projectile-find-file)
-    (define-key crockeo-mode-map (kbd "C-c p") 'helm-projectile-switch-project)
-
-    ;; misc
-    (define-key crockeo-mode-map (kbd "C-c e f") 'move-to-file-buffer)
-    (define-key crockeo-mode-map (kbd "C-c e i") 'move-to-irc-buffer)
-    (define-key crockeo-mode-map (kbd "C-c i") 'ibuffer)
-    (define-key crockeo-mode-map (kbd "C-c k") 'kill-buffer-and-window)
-    (define-key crockeo-mode-map (kbd "C-c s") 'format-buffer)
-
+    (mapc
+     (lambda (keybind)
+       (define-key
+         crockeo-mode-map
+         (kbd (nth 0 keybind))
+         (nth 1 keybind)))
+     crockeo-mode-hotkeys)
     crockeo-mode-map))
 
 ;; Defining crockeo-mode.
