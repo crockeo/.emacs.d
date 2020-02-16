@@ -38,7 +38,7 @@
 (setq initial-buffer-choice "~/home.org")
 
 ;; Making Emacs GC more kindly
-(setq gc-cons-threshold (eval-when-compile (* 1024 1024 1024)))
+(setq gc-cons-threshold (eval-when-compile (* 2 1024 1024 1024)))
 (run-with-idle-timer
  3
  t

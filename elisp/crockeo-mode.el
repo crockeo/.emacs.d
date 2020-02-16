@@ -9,8 +9,7 @@
 ;; their (major|minor)-mode.
 (defvar crockeo-mode-hotkeys '())
 (setq crockeo-mode-hotkeys
-      '(("C-c a" helm-projectile-ag)
-        ("C-c c" evilnc-comment-or-uncomment-lines)
+      '(("C-c c" evilnc-comment-or-uncomment-lines)
         ("C-c d" dired-sidebar-toggle-sidebar)
         ("C-c b b" switch-to-buffer)
         ("C-c b f" move-to-file-buffer)
@@ -18,8 +17,9 @@
         ("C-c p a" helm-projectile-ag)
         ("C-c p f" helm-projectile-find-file)
         ("C-c p p" helm-projectile-switch-project)
-        ("C-c g b" dumb-jump-back)
-        ("C-c g f" dumb-jump-go)
+        ("C-c j b" smart-jump-back)
+        ("C-c j g" smart-jump-go)
+        ("C-c j p" smart-jump-peek)
         ("C-c i" ibuffer)
         ("C-c k" kill-buffer-and-window)
         ("C-c s" format-buffer)

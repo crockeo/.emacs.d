@@ -35,7 +35,11 @@
   (interactive)
   (winpop-push)
   (delete-other-windows)
-  (switch-to-buffer (get-file-buffer initial-buffer-choice)))
+
+  (let ((existing-buffer (get-file-buffer initial-buffer-choice)))
+    (if existing-buffer
+        (switch-to-buffer existing-buffer)
+      (find-file initial-buffer-choice))))
 
 (provide 'winpop-get-confs)
 (provide 'winpop-get-names)
