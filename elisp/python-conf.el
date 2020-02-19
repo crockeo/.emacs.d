@@ -14,6 +14,12 @@
 (require 'jedi-core)
 (require 'projectile)
 
+;; NOTE: If you're getting a jediepcserver error, then make a Python2 virtual
+;;       environment:
+;;
+;;   - rm -rf ~/.emacs.d/.python-environments/default
+;;   - virtualenv -p ~/.emacs.d/.python-environments/default
+
 (load-library "jedi-posframe")
 
 ;; Installing elpy dependencies in the virtualenv.

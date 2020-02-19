@@ -18,6 +18,7 @@
         ("C-c p a" helm-projectile-ag)
         ("C-c p f" helm-projectile-find-file)
         ("C-c p p" helm-projectile-switch-project)
+        ("C-c p r" projectile-discover-projects-in-search-path)
         ("C-c g b" dumb-jump-back)
         ("C-c g f" dumb-jump-go)
         ("C-c i" ibuffer)
