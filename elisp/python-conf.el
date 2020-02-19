@@ -104,3 +104,6 @@
 ;; Configuring jedi to work within elpy.
 (setq jedi:complete-on-dot t)
 (setq jedi:get-in-function-call-delay 250)
+
+;; Skipping string normalization for Black.
+(setq blacken-skip-string-normalization t)
