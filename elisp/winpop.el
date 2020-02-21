@@ -29,6 +29,13 @@
           (message "winpop: Popped window configuration to %s" old-winpop-name))
       (message "winpop: At bottom of stack"))))
 
+(defun winpop-clear ()
+  "Clears the stack of window configurations, but does not go back to any
+  particular one."
+  (interactive)
+  (setq winpop-confs '())
+  (setq winpop-names '()))
+
 (defun winpop-go-home ()
   "Moves the current window to the file described by initial-buffer-choice. At
   time of writing, that's ~/home.org"
@@ -36,13 +43,21 @@
   (winpop-push)
   (delete-other-windows)
 
+  ;; Go to ~/home.org
   (let ((existing-buffer (get-file-buffer initial-buffer-choice)))
     (if existing-buffer
         (switch-to-buffer existing-buffer)
-      (find-file initial-buffer-choice))))
+      (find-file initial-buffer-choice)))
+
+  ;; Opening weekly agenda
+  (org-agenda nil "a")
+
+  ;; Switching to the home.org buffer
+  (other-window 1))
 
 (provide 'winpop-get-confs)
 (provide 'winpop-get-names)
 (provide 'winpop-push)
 (provide 'winpop-pop)
+(provide 'winpop-clear)
 (provide 'winpop-go-home)

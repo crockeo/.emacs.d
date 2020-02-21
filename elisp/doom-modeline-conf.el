@@ -24,7 +24,7 @@
   "Provides the list of window configurations that are currently on the stack."
   (concat
    " ("
-   (string-join (winpop-get-names)
+   (string-join (reverse (winpop-get-names))
                 " > ")
    ") "))
 

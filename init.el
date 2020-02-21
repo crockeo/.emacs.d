@@ -67,6 +67,9 @@
 ;; Builtin configuration
 (load-library "builtin-conf")
 
+;; TODO: Move this elsewhere
+(setq org-agenda-files '("~/home.org"))
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Custom Configurations ;;
 

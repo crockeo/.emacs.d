@@ -24,19 +24,33 @@
         ("C-c k" kill-buffer-and-window)
         ("C-c s" format-buffer)
         ("C-c w b" winpop-pop)
+        ("C-c w c" winpop-clear)
         ("C-c w f" winpop-push)
         ("C-c w h" winpop-go-home)))
 
+(defun register-keys (keymap hotkeys)
+  "Registers a series of keys onto a keymap."
+  (mapc
+   (lambda (keybind)
+     (define-key
+       keymap
+       (kbd (nth 0 keybind))
+       (nth 1 keybind)))
+   hotkeys)
+  keymap)
+
+;; When you want to redefine your keys, after modifying crockeo-mode-hotkeys,
+;; run the following:
+;;
+;; (register-keys crockeo-mode-map crockeo-mode-hotkeys)
+
 ;; Defining the crockeo-mode keymap.
 (defun make-crockeo-mode-keymap ()
+  "Constructs a keymap for crockeo-mode, and then registers the
+  crockeo-mode-hotkeys to it."
   (let ((crockeo-mode-map (make-sparse-keymap)))
-    (mapc
-     (lambda (keybind)
-       (define-key
-         crockeo-mode-map
-         (kbd (nth 0 keybind))
-         (nth 1 keybind)))
-     crockeo-mode-hotkeys)
+    (register-keys crockeo-mode-map
+                   crockeo-mode-hotkeys)
     crockeo-mode-map))
 
 ;; Defining crockeo-mode.

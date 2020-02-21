@@ -37,6 +37,13 @@
 ;; crockeo-mode is enabled by default.
 (setq initial-buffer-choice "~/home.org")
 
+;; Making org-mode have an auto fill at column 80.
+(defun org-mode-fill ()
+  (set-fill-column 80)
+  (auto-fill-mode 1))
+
+(add-hook 'org-mode-hook 'org-mode-fill)
+
 ;; Making Emacs GC more kindly
 (setq gc-cons-threshold (eval-when-compile (* 2 1024 1024 1024)))
 (run-with-idle-timer
