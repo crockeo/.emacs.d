@@ -1,19 +1,18 @@
-(defun conf-lsp-mode ()
-  (use-package lsp-mode)
+;; Installing pacakges
+(use-package lsp-mode)
 
-  ;; Setting up package modes
-  (use-package company-lsp
-    :after company lsp-mode
-    :config '(push 'company-lsp company-backends))
+(use-package company-lsp
+  :after company
+  :config '(push 'company-lsp company-backends))
 
-  (use-package helm-lsp)
+(use-package helm-lsp)
 
-  (use-package lsp-ui
-    :after lsp-mode)
+(use-package lsp-ui)
 
-  ;; Setting up language modes
-  (add-hook 'go-mode-hook 'lsp)
-  (add-hook 'python-mode-hook 'lsp))
+;; Setting up languages
+(add-hook 'go-mode-hook 'lsp-deferred)
+(add-hook 'python-mode-hook 'lsp-deferred)
 
-(unless (version< emacs-version "27")
-  (conf-lsp-mode))
+;; Misc configuration
+(setq lsp-eldoc-hook nil)
+(setq lsp-signature-auto-activate nil)
