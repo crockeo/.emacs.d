@@ -4,6 +4,7 @@ backup/
 elpa/
 elpy/
 eshell/
+.lsp-session*
 projectile-bookmarks.eld
 url/
 recentf

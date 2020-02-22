@@ -9,7 +9,6 @@
 
 (add-to-list 'package-archives '("org" . "http://orgmode.org/elpa/"))
 (add-to-list 'package-archives '("melpa" . "http://melpa.org/packages/"))
-(add-to-list 'package-archives '("melpa-stable" . "http://stable.melpa.org/packages/"))
 
 (setq package-enable-at-startup nil)
 (package-initialize)
@@ -42,6 +41,7 @@
 (load-library "flycheck-conf")
 (load-library "git-gutter-fringe-conf")
 (load-library "helm-conf")
+(load-library "lsp-conf")
 (load-library "projectile-conf")
 (load-library "smart-jump-conf")
 
@@ -80,7 +80,7 @@
  ;; If there is more than one, they won't work right.
  '(package-selected-packages
    (quote
-    (smart-jump floobits glsl-mode fennel fennel-mode lua-mode company-jedi jedi eros dumb-jump fill-column-indicator cider company-go go-mode jedi-company company-quickhelp dired-sidebar company-lean company flychecker projectile evil-nerd-commenter lean-mode markdown-mode use-package helm evil-visual-mark-mode))))
+    (lsp-ui helm-lsp company-lsp lsp-mode smart-jump floobits glsl-mode fennel fennel-mode lua-mode company-jedi jedi eros dumb-jump fill-column-indicator cider company-go go-mode jedi-company company-quickhelp dired-sidebar company-lean company flychecker projectile evil-nerd-commenter lean-mode markdown-mode use-package helm evil-visual-mark-mode))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
