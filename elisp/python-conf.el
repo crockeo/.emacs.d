@@ -16,10 +16,7 @@
       (if (file-exists-p venv)
           (progn
             (pyvenv-activate venv)
-            (message "Virtualenv activated in '%s'" venv)
-
-            (setup-venv-elpy)
-            (message "Elpy dependencies installed in '%s'" venv))
+            (message "Virtualenv activated in '%s'" venv))
         (message "No virtualenv found at '%s'" venv)))))
 
 ;; Ensuring we have black installed.
@@ -30,13 +27,31 @@
                      "pip"
                      "install"
                      "black")
-      (message "Black installed"))))
+      (message "black installed"))))
+
+(defun ensure-lsp ()
+  "Ensures that we have a language server installed in the project. We make sure
+  this executes within the venv, so that we "
+  (unless (executable-find "pyls")
+    (progn
+      (start-process "ensure-pyls" "ensure-pyls"
+                     "pip "
+                     "install"
+                     "python-language-server[all]")
+      (message "pyls installed"))))
+
+(defun ensure-packages ()
+  "Ensures that we have all of the packages we expect installed in any Python
+  environment."
+  (ensure-black)
+  (ensure-lsp))
 
 ;; Setting company-jedi with company-mode
 (defun setup-python-mode ()
   (setup-venv)
-  (ensure-black)
-  (define-key python-mode-map (kbd "RET") 'newline-and-indent))
+  (ensure-packages)
+  (define-key python-mode-map (kbd "RET") 'newline-and-indent)
+  (message "Python mode setup complete"))
 
 (add-hook 'python-mode-hook 'setup-python-mode)
 
@@ -65,3 +80,9 @@
 
 ;; Skipping string normalization for Black.
 (setq blacken-skip-string-normalization t)
+
+;; Intercepting calls to py-help-at-point so that we never have to see
+;; *Python-Help* ever again.
+(defun intercept-call (oldfn &rest args))
+(advice-add 'py-help-at-point
+            :around #'intercept-call)
