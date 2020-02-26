@@ -35,7 +35,7 @@
   (unless (executable-find "pyls")
     (progn
       (start-process "ensure-pyls" "ensure-pyls"
-                     "pip "
+                     "pip"
                      "install"
                      "python-language-server[all]")
       (message "pyls installed"))))
@@ -51,6 +51,7 @@
   (setup-venv)
   (ensure-packages)
   (define-key python-mode-map (kbd "RET") 'newline-and-indent)
+  (setq lsp-enable-indentation nil)
   (message "Python mode setup complete"))
 
 (add-hook 'python-mode-hook 'setup-python-mode)

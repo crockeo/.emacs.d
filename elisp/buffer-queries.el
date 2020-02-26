@@ -38,5 +38,7 @@
      (with-current-buffer buffer
        (eq major-mode 'erc-mode)))))
 
+(setq helm-buffer-max-length nil)
+
 (provide 'move-to-file-buffer)
 (provide 'move-to-irc-buffer)
