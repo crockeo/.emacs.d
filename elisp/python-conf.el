@@ -82,6 +82,9 @@
 ;; Skipping string normalization for Black.
 (setq blacken-skip-string-normalization t)
 
+;; Making our max line length longer for lsp-pyls
+(setq lsp-pyls-plugins-pycodestyle-max-line-length 120)
+
 ;; Intercepting calls to py-help-at-point so that we never have to see
 ;; *Python-Help* ever again.
 (defun intercept-call (oldfn &rest args))
