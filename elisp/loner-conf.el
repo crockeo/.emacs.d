@@ -11,8 +11,8 @@
   :init (eros-mode))
 
 ;; Makes emacs pretty
-(use-package monokai-theme
-  :init (load-theme 'monokai t))
+(use-package srcery-theme
+  :init (load-theme 'srcery t))
 
 ;; macOS friendly alternative to pos-tip.
 (use-package posframe)
