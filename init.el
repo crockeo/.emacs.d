@@ -22,6 +22,9 @@
 
 (setq use-package-always-ensure t)
 
+(defun is-emacs-27 ()
+  (version< "27.0" emacs-version))
+
 ;;;;;;;;;;;;;;;;;;
 ;; Package List ;;
 
@@ -51,7 +54,10 @@
 (load-library "glsl-conf")
 (load-library "go-conf")
 (load-library "lean-conf")
-(load-library "lua-conf")
+
+(unless (is-emacs-27)
+  (load-library "lua-conf"))
+
 (load-library "protobuf-conf")
 (load-library "python-conf")
 (load-library "markdown-conf")
@@ -79,9 +85,10 @@
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
+ '(custom-safe-themes
+   '("a2cde79e4cc8dc9a03e7d9a42fabf8928720d420034b66aecc5b665bbf05d4e9" default))
  '(package-selected-packages
-   (quote
-    (editorconfig protobuf-mode lsp-ui helm-lsp company-lsp lsp-mode smart-jump floobits glsl-mode fennel fennel-mode lua-mode company-jedi jedi eros dumb-jump fill-column-indicator cider company-go go-mode jedi-company company-quickhelp dired-sidebar company-lean company flychecker projectile evil-nerd-commenter lean-mode markdown-mode use-package helm evil-visual-mark-mode))))
+   '(editorconfig protobuf-mode lsp-ui helm-lsp company-lsp lsp-mode smart-jump floobits glsl-mode fennel fennel-mode lua-mode company-jedi jedi eros dumb-jump fill-column-indicator cider company-go go-mode jedi-company company-quickhelp dired-sidebar company-lean company flychecker projectile evil-nerd-commenter lean-mode markdown-mode use-package helm evil-visual-mark-mode)))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
