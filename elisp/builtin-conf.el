@@ -50,3 +50,6 @@
  3
  t
  (lambda () (garbage-collect)))
+
+;; Making sure we can execute programs in /usr/local/bin cross-platform
+(add-to-list 'exec-path "/usr/local/bin")
