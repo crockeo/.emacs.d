@@ -8,7 +8,8 @@
 ;; Adding projectile projects
 (setq
  projectile-project-search-path
- '("~/src/"))
+ '("~/src/"
+   "~/src/go/src/github.com/crockeo"))
 
 (defun setup-projectile-projects ()
   (projectile-discover-projects-in-search-path)

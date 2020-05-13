@@ -83,7 +83,7 @@
 (setq blacken-skip-string-normalization t)
 
 ;; Removing trailing commas
-(setq blacken-allow-py36 nil)
+(setq blacken-allow-py36 t)
 
 ;; Making our max line length longer for lsp-pyls
 (setq lsp-pyls-plugins-pycodestyle-max-line-length 120)

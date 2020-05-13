@@ -16,8 +16,6 @@
 (setq company-idle-delay 0.075)
 (setq company-quickhelp-delay 0.001)
 
-(message "%s" (cdr (assoc 'background-color (frame-parameters))))
-
 ;; Matching quickhelp colors to theme colors
 (setq
  company-quickhelp-color-background

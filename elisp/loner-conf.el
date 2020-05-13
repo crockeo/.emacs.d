@@ -16,3 +16,9 @@
 
 ;; macOS friendly alternative to pos-tip.
 (use-package posframe)
+
+;; Inherit environment variables from the shell.
+(use-package exec-path-from-shell
+  :config
+  (when (memq window-system '(mac ns x))
+    (exec-path-from-shell-initialize)))
