@@ -12,16 +12,18 @@
 
 (defun go-conf--custom-indentation ()
   "Sets Golang tab width to 4"
+  (setq-default indent-tabs-mode 1)
   (setq indent-tabs-mode 1)
+
+  (setq-default tab-width 4)
   (setq tab-width 4))
 
 (defun go-conf--setup-go-mode ()
   "Ensures that go-mode is set up correctly."
-  (ensure-lsp)
+  (go-conf--ensure-lsp)
   (setq lsp-enable-snippet nil)
   (lsp-deferred)
 
-  (custom-indentation))
+  (go-conf--custom-indentation))
 
-(remove-hook 'go-mode-hook 'go-conf--setup-go-mode)
 (add-hook 'go-mode-hook 'go-conf--setup-go-mode)

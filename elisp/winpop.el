@@ -50,10 +50,11 @@
       (find-file initial-buffer-choice)))
 
   ;; Opening weekly agenda
-  (org-agenda nil "a")
+  ;; (org-agenda nil "a")
 
   ;; Switching to the home.org buffer
-  (other-window 1))
+  ;; (other-window 1)
+  )
 
 (provide 'winpop-get-confs)
 (provide 'winpop-get-names)
