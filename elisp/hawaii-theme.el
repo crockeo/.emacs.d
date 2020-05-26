@@ -13,14 +13,14 @@
 
 (defconst hawaii-background "#332a24")
 (defconst hawaii-background-light "#40352d")
-(defconst hawaii-comment "#80695b")
+(defconst hawaii-comment "#997e6d")
 (defconst hawaii-error "#ff0000")
 (defconst hawaii-highlight-blue "#79eaf2")
 (defconst hawaii-highlight-green "#aff279")
 (defconst hawaii-highlight-orange "#ffb080")
 (defconst hawaii-highlight-purple "#bb80ff")
 (defconst hawaii-highlight-red "#ff4040")
-(defconst hawaii-text "#f2f2f2")
+(defconst hawaii-text "#ffffff")
 
 (deftheme hawaii "DOCSTRING for hawaii")
 
@@ -37,7 +37,7 @@
     ((t (:foreground ,hawaii-text :background ,hawaii-background))))
 
  `(font-lock-builtin-face
-   ((t (:foreground ,hawaii-highlight-green :bold t))))
+   ((t (:foreground ,hawaii-highlight-purple :bold t))))
 
  `(font-lock-comment-face
    ((t (:foreground ,hawaii-comment))))
