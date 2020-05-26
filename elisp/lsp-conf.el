@@ -16,12 +16,3 @@
 (use-package lsp-ui
   :after lsp-mode
   :hook (lsp-mode-hook . lsp-ui-mode))
-
-;(defun intercept-lsp-eldoc (oldfunc &rest args)
-  ;(message "intercepted lsp eldoc with %s" args))
-
-;((lambda ()
-   ;(advice-remove 'lsp-eldoc-function
-                  ;#'intercept-lsp-eldoc)
-   ;(advice-add 'lsp-eldoc-function
-               ;:around #'intercept-lsp-eldoc)))

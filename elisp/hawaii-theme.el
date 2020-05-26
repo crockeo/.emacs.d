@@ -12,7 +12,7 @@
 ;;; Code:
 
 (defconst hawaii-background "#332a24")
-(defconst hawaii-background-dark "#40352d")
+(defconst hawaii-background-light "#40352d")
 (defconst hawaii-comment "#80695b")
 (defconst hawaii-error "#ff0000")
 (defconst hawaii-highlight-blue "#79eaf2")
@@ -27,8 +27,8 @@
 (custom-theme-set-faces
  'hawaii
 
- ;;;;;;;;;;;;;;;;;;;;;;;;;;;;
- ;; Built-In Configuration ;;
+ ;;;;;;;;;;;;;;
+ ;; Built-In ;;
 
  `(cursor
    ((t (:background ,hawaii-highlight-orange))))
@@ -70,10 +70,57 @@
    ((t (:foreground ,hawaii-text :bold t))))
 
  `(mode-line
-   ((t (:foreground ,hawaii-text :background ,hawaii-background-dark))))
+   ((t (:foreground ,hawaii-text :background ,hawaii-background-light))))
 
  `(region
-   ((t (:foreground ,hawaii-background :background ,hawaii-highlight-orange)))))
+   ((t (:foreground ,hawaii-background :background ,hawaii-highlight-orange))))
+
+ ;;;;;;;;;;;;;
+ ;; Company ;;
+
+ `(company-preview-common
+   ((t (:foreground ,hawaii-comment :background ,hawaii-background))))
+
+ `(company-scrollbar-bg
+   ((t (:background ,hawaii-background-light))))
+
+ `(company-scrollbar-fg
+   ((t (:background ,hawaii-text))))
+
+ `(company-tooltip
+   ((t (:foreground ,hawaii-text :background ,hawaii-background-light))))
+
+ `(company-tooltip-common
+   ((t (:foreground ,hawaii-highlight-green))))
+
+ `(company-tooltip-selection
+   ((t (:foreground ,hawaii-background :background ,hawaii-highlight-orange))))
+
+ ;;;;;;;;;;;;;;;;
+ ;; Git Gutter ;;
+
+ `(git-gutter-fr:added
+   ((t (:foreground ,hawaii-highlight-green))))
+
+ `(git-gutter-fr:modified
+   ((t (:foreground ,hawaii-highlight-orange))))
+
+ `(git-gutter-fr:deleted
+   ((t (:foreground ,hawaii-highlight-red))))
+
+ ;;;;;;;;;;
+ ;; Helm ;;
+
+ `(helm-selection
+   ((t (:foreground ,hawaii-background :background ,hawaii-highlight-orange))))
+
+ ;;;;;;;;;;;;;;;;;
+ ;; Line Number ;;
+
+ `(line-number
+   ((t (:foreground ,hawaii-comment))))
+
+ )
 
 ;;;###autoload
 (when load-file-name

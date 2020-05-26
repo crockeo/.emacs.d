@@ -33,11 +33,6 @@
   "........"
   "........")
 
-;; Changing the default colors
-(set-face-foreground 'git-gutter-fr:added "green")
-(set-face-foreground 'git-gutter-fr:modified "yellow")
-(set-face-foreground 'git-gutter-fr:deleted "red")
-
 ;; Enabling git-gutter-mode by default.
 (global-git-gutter-mode 1)
 (add-fringe-margin)
