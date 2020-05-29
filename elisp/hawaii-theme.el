@@ -13,6 +13,7 @@
 
 (defconst hawaii-background "#332a24")
 (defconst hawaii-background-light "#40352d")
+(defconst hawaii-background-dark "#26201b")
 (defconst hawaii-comment "#997e6d")
 (defconst hawaii-error "#ff0000")
 (defconst hawaii-highlight-blue "#79eaf2")
@@ -66,6 +67,12 @@
  `(fringe
    ((t (:background ,hawaii-background))))
 
+ `(link
+   ((t (:foreground ,hawaii-highlight-blue :underline t))))
+
+ `(link-visited
+   ((t (:foreground ,hawaii-highlight-purple :underline t))))
+
  `(minibuffer-prompt
    ((t (:foreground ,hawaii-text :bold t))))
 
@@ -74,6 +81,9 @@
 
  `(region
    ((t (:foreground ,hawaii-background :background ,hawaii-highlight-orange))))
+
+ `(success
+   ((t (:foreground ,hawaii-highlight-green))))
 
  ;;;;;;;;;;;;;
  ;; Company ;;
@@ -118,7 +128,37 @@
  ;; Line Number ;;
 
  `(line-number
-   ((t (:foreground ,hawaii-comment))))
+   ((t (:foreground ,hawaii-comment :background ,hawaii-background))))
+
+ ;;;;;;;;;;;;;;;
+ ;; Mode Line ;;
+
+ `(mode-line
+   ((t (:foreground ,hawaii-text :background ,hawaii-background-light))))
+
+ `(mode-line-emphasis
+   ((t (:foreground ,hawaii-highlight-blue))))
+
+ `(mode-line-highlight
+   ((t (:foreground ,hawaii-highlight-purple))))
+
+ `(mode-line-inactive
+   ((t (:foreground ,hawaii-comment :background ,hawaii-background-light))))
+
+ ;;;;;;;;;
+ ;; Org ;;
+
+ `(org-level-1
+   ((t (:foreground ,hawaii-highlight-green :height 1.3))))
+
+ `(org-level-2
+   ((t (:foreground ,hawaii-highlight-blue :height 1.2))))
+
+ `(org-level-3
+   ((t (:foreground ,hawaii-highlight-orange :height 1.1))))
+
+ `(org-level-4
+   ((t (:foreground ,hawaii-highlight-purple))))
 
  )
 
@@ -128,5 +168,9 @@
                (file-name-as-directory (file-name-directory load-file-name))))
 
 (provide-theme 'hawaii)
+
+;; Used for loading while editing:
+;;
+;; (load-theme 'hawaii t)
 
 ;;; hawaii-theme.el ends here
