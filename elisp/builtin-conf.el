@@ -53,3 +53,6 @@
 
 ;; Prefer disk file to Emacs file
 (global-auto-revert-mode t)
+
+;; Increase the max recursion size
+(setq max-specpdl-size 5000)
