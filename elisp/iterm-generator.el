@@ -1,10 +1,3 @@
-(defun hex-to-decimal (hex-string &optional value)
-  "Converts a hex string into a decimal number"
-  (if (= hex-string "")
-      value
-    (hex-to-decimal (substring hex-string 1)
-                    value)))
-
 ;; Constructs the numeric RGB representation of a color from the provided color.
 (defmacro color-component (name start end)
   `(defun ,name (color)
@@ -38,15 +31,6 @@
 </dict>
 </plist>")
 
-
-
-;; <key>Cursor Text Color</key>
-;; <key>Cursor Color</key>
-;; <key>Badge Color</key>
-
-;; <key>Cursor Guide Color</key>
-;; Ansi 8-15 color
-
 (defvar iterm-generator--color-name-lookup
   '((foreground . "Foreground Color")
     (background . "Background Color")
@@ -67,7 +51,16 @@
     (blue . "Ansi 4 Color")
     (magenta . "Ansi 5 Color")
     (cyan . "Ansi 6 Color")
-    (white . "Ansi 7 Color")))
+    (white . "Ansi 7 Color")
+
+    (black-bright . "Ansi 8 Color")
+    (red-bright . "Ansi 9 Color")
+    (green-bright . "Ansi 10 Color")
+    (yellow-bright . "Ansi 11 Color")
+    (blue-bright . "Ansi 12 Color")
+    (magenta-bright . "Ansi 13 Color")
+    (cyan-bright . "Ansi 14 Color")
+    (white-bright . "Ansi 15 Color")))
 
 (defun iterm-generator--generate-color (color-name color)
   (format iterm-generator--color-template
@@ -118,7 +111,16 @@
      (blue ,hawaii-highlight-blue)
      (magenta ,hawaii-highlight-purple)
      (cyan ,hawaii-highlight-blue)
-     (white ,hawaii-text))))
+     (white ,hawaii-text)
+
+     (black-bright ,hawaii-background)
+     (red-bright ,hawaii-highlight-red)
+     (green-bright ,hawaii-highlight-green)
+     (yellow-bright ,hawaii-highlight-orange)
+     (blue-bright ,hawaii-highlight-blue)
+     (magenta-bright ,hawaii-highlight-purple)
+     (cyan-bright ,hawaii-highlight-blue)
+     (white-bright ,hawaii-text))))
 
 (generate-hawaii-theme-iterm "~/hawaii.itermcolors")
 
