@@ -1,4 +1,4 @@
-;; Installng packages
+;; Installing packages
 (use-package company
   :init (global-company-mode))
 
@@ -7,6 +7,11 @@
 
 (use-package company-posframe
   :hook (company-mode . company-posframe-mode))
+
+;; Until Emacs27 is updated on macOS, you need to use this revision of company-posframe, or else
+;; calls to `lower-frame` are going to hide emacs.
+;;
+;; https://github.com/tumashu/company-posframe/tree/4e8f2056fa71aa5749341d834226e3ec786cea63
 
 ;; Forcing company to be case-sensitive
 (defvar company-dabbrev-downcase)
@@ -17,13 +22,10 @@
 (setq company-quickhelp-delay 0.001)
 
 ;; Matching quickhelp colors to theme colors
-(setq
- company-quickhelp-color-background
- (cdr (assoc 'background-color (frame-parameters))))
+(require 'hawaii-theme)
 
-(setq
- company-quickhelp-color-background
- (cdr (assoc 'foreground-color (frame-parameters))))
+(setq company-quickhelp-color-background hawaii-background-light)
+(setq company-quickhelp-color-foreground hawaii-text)
 
 ;; Allowing me to type things that are not autocomplete
 (setq company-require-match nil)
