@@ -27,7 +27,11 @@
 (use-package company-posframe
   :hook (company-mode . company-posframe-mode))
 
-;; Until Emacs27 is updated on macOS, you need to use this revision of company-posframe, or else
-;; calls to `lower-frame` are going to hide emacs.
-;;
-;; https://github.com/tumashu/company-posframe/tree/4e8f2056fa71aa5749341d834226e3ec786cea63
+;; Until Emacs27 is updated on macOS, it causes the entire window to be hidden under the application
+;; beneath it. This code snipped just prevents lower-frame from actually being executed.
+(defun no-lower-frame (orig-fun &rest args)
+  nil)
+
+(advice-add
+ 'lower-frame
+ :around #'no-lower-frame)
