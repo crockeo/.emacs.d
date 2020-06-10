@@ -1,9 +1,28 @@
 ;; Installing packages
 (use-package company
-  :init (global-company-mode))
+  :init (global-company-mode)
+  :config
+
+  ;; Make company case-sensitive
+  (setq company-dabbrev-downcase nil)
+
+  ;; Reduce delay before an autocomplete suggestion
+  (setq company-idle-delay 0.075)
+
+  ;; Reduce minimum # of characters before autocomplete to 1
+  (setq company-minimum-prefix-length 1)
+
+  ;; Allow me to type non-matched words
+  (setq company-require-match nil))
 
 (use-package company-quickhelp
-  :hook (company-mode . company-quickhelp-mode))
+  :hook (company-mode . company-quickhelp-mode)
+  :config
+
+  (require 'hawaii-theme)
+
+  (setq company-quickhelp-color-background hawaii-background-light)
+  (setq company-quickhelp-color-foreground hawaii-text))
 
 (use-package company-posframe
   :hook (company-mode . company-posframe-mode))
@@ -12,20 +31,3 @@
 ;; calls to `lower-frame` are going to hide emacs.
 ;;
 ;; https://github.com/tumashu/company-posframe/tree/4e8f2056fa71aa5749341d834226e3ec786cea63
-
-;; Forcing company to be case-sensitive
-(defvar company-dabbrev-downcase)
-(setq company-dabbrev-downcase nil)
-
-;; Making auto-complete appear while typing, instead of having to wait.
-(setq company-idle-delay 0.075)
-(setq company-quickhelp-delay 0.001)
-
-;; Matching quickhelp colors to theme colors
-(require 'hawaii-theme)
-
-(setq company-quickhelp-color-background hawaii-background-light)
-(setq company-quickhelp-color-foreground hawaii-text)
-
-;; Allowing me to type things that are not autocomplete
-(setq company-require-match nil)

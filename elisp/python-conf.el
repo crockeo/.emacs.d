@@ -1,13 +1,6 @@
 ;; Installing packages
-(use-package python-mode)
 (use-package blacken)
 (use-package pyvenv)
-
-;; NOTE: If you're getting a jediepcserver error, then make a Python2 virtual
-;;       environment:
-;;
-;;   - rm -rf ~/.emacs.d/.python-environments/default
-;;   - virtualenv -p ~/.emacs.d/.python-environments/default
 
 ;; Automatically switches to the venv in a Python directory if it exists.
 (defun setup-venv ()
@@ -46,18 +39,21 @@
   (ensure-black)
   (ensure-lsp))
 
-;; Setting company-jedi with company-mode
+(defun squelch-eldoc ()
+  (setq eldoc-documentation-function
+        (lambda (&rest args)
+          nil)))
+
 (defun setup-python-mode ()
   (setup-venv)
   (ensure-packages)
-  (define-key python-mode-map (kbd "RET") 'newline-and-indent)
-  (setq lsp-enable-indentation nil)
+  (squelch-eldoc)
   (message "Python mode setup complete"))
 
 (add-hook 'python-mode-hook 'setup-python-mode)
 
-;; Forcing python-mode to opinionated indentation.
 (defun custom-indentation (orig-fun &rest args)
+  "Forces python-mode to have sane indentation when writing docstrings"
   (save-excursion
     (pcase (python-indent-context)
       ;; When we make a new line in a docstring, we want to move to the
@@ -65,12 +61,6 @@
       (`(:inside-docstring . ,start)
        (goto-char start)
        (current-indentation))
-
-      ;; When we define a new function, we only want to be one block indented
-      ;; from the function definition, not two.
-      (`(:inside-paren-newline-start-from-block . ,start)
-       (goto-char start)
-       (+ (current-indentation) python-indent-offset))
 
       ;; If we are not in an overriden context, execute the standard function.
       (_ (apply orig-fun args)))))
@@ -87,9 +77,3 @@
 
 ;; Making our max line length longer for lsp-pyls
 (setq lsp-pyls-plugins-pycodestyle-max-line-length 120)
-
-;; Intercepting calls to py-help-at-point so that we never have to see
-;; *Python-Help* ever again.
-(defun intercept-call (oldfn &rest args))
-(advice-add 'py-help-at-point
-            :around #'intercept-call)
