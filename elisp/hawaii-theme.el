@@ -106,6 +106,18 @@
  `(company-tooltip-selection
    ((t (:foreground ,hawaii-background :background ,hawaii-highlight-orange))))
 
+ `(company-tooltip-annotation
+   ((t (:foreground ,hawaii-highlight-blue))))
+
+ `(company-tooltip-annotation-selection
+   ((t (:foreground ,hawaii-comment))))
+
+ `(company-posframe-quickhelp
+   ((t (:foreground ,hawaii-text :background ,hawaii-background-light))))
+
+ `(company-posframe-quickhelp-header
+   ((t (:foreground ,hawaii-text :background ,hawaii-background-light :extend t :box ,hawaii-background-dark))))
+
  ;;;;;;;;;;;;;;;;
  ;; Git Gutter ;;
 

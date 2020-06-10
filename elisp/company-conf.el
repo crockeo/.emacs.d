@@ -19,13 +19,13 @@
   :hook (company-mode . company-quickhelp-mode)
   :config
 
-  (require 'hawaii-theme)
-
-  (setq company-quickhelp-color-background hawaii-background-light)
-  (setq company-quickhelp-color-foreground hawaii-text))
+  (setq company-quickhelp-delay 0.05))
 
 (use-package company-posframe
-  :hook (company-mode . company-posframe-mode))
+  :hook (company-mode . company-posframe-mode)
+  :config
+
+  (setq company-posframe-quickhelp-delay 0.05))
 
 ;; Until Emacs27 is updated on macOS, it causes the entire window to be hidden under the application
 ;; beneath it. This code snipped just prevents lower-frame from actually being executed.
