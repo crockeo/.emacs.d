@@ -51,6 +51,9 @@
  t
  (lambda () (garbage-collect)))
 
+;; Allow for larger read process outputs
+(setq read-process-output-max (eval-when-compile (* 1024 1024)))
+
 ;; Prefer disk file to Emacs file
 (global-auto-revert-mode t)
 

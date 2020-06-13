@@ -91,7 +91,7 @@
    '("a2cde79e4cc8dc9a03e7d9a42fabf8928720d420034b66aecc5b665bbf05d4e9" default))
  '(org-agenda-files '("~/home.org"))
  '(package-selected-packages
-   '(company-box exec-path-from-shell salt-mode yaml-mode yaml ag srcery-theme editorconfig protobuf-mode lsp-ui helm-lsp company-lsp lsp-mode smart-jump floobits glsl-mode fennel fennel-mode lua-mode company-jedi jedi eros dumb-jump fill-column-indicator cider company-go go-mode jedi-company company-quickhelp dired-sidebar company-lean company flychecker projectile evil-nerd-commenter lean-mode markdown-mode use-package helm evil-visual-mark-mode)))
+   '(company-box exec-path-from-shell salt-mode yaml-mode yaml ag srcery-theme editorconfig protobuf-mode lsp-ui helm-lsp lsp-mode smart-jump floobits glsl-mode fennel fennel-mode lua-mode company-jedi jedi eros dumb-jump fill-column-indicator cider company-go go-mode jedi-company company-quickhelp dired-sidebar company-lean company flychecker projectile evil-nerd-commenter lean-mode markdown-mode use-package helm evil-visual-mark-mode)))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
