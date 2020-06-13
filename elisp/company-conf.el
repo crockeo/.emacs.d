@@ -16,16 +16,22 @@
   (setq company-require-match nil))
 
 (use-package company-quickhelp
+  :after company
   :hook (company-mode . company-quickhelp-mode)
   :config
 
   (setq company-quickhelp-delay 0.05))
 
 (use-package company-posframe
+  :after company
   :hook (company-mode . company-posframe-mode)
   :config
 
   (setq company-posframe-quickhelp-delay 0.05))
+
+(use-package company-box
+  :after company
+  :hook (company-mode . company-box-mode))
 
 ;; Until Emacs27 is updated on macOS, it causes the entire window to be hidden under the application
 ;; beneath it. This code snipped just prevents lower-frame from actually being executed.

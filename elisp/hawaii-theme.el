@@ -92,7 +92,7 @@
    ((t (:foreground ,hawaii-comment :background ,hawaii-background))))
 
  `(company-scrollbar-bg
-   ((t (:background ,hawaii-background-light))))
+   ((t (:background ,hawaii-background-light :box ,hawaii-background-dark))))
 
  `(company-scrollbar-fg
    ((t (:background ,hawaii-text))))

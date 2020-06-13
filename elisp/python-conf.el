@@ -48,6 +48,7 @@
   (setup-venv)
   (ensure-packages)
   (squelch-eldoc)
+  (setq lsp-enable-indentation nil)
   (message "Python mode setup complete"))
 
 (add-hook 'python-mode-hook 'setup-python-mode)
