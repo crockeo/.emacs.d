@@ -10,56 +10,40 @@
          "install"
          package-names))
 
-;; Automatically switches to the venv in a Python directory if it exists.
-(defun setup-venv ()
-  (if pyvenv-virtual-env-name
-      t
+(defun python-conf--enter-venv ()
+  "Enters a virtual Python environment in the current project directory if it
+exists and is not currently active."
+  (when (or (not pyvenv-virtual-env-name)
+            (not (equal pyvenv-virtual-env-name
+                        (projectile-project-name))))
     (let ((venv (concat (projectile-project-root) "venv")))
-      (if (file-exists-p venv)
-          (progn
-            (pyvenv-activate venv)
-            t)
-        nil))))
+      (when (file-exists-p venv)
+        (progn
+          (pyvenv-activate venv)
+          t)))))
 
-;; Ensuring we have black installed.
-(defun ensure-black ()
-  (unless (executable-find "black")
+(defun python-conf--ensure-packages ()
+  "Ensures we have the required pip-installable packages."
+  (apply 'python-conf--install-packages
+         (seq-filter
+          (lambda (package)
+            (not (executable-find package)))
+          '("black" "flake8"))))
+
+(defun python-conf--squelch-eldoc ()
+  "Squelches errors we receive from eldoc"
+  (setq eldoc-documentation-function (lambda (&rest args) nil)))
+
+(defun python-conf--setup ()
+  "Sets up Python config when we enter the Python major mode"
+  (when (python-conf--enter-venv)
     (progn
-      (start-process "ensure-black" "ensure-black"
-                     "pip"
-                     "install"
-                     "black")
-      (message "black installed"))))
+      (python-conf--ensure-packages)
+      (python-conf--squelch-eldoc)
 
-(defun ensure-lsp ()
-  "Ensures that we have a language server installed in the project. We make sure
-  this executes within the venv, so that we "
-  (unless (executable-find "pyls")
-    (progn
-      (python-conf--install-packages "python-language-server[all]")
-      (message "pyls installed"))))
+      (setq lsp-enable-indentation nil))))
 
-(defun ensure-packages ()
-  "Ensures that we have all of the packages we expect installed in any Python
-  environment."
-  (ensure-black)
-  (ensure-lsp))
-
-(defun squelch-eldoc ()
-  (setq eldoc-documentation-function
-        (lambda (&rest args)
-          nil)))
-
-(defun setup-python-mode ()
-  (if (setup-venv)
-      (progn
-        (ensure-packages)
-        (squelch-eldoc)
-        (setq lsp-enable-indentation nil)
-        (message "Python mode setup complete"))
-    (error "No venv available")))
-
-(add-hook 'python-mode-hook 'setup-python-mode)
+(add-hook 'python-mode-hook 'python-conf--setup)
 
 (defun custom-indentation (orig-fun &rest args)
   "Forces python-mode to have sane indentation when writing docstrings"
