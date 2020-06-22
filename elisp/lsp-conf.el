@@ -14,3 +14,6 @@
 (use-package lsp-ui
   :after lsp-mode
   :hook (lsp-mode-hook . lsp-ui-mode))
+
+(use-package lsp-python-ms
+  :after lsp-mode)

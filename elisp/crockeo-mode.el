@@ -10,19 +10,26 @@
 (defvar crockeo-mode-hotkeys '())
 (setq crockeo-mode-hotkeys
       '(("C-c c" evilnc-comment-or-uncomment-lines)
+
         ("C-c d" dired-sidebar-toggle-sidebar)
+
         ("C-c b b" switch-to-buffer)
         ("C-c b f" move-to-file-buffer)
         ("C-c b i" move-to-irc-buffer)
+
         ("C-c p a" helm-projectile-ag)
         ("C-c p f" helm-projectile-find-file)
         ("C-c p p" helm-projectile-switch-project)
         ("C-c p r" projectile-discover-projects-in-search-path)
         ("C-c i" ibuffer)
+
         ("C-c j b" smart-jump-back)
         ("C-c j g" smart-jump-go)
+
         ("C-c k" kill-buffer-and-window)
+
         ("C-c s" format-buffer)
+
         ("C-c w b" winpop-pop)
         ("C-c w c" winpop-clear)
         ("C-c w f" winpop-push)

@@ -2,15 +2,24 @@
 (use-package blacken)
 (use-package pyvenv)
 
+(defun python-conf--install-packages (&rest package-names)
+  "Installs a series of python packages with `pip` in the current environment."
+  (apply 'start-process
+         "python-conf--install-package" "python-conf--install-package"
+         "pip"
+         "install"
+         package-names))
+
 ;; Automatically switches to the venv in a Python directory if it exists.
 (defun setup-venv ()
-  (unless pyvenv-virtual-env-name
+  (if pyvenv-virtual-env-name
+      t
     (let ((venv (concat (projectile-project-root) "venv")))
       (if (file-exists-p venv)
           (progn
             (pyvenv-activate venv)
-            (message "Virtualenv activated in '%s'" venv))
-        (message "No virtualenv found at '%s'" venv)))))
+            t)
+        nil))))
 
 ;; Ensuring we have black installed.
 (defun ensure-black ()
@@ -27,10 +36,7 @@
   this executes within the venv, so that we "
   (unless (executable-find "pyls")
     (progn
-      (start-process "ensure-pyls" "ensure-pyls"
-                     "pip"
-                     "install"
-                     "python-language-server[all]")
+      (python-conf--install-packages "python-language-server[all]")
       (message "pyls installed"))))
 
 (defun ensure-packages ()
@@ -45,11 +51,13 @@
           nil)))
 
 (defun setup-python-mode ()
-  (setup-venv)
-  (ensure-packages)
-  (squelch-eldoc)
-  (setq lsp-enable-indentation nil)
-  (message "Python mode setup complete"))
+  (if (setup-venv)
+      (progn
+        (ensure-packages)
+        (squelch-eldoc)
+        (setq lsp-enable-indentation nil)
+        (message "Python mode setup complete"))
+    (error "No venv available")))
 
 (add-hook 'python-mode-hook 'setup-python-mode)
 
