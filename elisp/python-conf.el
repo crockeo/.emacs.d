@@ -1,5 +1,9 @@
 ;; Installing packages
 (use-package blacken)
+
+(use-package lsp-python-ms
+  :after lsp-mode)
+
 (use-package pyvenv)
 
 (defun python-conf--install-packages (&rest package-names)
@@ -34,14 +38,21 @@ exists and is not currently active."
   "Squelches errors we receive from eldoc"
   (setq eldoc-documentation-function (lambda (&rest args) nil)))
 
+(defun python-conf--use-flake8 ()
+  "Forces Emacs to use flake8 with flycheck even while using the Microsoft
+Python LSP server."
+  (setq flycheck-python-flake8-executable "flake8")
+  (flycheck-select-checker 'python-flake8)
+  (flycheck-mode t))
+
 (defun python-conf--setup ()
   "Sets up Python config when we enter the Python major mode"
   (when (python-conf--enter-venv)
-    (progn
-      (python-conf--ensure-packages)
-      (python-conf--squelch-eldoc)
+    (python-conf--ensure-packages))
 
-      (setq lsp-enable-indentation nil))))
+  (python-conf--squelch-eldoc)
+  (python-conf--use-flake8)
+  (setq lsp-enable-indentation nil))
 
 (add-hook 'python-mode-hook 'python-conf--setup)
 

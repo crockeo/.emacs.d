@@ -4,6 +4,16 @@
 (load-library "format")
 (load-library "winpop")
 
+(defun copy-current-file-path ()
+  "Copies the path of the current file relative to its project path into the
+clipboard."
+  (interactive)
+  (let* ((root (projectile-project-root))
+         (full-path buffer-file-name)
+
+         (relative-path (string-remove-prefix root full-path)))
+    (kill-new relative-path)))
+
 ;; Divided up hotkeys into individual sections. Note that certain hotkeys, which
 ;; are not global across emacs, are stored in individual files according to
 ;; their (major|minor)-mode.
@@ -18,6 +28,7 @@
         ("C-c b i" move-to-irc-buffer)
 
         ("C-c p a" helm-projectile-ag)
+        ("C-c p c" copy-current-file-path)
         ("C-c p f" helm-projectile-find-file)
         ("C-c p p" helm-projectile-switch-project)
         ("C-c p r" projectile-discover-projects-in-search-path)
