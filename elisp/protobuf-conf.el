@@ -2,7 +2,7 @@
 (use-package protobuf-mode)
 
 (defconst protobuf-style
-  '((c-basic-offset . 4)
+  '((c-basic-offset . 2)
     (indent-tabs-mode nil)))
 
 (defun setup-style ()

@@ -52,6 +52,7 @@ Python LSP server."
 
   (python-conf--squelch-eldoc)
   (python-conf--use-flake8)
+  (define-key python-mode-map (kbd "RET") 'newline-and-indent)
   (setq lsp-enable-indentation nil))
 
 (add-hook 'python-mode-hook 'python-conf--setup)

@@ -32,6 +32,9 @@ clipboard."
         ("C-c p f" helm-projectile-find-file)
         ("C-c p p" helm-projectile-switch-project)
         ("C-c p r" projectile-discover-projects-in-search-path)
+
+        ("C-c g" magit)
+
         ("C-c i" ibuffer)
 
         ("C-c j b" smart-jump-back)
