@@ -33,7 +33,7 @@ clipboard."
         ("C-c p p" helm-projectile-switch-project)
         ("C-c p r" projectile-discover-projects-in-search-path)
 
-        ("C-c g" magit)
+        ("C-c g l" git-link)
 
         ("C-c i" ibuffer)
 
