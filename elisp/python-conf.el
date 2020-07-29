@@ -4,6 +4,10 @@
 (use-package lsp-python-ms
   :after lsp-mode)
 
+(git-package lsp-pyright "emacs-lsp/lsp-pyright"
+  :after lsp-mode
+  :hook (python-mode . (require 'lsp-pyright)))
+
 (use-package pyvenv)
 
 (defun python-conf--install-packages (&rest package-names)
