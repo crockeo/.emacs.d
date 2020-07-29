@@ -4,9 +4,10 @@
 (use-package lsp-python-ms
   :after lsp-mode)
 
-(git-package lsp-pyright "emacs-lsp/lsp-pyright"
-  :after lsp-mode
-  :hook (python-mode . (require 'lsp-pyright)))
+;; TODO: fix lsp-pyright when i'm not wasting work hours
+;; (git-package lsp-pyright "emacs-lsp/lsp-pyright"
+;;   :after lsp-mode
+;;   :hook (python-mode . (require 'lsp-pyright)))
 
 (use-package pyvenv)
 
