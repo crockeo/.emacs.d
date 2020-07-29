@@ -1,5 +1,8 @@
 ;; Installing pacakges
+(use-package yasnippet)
+
 (use-package lsp-mode
+  :after yasnippet
   :config
   (setq lsp-eldoc-hook nil)
   (setq lsp-prefer-capf t)
