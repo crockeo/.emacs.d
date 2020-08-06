@@ -9,7 +9,9 @@
   (setq lsp-signature-auto-activate nil)
 
   (add-hook 'go-mode-hook 'lsp-deferred)
-  (add-hook 'python-mode-hook 'lsp-deferred))
+  (add-hook 'python-mode-hook 'lsp-deferred)
+  (add-hook 'js-mode-hook 'lsp-deferred)
+  (add-hook 'typescript-mode-hook 'lsp-deferred))
 
 (use-package helm-lsp
   :after helm lsp-mode)
