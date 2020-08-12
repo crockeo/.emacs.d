@@ -50,7 +50,7 @@ transforms them into only the test name."
                                (match-beginning 1)
                                (match-end 1))))))
 
-(defun failing-tests (url)
+(defun ci-failing-tests (url)
   "Returns all of the failing tests from the provided URL."
   (let ((test-names (split-and-filter (url-retrieve-as-string url))))
     (delete-dups test-names)
@@ -107,7 +107,8 @@ transforms them into only the test name."
          (gethash "target_url" status))
        (remove-if-not
         (lambda (status)
-          (equal (gethash "state" status) "failure"))
+          (and (equal (gethash "state" status) "failure")
+               (string-match "test:" (gethash "context" status))))
         statuses)))))
 
 (defun get-head-of-pr (owner repo pr)
@@ -129,6 +130,46 @@ transforms them into only the test name."
   (let* ((failed-status-urls (get-failed-status-urls-for-pr owner repo pr))
          (failed-tests (mapcar
                         (lambda (url)
-                          (failing-tests url))
+                          (ci-failing-tests url))
                         failed-status-urls)))
     (delete-dups (apply #'append failed-tests))))
+
+(defun copy-failed-tests-for-pr (owner repo pr &optional separator)
+  (setq separator (or separator "\n"))
+  (kill-new (string-join (get-failed-tests-for-pr owner repo pr) separator)))
+
+(defun failing-tests ()
+  (interactive)
+
+  (let ((owner (read-from-minibuffer "Owner: "))
+        (repo (read-from-minibuffer "Repo: "))
+        (pr (read-from-minibuffer "PR: ")))
+    (copy-failed-tests-for-pr owner repo pr)))
+
+(defun parse-pr-url (pr-url)
+  (when (string-match
+         (rx
+          "https://github.com/"
+          (group-n 1 (+? anything))
+          "/"
+          (group-n 2 (+? anything))
+          "/pull/"
+          (group-n 3 (+ digit)))
+         pr-url)
+    (apply #'values
+           (loop for i from 1 to 3
+                 collect (substring pr-url
+                                    (match-beginning i)
+                                    (match-end i))))))
+
+(defun failing-tests-from-pr-url ()
+  (interactive)
+
+  (let ((pr-url (read-from-minibuffer "PR URL: ")))
+    (multiple-value-bind (owner repo pr) (parse-pr-url pr-url)
+      (copy-failed-tests-for-pr owner repo pr))
+
+    (message "Tests copied to clipboard!" pr-url)))
+
+(provide 'failing-tests)
+(provide 'failing-tests-from-pr-url)

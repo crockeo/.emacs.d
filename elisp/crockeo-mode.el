@@ -1,3 +1,4 @@
+(require 'failing-tests)
 (require 'helm-projectile)
 
 (load-library "buffer-queries")
@@ -33,6 +34,7 @@ clipboard."
         ("C-c p p" helm-projectile-switch-project)
         ("C-c p r" projectile-discover-projects-in-search-path)
 
+        ("C-c g f" failing-tests-from-pr-url)
         ("C-c g l" git-link)
 
         ("C-c i" ibuffer)
