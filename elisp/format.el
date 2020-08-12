@@ -17,6 +17,7 @@
  format-formatters
  '((emacs-lisp-mode . indent-all)
    (fennel-mode . indent-all)
+   (lisp-mode . indent-all)
    (go-mode . gofmt)
    (python-mode . blacken-buffer)))
 

@@ -9,6 +9,7 @@
 (setq
  projectile-project-search-path
  '("~/src/"
+   "~/personalsrc"
    "~/src/go/src/github.com/lyft"
    "~/src/go/src/github.com/crockeo"))
 
