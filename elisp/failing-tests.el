@@ -6,10 +6,9 @@
 ;;;; This makes it really annoying to find the complete set of failing tests on a CI build. This
 ;;;; script:
 ;;;;
-;;;;   1. Auths into GH with OAuth
-;;;;   2. Auths into my company's GH with OAuth
-;;;;   3. Fetches failing tasks on a GitHub PR
-;;;;   4. Parses the resultent console output to find the set of failing tests.
+;;;;   1. Auths into GH with a personal token
+;;;;   2. Fetches failing statuses on a GitHub PR
+;;;;   3. Fetches and parses the statuses' console output to find the set of failing tests
 
 (require 'rx)
 
