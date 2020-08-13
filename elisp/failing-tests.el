@@ -23,7 +23,7 @@
       (? (any ?: ?.)))
    space
    (group-n 1
-            (+ (not space)))
+            (+? (not space)))
    (optional ?\[
              (+ (not space))
              ?\])
@@ -37,17 +37,21 @@
       (kill-buffer)
       contents)))
 
+(defun just-test-name (str)
+  "Extracts just the test name from a test failure line."
+  (when (string-match pytest-vvv-failed-test-regexp
+                      str)
+    (substring str
+               (match-beginning 1)
+               (match-end 1))))
+
 (defun split-and-filter (str)
   "Splits a string into lines, filters out only the lines that are a failing pytest (at -vvv), and
 transforms them into only the test name."
   (let ((str-lines (split-string str "\n")))
     (loop for str-line in str-lines
           if (string-match "FAILED \\[" str-line)
-          collect (progn
-                    (string-match pytest-vvv-failed-test-regexp str-line)
-                    (substring str-line
-                               (match-beginning 1)
-                               (match-end 1))))))
+          collect (just-test-name str-line))))
 
 (defun ci-failing-tests (url)
   "Returns all of the failing tests from the provided URL."
