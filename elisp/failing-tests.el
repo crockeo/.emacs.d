@@ -49,9 +49,9 @@
   "Splits a string into lines, filters out only the lines that are a failing pytest (at -vvv), and
 transforms them into only the test name."
   (let ((str-lines (split-string str "\n")))
-    (loop for str-line in str-lines
-          if (string-match "FAILED \\[" str-line)
-          collect (just-test-name str-line))))
+    (cl-loop for str-line in str-lines
+             if (string-match "FAILED \\[" str-line)
+             collect (just-test-name str-line))))
 
 (defun ci-failing-tests (url)
   "Returns all of the failing tests from the provided URL."
@@ -108,7 +108,7 @@ transforms them into only the test name."
       (mapcar
        (lambda (status)
          (gethash "target_url" status))
-       (remove-if-not
+       (cl-remove-if-not
         (lambda (status)
           (and (equal (gethash "state" status) "failure")
                (string-match "test:" (gethash "context" status))))
@@ -159,17 +159,17 @@ transforms them into only the test name."
           "/pull/"
           (group-n 3 (+ digit)))
          pr-url)
-    (apply #'values
-           (loop for i from 1 to 3
-                 collect (substring pr-url
-                                    (match-beginning i)
-                                    (match-end i))))))
+    (apply #'cl-values
+           (cl-loop for i from 1 to 3
+                    collect (substring pr-url
+                                       (match-beginning i)
+                                       (match-end i))))))
 
 (defun failing-tests-from-pr-url ()
   (interactive)
 
   (let ((pr-url (read-from-minibuffer "PR URL: ")))
-    (multiple-value-bind (owner repo pr) (parse-pr-url pr-url)
+    (cl-multiple-value-bind (owner repo pr) (parse-pr-url pr-url)
       (copy-failed-tests-for-pr owner repo pr))
 
     (message "Tests copied to clipboard!" pr-url)))

@@ -46,6 +46,8 @@ clipboard."
 
         ("C-c s" format-buffer)
 
+        ("C-c w 1" split-window-horizontally)
+        ("C-c w 2" split-window-vertically)
         ("C-c w b" winpop-pop)
         ("C-c w c" winpop-clear)
         ("C-c w f" winpop-push)
