@@ -10,11 +10,17 @@
   (setq lsp-prefer-capf t)
   (setq lsp-signature-auto-activate nil)
 
-  (add-hook 'go-mode-hook 'lsp-deferred)
-  (add-hook 'python-mode-hook 'lsp-deferred)
-  (add-hook 'js-mode-hook 'lsp-deferred)
-  (add-hook 'typescript-mode-hook 'lsp-deferred)
-  (add-hook 'caml-mode 'lsp-deferred))
+  (mapc
+   (lambda (mode)
+     (add-hook mode 'lsp-deferred))
+   '(c++-mode-hook
+     caml-mode-hook
+     go-mode-hook
+     js-mode-hook
+     python-mode-hook
+     rust-mode-hook
+     typescript-mode-hook))
+  )
 
 (use-package helm-lsp
   :after helm lsp-mode)

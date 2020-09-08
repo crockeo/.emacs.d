@@ -19,7 +19,8 @@
    (fennel-mode . indent-all)
    (lisp-mode . indent-all)
    (go-mode . gofmt)
-   (python-mode . blacken-buffer)))
+   (python-mode . blacken-buffer)
+   (rust-mode . rust-format-buffer)))
 
 ;; Formats the current buffer. Uses a different formatter depending on the
 ;; current major mode. If an unknown major mode is used, no formatting occurs.

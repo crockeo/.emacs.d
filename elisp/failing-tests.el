@@ -111,7 +111,7 @@ transforms them into only the test name."
        (cl-remove-if-not
         (lambda (status)
           (and (equal (gethash "state" status) "failure")
-               (string-match "test:" (gethash "context" status))))
+               (string-match "test: pytest" (gethash "context" status))))
         statuses)))))
 
 (defun get-head-of-pr (owner repo pr)
@@ -168,9 +168,13 @@ transforms them into only the test name."
 (defun failing-tests-from-pr-url ()
   (interactive)
 
-  (let ((pr-url (read-from-minibuffer "PR URL: ")))
+  (let ((use-spaces (yes-or-no-p "Use spaces: "))
+        (pr-url (read-from-minibuffer "PR URL: ")))
     (cl-multiple-value-bind (owner repo pr) (parse-pr-url pr-url)
-      (copy-failed-tests-for-pr owner repo pr))
+      (copy-failed-tests-for-pr owner repo pr
+                                (if use-spaces
+                                    " "
+                                  "\n")))
 
     (message "Tests copied to clipboard!" pr-url)))
 
