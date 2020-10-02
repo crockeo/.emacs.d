@@ -5,6 +5,12 @@
 (load-library "format")
 (load-library "winpop")
 
+(defun select-word ()
+  "Selects the current word."
+  (interactive)
+  (left-word)
+  (mark-word))
+
 (defun copy-current-file-path ()
   "Copies the path of the current file relative to its project path into the
 clipboard."
@@ -43,6 +49,8 @@ clipboard."
         ("C-c j g" smart-jump-go)
 
         ("C-c k" kill-buffer-and-window)
+
+        ("C-c l" select-word)
 
         ("C-c s" format-buffer)
 

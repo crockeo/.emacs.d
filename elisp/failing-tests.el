@@ -168,7 +168,7 @@ transforms them into only the test name."
 (defun failing-tests-from-pr-url ()
   (interactive)
 
-  (let ((use-spaces (yes-or-no-p "Use spaces: "))
+  (let ((use-spaces t)
         (pr-url (read-from-minibuffer "PR URL: ")))
     (cl-multiple-value-bind (owner repo pr) (parse-pr-url pr-url)
       (copy-failed-tests-for-pr owner repo pr

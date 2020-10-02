@@ -1,2 +1,2 @@
 (use-package paredit
-  :hook ((emacs-lisp-mode slime-mode) . paredit-mode))
+  :hook ((emacs-lisp-mode slime-mode clojure-mode) . paredit-mode))

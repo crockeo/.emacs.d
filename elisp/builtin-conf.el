@@ -39,7 +39,7 @@
 
 ;; Making org-mode have an auto fill at column 80.
 (defun org-mode-fill ()
-  (set-fill-column 80)
+  (set-fill-column 120)
   (auto-fill-mode 1))
 
 (add-hook 'org-mode-hook 'org-mode-fill)
