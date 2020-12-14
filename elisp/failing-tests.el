@@ -111,7 +111,7 @@ transforms them into only the test name."
        (cl-remove-if-not
         (lambda (status)
           (and (equal (gethash "state" status) "failure")
-               (string-match "test: pytest" (gethash "context" status))))
+               (string-match "test: pytest-app-batch" (gethash "context" status))))
         statuses)))))
 
 (defun get-head-of-pr (owner repo pr)

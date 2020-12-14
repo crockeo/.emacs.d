@@ -52,7 +52,7 @@ clipboard."
 
         ("C-c l" select-word)
 
-        ("C-c s" format-buffer)
+        ("C-c s" format-or-lsp-format)
 
         ("C-c w 1" split-window-horizontally)
         ("C-c w 2" split-window-vertically)

@@ -1,0 +1,1 @@
+(use-package bazel-mode)

@@ -71,6 +71,9 @@ Python LSP server."
       (`(:inside-docstring . ,start)
        (goto-char start)
        (current-indentation))
+      (`(:inside-string . ,start)
+       (goto-char start)
+       (current-indentation))
 
       ;; If we are not in an overriden context, execute the standard function.
       (_ (apply orig-fun args)))))

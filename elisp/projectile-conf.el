@@ -21,3 +21,6 @@
       (projectile-add-known-project emacs-dir))))
 
 (setup-projectile-projects)
+
+;; Ignoring Git submodules
+(setq projectile-git-submodule-command "")

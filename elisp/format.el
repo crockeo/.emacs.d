@@ -31,6 +31,12 @@
         (progn
           (funcall (cdr cmd))
           (save-buffer))
-      (message "No formatter found for %s" major-mode))))
+      nil)))
+
+(defun format-or-lsp-format ()
+  (interactive)
+  (unless (format-buffer)
+    (lsp-format-buffer)))
 
 (provide 'format-buffer)
+(provide 'format-or-lsp-format)

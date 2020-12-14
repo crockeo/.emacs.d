@@ -7,7 +7,7 @@
   :after yasnippet
   :config
   (setq lsp-eldoc-hook nil)
-  (setq lsp-prefer-capf t)
+  (setq lsp-prefer-capf nil)
   (setq lsp-signature-auto-activate nil)
 
   (mapc
@@ -21,6 +21,9 @@
      rust-mode-hook
      typescript-mode-hook))
   )
+
+(use-package company-lsp
+  :after lsp-mode)
 
 (use-package helm-lsp
   :after helm lsp-mode)

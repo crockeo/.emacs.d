@@ -25,3 +25,8 @@
 
 ;; Syntax for Dockerfiles
 (use-package dockerfile-mode)
+
+;; Making worst-case undos faster
+(setq undo-limit 20000)
+(setq undo-strong-limit 20000)
+(setq undo-outer-limit 20000)
