@@ -49,29 +49,18 @@
 (load-library "flycheck-conf")
 (load-library "geiser-conf")
 (load-library "git-gutter-fringe-conf")
-(load-library "git-link-conf")
 (load-library "helm-conf")
 (load-library "lsp-conf")
 (load-library "paredit-conf")
-(load-library "polymode-conf")
 (load-library "projectile-conf")
 (load-library "slime-conf")
 (load-library "smart-jump-conf")
 
 ;; Language configuration
-(load-library "clojure-conf")
-(load-library "fennel-conf")
-(load-library "glsl-conf")
 (load-library "go-conf")
 (load-library "javascript-conf")
-(load-library "lean-conf")
-(load-library "ocaml-conf")
 (load-library "rust-conf")
 (load-library "salt-conf")
-
-(unless (is-emacs-27)
-  (load-library "lua-conf"))
-
 (load-library "protobuf-conf")
 (load-library "python-conf")
 (load-library "markdown-conf")
@@ -104,7 +93,7 @@
    '("a2cde79e4cc8dc9a03e7d9a42fabf8928720d420034b66aecc5b665bbf05d4e9" default))
  '(org-agenda-files '("~/home.org"))
  '(package-selected-packages
-   '(clang-format json-mode bazel-mode dockerfile-mode cargo rust rust-mode all-the-icons-dired tuareg caml caml-mode ocaml-mode typescript-mode polymode geiser quelpa lsp-pyright yasnippet paredit slime tree-sitter git-link magit python-docstring cython-mode company-box exec-path-from-shell salt-mode yaml-mode yaml ag srcery-theme editorconfig protobuf-mode lsp-ui helm-lsp lsp-mode smart-jump floobits glsl-mode fennel fennel-mode lua-mode company-jedi jedi eros dumb-jump fill-column-indicator cider company-go go-mode jedi-company company-quickhelp dired-sidebar company-lean company flychecker projectile evil-nerd-commenter lean-mode markdown-mode use-package helm evil-visual-mark-mode))
+   '(explain-pause-mode clang-format json-mode bazel-mode dockerfile-mode cargo rust rust-mode all-the-icons-dired tuareg caml caml-mode ocaml-mode typescript-mode polymode geiser quelpa lsp-pyright yasnippet paredit slime tree-sitter git-link magit python-docstring cython-mode company-box exec-path-from-shell salt-mode yaml-mode yaml ag srcery-theme editorconfig protobuf-mode lsp-ui helm-lsp lsp-mode smart-jump floobits glsl-mode fennel fennel-mode lua-mode company-jedi jedi eros dumb-jump fill-column-indicator cider company-go go-mode jedi-company company-quickhelp dired-sidebar company-lean company flychecker projectile evil-nerd-commenter lean-mode markdown-mode use-package helm evil-visual-mark-mode))
  '(safe-local-variable-values '((geiser-scheme-implementation quote chicken))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
