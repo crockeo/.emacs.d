@@ -1,13 +1,8 @@
+.cache/
+.lsp-session-v1
 auto-save-list/
-.python-environments/
-backup/
 elpa/
-elpy/
-eshell/
-.lsp-session*
 projectile-bookmarks.eld
-url/
+projectile.cache
 recentf
-.cache
-quelpa/
-secret/
+straight/
