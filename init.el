@@ -37,6 +37,8 @@
 (setq read-process-output-max (* 2 1024 1024))
 (setq ring-bell-function 'ignore)
 
+(load-theme 'whiteboard)
+
 ;;
 ;; editor configuration
 ;;
@@ -49,6 +51,9 @@
 
 (use-package company-prescient
   :after (company prescient))
+
+(use-package eros
+  :config (eros-mode 1))
 
 (use-package evil
   :config
