@@ -27,25 +27,35 @@
 ;; builtin configuration
 ;;
 (add-hook
+ 'before-save-hook
+ 'delete-trailing-whitespace)
+
+(add-hook
  'org-mode-hook
  (lambda ()
    (set-fill-column 100)
    (auto-fill-mode)))
 
 (column-number-mode t)
-(global-display-line-numbers-mode 1)
-(global-auto-revert-mode t)
+(global-display-line-numbers-mode t)
+(global-eldoc-mode nil)
+(set-face-attribute 'default nil :height 130)
 (tool-bar-mode -1)
 
 (setq auto-save-file-name-transforms `((".*" ,temporary-file-directory t)))
 (setq backup-directories-alist `((".*" . ,temporary-file-directory)))
-(setq exec-path (append exec-path '("/usr/local/bin" "~/bin")))
+(add-to-list 'default-frame-alist '(inhibit-double-buffering . t))
+(add-to-list 'exec-path '("/usr/local/bin" "~/bin"))
 (setq flymake-no-changes-timeout 5)
-(setq gc-cons-threshold (* 20 1024 1024))
+(setq gc-cons-threshold (* 4 1024 1024 1024))
 (setq initial-buffer-choice "~/home.org")
+(setq max-specpdl-size 500)
 (setq-default mode-line-format "    %* %f    (%c,%l)    [%m]")
 (setq read-process-output-max (* 200 1024 1024))
 (setq ring-bell-function 'ignore)
+(setq scroll-conservatively 101)
+(setq scroll-margin 4)
+
 
 ;; for macOS, you need to set the PATH in addition to exec-path to find certain executables
 (setenv "PATH" (concat (getenv "PATH") ":/usr/local/bin:~/bin"))
@@ -53,6 +63,7 @@
 ;;
 ;; personal packages
 ;;
+(require 'file-buffers)
 (require 'hawaii-theme)
 (load-theme 'hawaii t)
 (require 'winpop)
@@ -65,7 +76,7 @@
 (use-package company
   :config
   (setq company-idle-delay 0.2)
-  (setq company-minimum-prefix-length 1)
+  (setq company-minimum-prefix-length 3)
   :hook (lsp-mode . (lambda () (company-mode 1) (push 'company-capf company-backends))))
 
 (use-package company-prescient
@@ -85,7 +96,7 @@
 (use-package evil
   :config
   (evil-mode 1)
-  
+
   (evil-define-key nil evil-insert-state-map
     "\C-a" 'evil-beginning-of-line
     "\C-e" (lambda () (interactive)
@@ -98,6 +109,7 @@
 
   (evil-define-key nil evil-normal-state-map
     "u" 'undo-fu-only-undo
+    ";" 'switch-to-last-file-buffer
     "\C-a" 'evil-beginning-of-line
     "\C-e" 'evil-end-of-line
     "\C-r" 'undo-fu-only-redo)
@@ -109,7 +121,9 @@
 (use-package evil-nerd-commenter)
 
 (use-package ivy
-  :config (ivy-mode 1))
+  :config
+  (ivy-mode 1)
+  (setq ivy-on-del-error-function #'ignore))
 
 (use-package ivy-prescient
   :after (ivy prescient)
@@ -134,23 +148,23 @@
 ;;
 (use-package lsp-mode
   :config
+  (setq lsp-completion-provider :capf)
+  ;; TODO: uncomment one by one :)
   (setq lsp-eldoc-enable-hover nil)
-  (setq lsp-enable-folding nil)
-  (setq lsp-enable-snippet nil)
-  (setq lsp-enable-symbol-highlighting nil)
+  ;; (setq lsp-enable-folding nil)
+  ;; (setq lsp-enable-snippet nil)
+  ;; (setq lsp-enable-symbol-highlighting nil)
   (setq lsp-headerline-breadcrumb-enable nil)
-  (setq lsp-lens-enable nil)
-  (setq lsp-modeline-code-actions-enable nil)
-  (setq lsp-modeline-diagnostics-enable nil)
-  (setq lsp-signature-auto-activate nil)
+  ;; (setq lsp-lens-enable nil)
+  ;; (setq lsp-modeline-code-actions-enable nil)
+  ;; (setq lsp-modeline-diagnostics-enable nil)
+  ;; (setq lsp-signature-auto-activate nil)
   (lsp-modeline-diagnostics-mode nil))
-  
+
 (use-package lsp-ui
   :after (lsp-mode)
   :config
-  (setq lsp-ui-doc-enable nil)
-  (setq lsp-ui-doc-position 'at-point)
-  (setq lsp-ui-sideline-enable t))
+  (setq lsp-ui-doc-position 'at-point))
 
 ;; python
 (use-package lsp-python-ms
@@ -180,11 +194,14 @@
 ;; (crockeo-mode-register-keys crockeo-mode-map)
 ;;
 (defvar crockeo-mode-keymap
-  '(("C-SPC" lsp-ui-doc-glance)
+  '(("C-SPC" company-complete)
 
     ("C-c c" evilnc-comment-or-uncomment-lines)
 
     ("C-c d" dired-sidebar-toggle-sidebar)
+
+    ("C-c e b" flymake-goto-prev-error)
+    ("C-c e n" flymake-goto-next-error)
 
     ("C-c i" ibuffer)
 
