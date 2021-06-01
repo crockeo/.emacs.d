@@ -34,18 +34,19 @@
  'org-mode-hook
  (lambda ()
    (set-fill-column 100)
-   (auto-fill-mode)))
+   (auto-fill-mode)
+   (setq org-adapt-indentation nil)))
 
 (column-number-mode t)
 (global-display-line-numbers-mode t)
 (global-eldoc-mode nil)
-(set-face-attribute 'default nil :height 130)
+(set-face-attribute 'default nil :height 140 :font "Fira Mono")
 (tool-bar-mode -1)
 
 (setq auto-save-file-name-transforms `((".*" ,temporary-file-directory t)))
 (setq backup-directories-alist `((".*" . ,temporary-file-directory)))
 (add-to-list 'default-frame-alist '(inhibit-double-buffering . t))
-(add-to-list 'exec-path '("/usr/local/bin" "~/bin"))
+(setq exec-path (append exec-path '("/usr/local/bin" "~/bin" "~/src/go/bin")))
 (setq flymake-no-changes-timeout 5)
 (setq gc-cons-threshold (* 4 1024 1024 1024))
 (setq initial-buffer-choice "~/home.org")
@@ -55,7 +56,6 @@
 (setq ring-bell-function 'ignore)
 (setq scroll-conservatively 101)
 (setq scroll-margin 4)
-
 
 ;; for macOS, you need to set the PATH in addition to exec-path to find certain executables
 (setenv "PATH" (concat (getenv "PATH") ":/usr/local/bin:~/bin"))
@@ -87,8 +87,7 @@
 
 (use-package dired-sidebar
   :config
-  (add-hook 'dired-sidebar-mode
-	    (lambda () (message "hello world") (display-line-numbers-mode nil))))
+  (add-hook 'dired-sidebar-mode (lambda () (display-line-numbers-mode nil))))
 
 (use-package eros
   :config (eros-mode 1))
@@ -129,6 +128,9 @@
   :after (ivy prescient)
   :hook (ivy-mode . ivy-prescient-mode))
 
+(use-package paredit
+  :hook (lisp-mode-hook . paredit-mode))
+
 (use-package prescient)
 
 (use-package projectile
@@ -143,6 +145,8 @@
 
 (use-package undo-fu)
 
+(use-package slime)
+
 ;;
 ;; language configuration
 ;;
@@ -155,6 +159,7 @@
   ;; (setq lsp-enable-snippet nil)
   ;; (setq lsp-enable-symbol-highlighting nil)
   (setq lsp-headerline-breadcrumb-enable nil)
+  (setq lsp-signature-render-documentation nil)
   ;; (setq lsp-lens-enable nil)
   ;; (setq lsp-modeline-code-actions-enable nil)
   ;; (setq lsp-modeline-diagnostics-enable nil)
@@ -166,7 +171,20 @@
   :config
   (setq lsp-ui-doc-position 'at-point))
 
-;; python
+(use-package bazel
+  :straight (emacs-bazel-mode
+	     :type git
+	     :host github
+	     :repo "bazelbuild/emacs-bazel-mode"))
+
+(use-package dockerfile-mode)
+
+(use-package go-mode
+  :after (lsp-mode)
+  :config
+  (setq tab-width 4)
+  (add-hook 'go-mode-hook #'lsp-deferred))
+
 (use-package lsp-python-ms
   :after (lsp-mode)
   :init (setq lsp-python-ms-auto-install-server t)
@@ -174,7 +192,6 @@
 			 (require 'lsp-python-ms)
 			 (lsp-deferred))))
 
-;; rust
 (use-package rust-mode
   :after (lsp-mode)
   :config
@@ -185,6 +202,8 @@
   ;; 		nil))
   (setq rust-match-angle-brackets nil)
   (add-hook 'rust-mode-hook #'lsp-deferred))
+
+(use-package yaml-mode)
 
 ;;
 ;; keymap configuration
@@ -212,6 +231,8 @@
 
     ("C-c j b" xref-pop-marker-stack)
     ("C-c j g" lsp-find-definition)
+    ("C-c j r" lsp-find-references)
+    ("C-c j i" lsp-find-implementation)
 
     ("C-c s" lsp-format-buffer)
 
