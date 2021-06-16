@@ -23,6 +23,13 @@
     (unless (or (eq evil-state 'visual)
 		(equal "" (buffer-substring (line-beginning-position) (line-end-position))))
       (forward-char)))
+
+  (defun ch/evil/last-file-buffer ()
+    (interactive)
+    (let* ((file-buffers (seq-filter #'buffer-file-name (buffer-list)))
+	   (last-file-buffer (when (> (length file-buffers) 1)
+			       (cadr file-buffers))))
+      (switch-to-buffer last-file-buffer)))
   
   (use-package undo-fu)
   
@@ -37,6 +44,7 @@
       "\C-f" 'evil-normal-state)
     
     (evil-define-key nil evil-normal-state-map
+      ";" 'ch/evil/last-file-buffer
       "u" 'undo-fu-only-undo
       (kbd "C-c c") 'evilnc-comment-or-uncomment-lines
       "\C-r" 'undo-fu-only-redo))
