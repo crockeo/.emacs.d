@@ -1,8 +1,6 @@
-;;; pkgs.el -*- lexical-binding: t; -*-
+;;; evil.el -*- lexical-binding: t; -*-
 
 
-;; TODO: move these their own files under ~/.emacs.d/lisp/pkgs
-;; and then require, e.g. ch/pkg/evil
 (ch/pkg evil ()
   (defmacro ch/evil/define-key-all (states &rest body)
     (declare (indent defun))
@@ -50,29 +48,3 @@
       "\C-r" 'undo-fu-only-redo))
 
   (use-package evil-nerd-commenter))
-
-
-(ch/pkg ivy ()
-  (use-package ivy
-    :init (ivy-mode 1))
-
-  (use-package prescient)
-
-  (use-package ivy-prescient
-    :after (ivy prescient)
-    :hook (ivy-mode . ivy-prescient-mode)))
-
-
-(ch/pkg lisp (emacs-lisp-mode-hook)
-  (use-package eros
-    :init (eros-mode 1)
-    :hook (emacs-lisp-mode . eros-mode))
-
-  (use-package paredit
-    :init (paredit-mode 1)
-    :hook (emacs-lisp-mode . paredit-mode)))
-
-(ch/use-pkgs
-  evil
-  ivy
-  lisp)

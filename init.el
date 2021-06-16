@@ -4,4 +4,4 @@
 (setq ring-bell-function 'ignore)
 
 (load "~/.emacs.d/lisp/core")
-(load "~/.emacs.d/lisp/pkgs")
+(load "~/.emacs.d/lisp/load-pkgs")
