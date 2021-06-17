@@ -3,8 +3,6 @@
 
 ;; TODO: go through and make this fit more with the other thing
 (ch/pkg colorscheme ()
-  (set-face-attribute 'default nil :height 140)
-  
   ;; unfortunately i can't have the actual theme here
   ;; because it needs to be discoverable by emacs
   ;; so it's in ~/.emacs.d/ and i just load it here :(

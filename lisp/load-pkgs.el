@@ -9,7 +9,8 @@
   (ch/use-pkgs
     colorscheme
     evil
-    ivy))
+    ivy
+    projectile))
 
 (ch/pkg languages ()
   (ch/use-pkgs
@@ -18,6 +19,7 @@
 
 
 (ch/use-pkgs
+  builtin
   interface
-  languages)
-
+  languages
+  lsp)

@@ -28,6 +28,14 @@
 	   (last-file-buffer (when (> (length file-buffers) 1)
 			       (cadr file-buffers))))
       (switch-to-buffer last-file-buffer)))
+
+  (defun ch/evil/toggle-home ()
+    (interactive)
+    (if (equal (buffer-name) "home.org")
+	(xref-pop-marker-stack)
+      (progn
+	(xref-push-marker-stack)
+	(find-file "~/home.org"))))
   
   (use-package undo-fu)
   
@@ -40,11 +48,29 @@
 
     (evil-define-key nil evil-insert-state-map
       "\C-f" 'evil-normal-state)
-    
+
     (evil-define-key nil evil-normal-state-map
       ";" 'ch/evil/last-file-buffer
-      "u" 'undo-fu-only-undo
+
       (kbd "C-c c") 'evilnc-comment-or-uncomment-lines
-      "\C-r" 'undo-fu-only-redo))
+
+      (kbd "C-c j g") 'lsp-find-definition
+      (kbd "C-c j b") 'xref-pop-marker-stack
+
+      (kbd "C-c p f") 'counsel-projectile-find-file
+      ;; TODO: come back and use counsel
+      ;; after i figure out performance issues
+      (kbd "C-c p p") 'projectile-switch-project
+      (kbd "C-c p a") 'counsel-projectile-ag
+
+      (kbd "C-c C-w") 'ch/evil/toggle-home
+
+      "u" 'undo-fu-only-undo
+      (kbd "C-r") 'undo-fu-only-redo
+
+      (kbd "C-s o") 'other-window
+      (kbd "C-s C-o") 'other-window
+      (kbd "C-s %") 'split-window-right
+      (kbd "C-s \"") 'split-window-below))
 
   (use-package evil-nerd-commenter))
