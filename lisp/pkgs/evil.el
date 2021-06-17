@@ -68,6 +68,7 @@
       "u" 'undo-fu-only-undo
       (kbd "C-r") 'undo-fu-only-redo
 
+      (kbd "C-s C-n") 'split-window-right
       (kbd "C-s o") 'other-window
       (kbd "C-s C-o") 'other-window
       (kbd "C-s %") 'split-window-right

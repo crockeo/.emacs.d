@@ -28,13 +28,25 @@
 	(setq done t)
 	(apply thing args)))))
 
+(defun ch/pkg/new-hooks (old-hook hook)
+  (seq-filter
+   (lambda (element)
+     (not (member element old-hook)))
+   hook))
+
+(defun ch/pkg/run-and-new-hooks (hook once-body)
+  (let ((old-hook (symbol-value hook)))
+    (funcall once-body)
+    (dolist (new-hooks (ch/pkg/new-hooks old-hook (symbol-value hook)))
+      (funcall new-hooks))))
+
 (defun ch/pkg/impl (name hooks body)
   (unless (assoc name ch/pkg-list)
     ;; If there are no hooks defined
     ;; just load when specified by use-pkgs
     (when (= (length hooks) 0)
       (push `(,name . ,body) ch/pkg-list))
-    
+
     ;; If there are hooks defined,
     ;; instead register a lambda
     ;; that adds the body to the hooks
@@ -43,7 +55,9 @@
       (let* ((once-body (ch/pkg/do-once body))
 	     (add-hooks (lambda ()
 			  (dolist (hook hooks)
-			    (add-hook hook once-body)))))
+			    (add-hook hook
+				      (lambda ()
+					(ch/pkg/run-and-new-hooks hook once-body)))))))
 	(push `(,name . ,add-hooks) ch/pkg-list)))))
 
 (defmacro ch/pkg (name hooks &rest body)
