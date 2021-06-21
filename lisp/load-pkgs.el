@@ -9,6 +9,7 @@
     colorscheme
     company
     evil
+    flycheck
     ivy
     projectile))
 
