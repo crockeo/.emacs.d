@@ -15,6 +15,7 @@
 
 (ch/pkg languages ()
   (ch/use-pkgs
+    go
     lisp
     org))
 
