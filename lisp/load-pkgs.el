@@ -11,13 +11,16 @@
     evil
     flycheck
     ivy
+    magit
     projectile))
 
 (ch/pkg languages ()
   (ch/use-pkgs
     go
     lisp
-    org))
+    org
+    proto
+    python))
 
 (ch/use-pkgs
   builtin

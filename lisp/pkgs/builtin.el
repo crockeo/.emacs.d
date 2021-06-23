@@ -12,4 +12,10 @@
 	read-process-output-max (* 1024 1024 4) ;; 2MB
 	ring-bell-function 'ignore)
 
+  (run-with-idle-timer
+   30 t
+   (lambda ()
+     (garbage-collect-maybe 3)))
+
+  (global-auto-revert-mode 1)
   (global-display-line-numbers-mode 1))
