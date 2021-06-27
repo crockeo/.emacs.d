@@ -16,6 +16,9 @@
 			   (let ((venv-dir (concat (projectile-project-root) "venv")))
 			     (when (file-directory-p venv-dir)
 			       (pyvenv-activate venv-dir)))
-			   (lsp))))
+			   (lsp-deferred)))
+    :config
+    (setq lsp-pyright-log-level "error"
+	  lsp-pyright-multi-root nil))
 
   (use-package pyvenv))

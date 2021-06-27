@@ -10,11 +10,11 @@
 	    `(evil-define-key nil ,state
 	       ,@body))
 	  states)))
-  
+
   (defun ch/evil/start-of-line ()
     (interactive)
     (evil-first-non-blank))
-  
+
   (defun ch/evil/end-of-line ()
     (interactive)
     (evil-end-of-line)
@@ -36,9 +36,9 @@
       (progn
 	(xref-push-marker-stack)
 	(find-file "~/home.org"))))
-  
+
   (use-package undo-fu)
-  
+
   (use-package evil
     :init (evil-mode 1)
     :config
@@ -47,7 +47,8 @@
       "\C-e" 'ch/evil/end-of-line)
 
     (evil-define-key nil evil-insert-state-map
-      "\C-f" 'evil-normal-state)
+      "\C-f" 'evil-normal-state
+      (kbd "C-SPC") 'company-complete)
 
     (evil-define-key nil evil-normal-state-map
       ";" 'ch/evil/last-file-buffer
@@ -57,11 +58,12 @@
       (kbd "C-c j g") 'lsp-find-definition
       (kbd "C-c j b") 'xref-pop-marker-stack
 
+      (kbd "C-c p a") 'counsel-projectile-ag
       (kbd "C-c p f") 'counsel-projectile-find-file
       ;; TODO: come back and use counsel
       ;; after i figure out performance issues
       (kbd "C-c p p") 'projectile-switch-project
-      (kbd "C-c p a") 'counsel-projectile-ag
+      (kbd "C-c p r") 'projectile-discover-projects-in-search-path
 
       (kbd "C-c C-w") 'ch/evil/toggle-home
 

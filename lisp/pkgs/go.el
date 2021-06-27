@@ -11,6 +11,8 @@
   (use-package go-mode
     :init (progn
 	    (go-mode)
-	    (lsp-deferred)))
+	    (lsp-deferred))
+    :config
+    (setq tab-width 4))
 
   (add-hook 'go-mode-hook #'lsp-deferred))

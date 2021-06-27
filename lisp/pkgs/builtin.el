@@ -18,4 +18,5 @@
      (garbage-collect-maybe 3)))
 
   (global-auto-revert-mode 1)
-  (global-display-line-numbers-mode 1))
+  (global-display-line-numbers-mode 1)
+  (global-eldoc-mode -1))
