@@ -64,6 +64,18 @@
   (declare (indent defun))
   `(ch/pkg/impl ',name ',hooks (lambda () ,@body)))
 
+(defun ch/pkg-lang/impl (name file-suffixes body)
+  (let* ((mode-name (concat (symbol-name name) "-bootstrapping-mode"))
+	 (hook-name (concat mode-name "-hook")))
+    (eval `(define-derived-mode ,(intern mode-name) fundamental-mode ""))
+    (dolist (file-suffix file-suffixes)
+      (push (cons file-suffix (intern mode-name)) auto-mode-alist))
+    (ch/pkg/impl name `(,(intern hook-name)) body)))
+
+(defmacro ch/pkg-lang (name file-suffixes &rest body)
+  (declare (indent defun))
+  `(ch/pkg-lang/impl ',name ',file-suffixes (lambda () ,@body)))
+
 (defun ch/use-pkgs-impl (packages)
   (dolist (package packages)
     (funcall (cdr (assoc package ch/pkg-list)))))

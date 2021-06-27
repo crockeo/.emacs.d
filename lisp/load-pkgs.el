@@ -20,7 +20,8 @@
     lisp
     org
     proto
-    python))
+    python
+    yaml))
 
 (ch/use-pkgs
   builtin
