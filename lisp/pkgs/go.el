@@ -6,6 +6,12 @@
 	    (go-mode)
 	    (lsp-deferred))
     :config
+    ;; TODO: figure out how to NOT need this
+    ;; in both :config and the hook below
     (setq tab-width 4))
 
-  (add-hook 'go-mode-hook #'lsp-deferred))
+  (defun ch/go/config ()
+    (setq tab-width 4)
+    (lsp-deferred))
+
+  (add-hook 'go-mode-hook #'ch/go/config))
