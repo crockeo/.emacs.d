@@ -7,5 +7,7 @@ emacs/
 projectile-bookmarks.eld
 projectile.cache
 recentf
-straight/
+straight/build
+straight/build-cache.el
+straight/repos
 *~
