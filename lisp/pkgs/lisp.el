@@ -8,4 +8,7 @@
   (use-package paredit
     :hook ((emacs-lisp-mode lisp-mode) . paredit-mode))
 
-  (use-package slime))
+  (add-hook 'lisp-mode-hook (lambda () (setq inferior-lisp-program "sbcl")))
+
+  (use-package slime
+    :hook (lisp-mode . slime)))
