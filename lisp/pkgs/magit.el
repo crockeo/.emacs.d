@@ -1,4 +1,4 @@
 ;;; magit.el -*- lexical-binding: t; -*-
 
-(ch/pkg magit ()
+(ch/pkg magit
   (use-package magit))

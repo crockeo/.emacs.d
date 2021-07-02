@@ -1,7 +1,7 @@
 ;;; evil.el -*- lexical-binding: t; -*-
 
 
-(ch/pkg evil ()
+(ch/pkg evil
   (defmacro ch/evil/define-key-all (states &rest body)
     (declare (indent defun))
     `(progn

@@ -4,7 +4,7 @@
 (dolist (file (directory-files "~/.emacs.d/lisp/pkgs" t "\\.el$"))
   (load file))
 
-(ch/pkg interface ()
+(ch/pkg interface
   (ch/use-pkgs
     colorscheme
     company
@@ -14,7 +14,7 @@
     magit
     projectile))
 
-(ch/pkg languages ()
+(ch/pkg languages
   (ch/use-pkgs
     go
     lisp

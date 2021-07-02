@@ -1,15 +1,10 @@
 ;;; go.el -*- lexical-binding: t; -*-
 
-(ch/pkg-lang go ("\\.go\\'")
-  (use-package go-mode
-    :init (progn
-	    (go-mode)
-	    (lsp-deferred))
-    :config
-    ;; TODO: figure out how to NOT need this
-    ;; in both :config and the hook below
-    (setq tab-width 4))
+(ch/pkg go
+  (use-package go-mode)
 
+  ;; putting this as :hook inside of use-package
+  ;; causes issues, so i'm not doing it! :)
   (defun ch/go/config ()
     (setq tab-width 4)
     (lsp-deferred))

@@ -1,7 +1,7 @@
 ;;; ivy.el -*- lexical-binding: t; -*-
 
 
-(ch/pkg ivy ()
+(ch/pkg ivy
   (use-package ivy
     :init (ivy-mode 1))
 

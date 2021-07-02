@@ -1,4 +1,4 @@
-(ch/pkg projectile ()
+(ch/pkg projectile
   (use-package projectile
     :init
     (setq projectile-project-search-path '("~/src/" "~/src/personal" "~/src/tmp"))

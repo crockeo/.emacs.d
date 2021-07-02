@@ -1,4 +1,4 @@
-(ch/pkg builtin ()
+(ch/pkg builtin
   (add-hook 'before-save-hook #'delete-trailing-whitespace)
 
   (set-face-attribute 'default nil

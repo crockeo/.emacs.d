@@ -1,6 +1,6 @@
 ;;; python.el -*- lexical-binding: t; -*-
 
-(ch/pkg python (python-mode-hook)
+(ch/pkg python
   (defun ch/python/lyftvenv ()
     (interactive)
 

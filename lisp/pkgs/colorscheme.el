@@ -1,8 +1,6 @@
 ;;; colorscheme.el -*- lexical-binding: t; -*-
 
-
-;; TODO: go through and make this fit more with the other thing
-(ch/pkg colorscheme ()
+(ch/pkg colorscheme
   ;; unfortunately i can't have the actual theme here
   ;; because it needs to be discoverable by emacs
   ;; so it's in ~/.emacs.d/ and i just load it here :(

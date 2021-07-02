@@ -1,10 +1,11 @@
 ;; company.el -*- lexical-binding: t; -*-
 
-(ch/pkg company (prog-mode-hook)
+(ch/pkg company
   (use-package company
     :hook (prog-mode . company-mode)
     :config
     (setq company-idle-delay 0))
 
   (use-package company-box
+    :after (company)
     :hook (company-mode . company-box-mode)))
