@@ -105,17 +105,16 @@
  `(company-posframe-quickhelp-header
    ((t (:foreground ,hawaii-text :background ,hawaii-background-light :extend t :box ,hawaii-background-dark))))
 
- ;;;;;;;;;;;;;;;;
- ;; Git Gutter ;;
+ ;;; hl-diff
 
- `(git-gutter-fr:added
+ `(diff-hl-insert
    ((t (:foreground ,hawaii-highlight-green))))
 
- `(git-gutter-fr:modified
-   ((t (:foreground ,hawaii-highlight-orange))))
-
- `(git-gutter-fr:deleted
+ `(diff-hl-delete
    ((t (:foreground ,hawaii-highlight-red))))
+
+ `(diff-hl-change
+   ((t (:foreground ,hawaii-highlight-orange))))
 
  ;;;;;;;;;;
  ;; Helm ;;
@@ -157,9 +156,7 @@
    ((t (:foreground ,hawaii-highlight-orange :height 1.1))))
 
  `(org-level-4
-   ((t (:foreground ,hawaii-highlight-purple))))
-
- )
+   ((t (:foreground ,hawaii-highlight-purple)))))
 
 ;;;###autoload
 (when load-file-name

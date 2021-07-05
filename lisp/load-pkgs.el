@@ -10,6 +10,7 @@
     company
     evil
     flycheck
+    diff-hl
     ivy
     magit
     projectile))

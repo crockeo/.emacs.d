@@ -55,8 +55,10 @@
 
       (kbd "C-c c") 'evilnc-comment-or-uncomment-lines
 
-      (kbd "C-c j g") 'lsp-find-definition
       (kbd "C-c j b") 'xref-pop-marker-stack
+      (kbd "C-c j g") 'lsp-find-definition
+      (kbd "C-c j i") 'lsp-find-implementation
+      (kbd "C-c j r") 'lsp-find-references
 
       (kbd "C-c p a") 'counsel-projectile-ag
       (kbd "C-c p f") 'counsel-projectile-find-file
@@ -64,6 +66,8 @@
       ;; after i figure out performance issues
       (kbd "C-c p p") 'projectile-switch-project
       (kbd "C-c p r") 'projectile-discover-projects-in-search-path
+
+      (kbd "C-c C-s") 'lsp-format-buffer
 
       (kbd "C-c C-w") 'ch/evil/toggle-home
 
