@@ -108,13 +108,13 @@
  ;;; hl-diff
 
  `(diff-hl-insert
-   ((t (:foreground ,hawaii-highlight-green))))
+   ((t (:foreground ,hawaii-highlight-green :background ,hawaii-highlight-green))))
 
  `(diff-hl-delete
-   ((t (:foreground ,hawaii-highlight-red))))
+   ((t (:foreground ,hawaii-highlight-red :background ,hawaii-highlight-red))))
 
  `(diff-hl-change
-   ((t (:foreground ,hawaii-highlight-orange))))
+   ((t (:foreground ,hawaii-highlight-orange :background ,hawaii-highlight-orange))))
 
  ;;;;;;;;;;
  ;; Helm ;;

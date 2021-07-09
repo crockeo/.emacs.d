@@ -1,4 +1,4 @@
-;; lsp.el -*- lexical-binding: t; -*-
+;;; lsp.el -*- lexical-binding: t; -*-
 
 (ch/pkg lsp
   (use-package lsp-mode
@@ -14,7 +14,15 @@
 	  lsp-enable-snippet nil
 	  lsp-enable-symbol-highlighting nil
 	  lsp-headerline-breadcrumb-enable nil
-	  lsp-idle-delay 0.25))
+	  lsp-idle-delay 0.25)
+
+    ;; prevents LSP from opening all projects
+    ;; associated with the language server
+    (advice-add
+     'lsp
+     :before (lambda (&rest _args)
+	       (eval '(setf (lsp-session-server-id->folders (lsp-session))
+			    (ht))))))
 
   (use-package lsp-ui
     :after (lsp)

@@ -37,6 +37,18 @@
 	(xref-push-marker-stack)
 	(find-file "~/home.org"))))
 
+  (defun ch/evil/kill-buffers ()
+    (interactive)
+    (when (yes-or-no-p "Close all buffers? ")
+      (switch-to-buffer "*scratch*")
+      (mapc #'kill-buffer
+	    (delq (current-buffer) (buffer-list)))))
+
+  (defun ch/evil/vterm ()
+    (interactive)
+    (select-window (split-window-horizontally (- (floor (* (window-width) (/ 2 5.0))))))
+    (vterm))
+
   (use-package undo-fu)
 
   (use-package evil
@@ -67,14 +79,16 @@
       (kbd "C-c p p") 'projectile-switch-project
       (kbd "C-c p r") 'projectile-discover-projects-in-search-path
 
-      (kbd "C-c C-s") 'lsp-format-buffer
+      (kbd "C-c k") 'ch/evil/kill-buffers
+
+      (kbd "C-c s") 'lsp-format-buffer
 
       (kbd "C-c C-w") 'ch/evil/toggle-home
 
       "u" 'undo-fu-only-undo
       (kbd "C-r") 'undo-fu-only-redo
 
-      (kbd "C-s C-n") 'split-window-right
+      (kbd "C-s C-n") 'ch/evil/vterm
       (kbd "C-s o") 'other-window
       (kbd "C-s C-o") 'other-window
       (kbd "C-s %") 'split-window-right

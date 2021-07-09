@@ -11,6 +11,7 @@
 			 "lyftvenv")))))
 
   (use-package lsp-pyright
+    :init (setq lsp-pyright-multi-root nil)
     :hook (python-mode . (lambda ()
 			   (require 'lsp-pyright)
 			   (let ((venv-dir (concat (projectile-project-root) "venv")))

@@ -11,9 +11,11 @@
     evil
     flycheck
     diff-hl
+    dired-sidebar
     ivy
     magit
-    projectile))
+    projectile
+    vterm))
 
 (ch/pkg languages
   (ch/use-pkgs
