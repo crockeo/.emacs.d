@@ -53,11 +53,6 @@
       (mapc #'kill-buffer
 	    (delq (current-buffer) (buffer-list)))))
 
-  (defun ch/evil/vterm ()
-    (interactive)
-    (select-window (split-window-horizontally (- (floor (* (window-width) (/ 2 5.0))))))
-    (vterm))
-
   (use-package undo-fu)
 
   (use-package evil
