@@ -29,13 +29,22 @@
 			       (cadr file-buffers))))
       (switch-to-buffer last-file-buffer)))
 
+  (defvar ch/evil/toggle-home--window-config nil)
+
   (defun ch/evil/toggle-home ()
     (interactive)
-    (if (equal (buffer-name) "home.org")
-	(xref-pop-marker-stack)
+    (if (and (equal (buffer-name) "home.org")
+	     ch/evil/toggle-home--window-config)
+	(set-window-configuration ch/evil/toggle-home--window-config)
       (progn
-	(xref-push-marker-stack)
-	(find-file "~/home.org"))))
+	(setq ch/evil/toggle-home--window-config (current-window-configuration))
+	(delete-other-windows)
+	(find-file "~/home.org")
+	(let ((home-window (get-buffer-window))
+	      (agenda-window (split-window-horizontally)))
+	  (select-window agenda-window)
+	  (org-agenda-list)
+	  (select-window home-window)))))
 
   (defun ch/evil/kill-buffers ()
     (interactive)

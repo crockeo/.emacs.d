@@ -2,7 +2,8 @@
 
 (ch/pkg org
   (defun ch/org/config ()
-    (setq org-adapt-indentation nil
+    (setq org-agenda-window-setup 'current-window
+	  org-adapt-indentation nil
           org-hide-emphasis-markers t)
 
     (auto-fill-mode 0)
