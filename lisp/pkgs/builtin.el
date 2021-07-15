@@ -6,21 +6,10 @@
 		      :height 140)
 
   (setq backup-directory-alist `(("." . ,(concat user-emacs-directory "backups")))
+	exec-path (split-string (getenv "PATH") ":")
 	inhibit-startup-screen t
 	read-process-output-max (* 1024 1024 4) ;; 2MB
 	ring-bell-function 'ignore)
-
-  (setq exec-path
-	`("/Library/Apple/usr/bin"
-	  ,(expand-file-name "~/bin")
-	  ,(expand-file-name "~/go/bin")
-	  "/bin"
-	  "/opt/local/bin"
-	  "/opt/local/sbin"
-	  "/sbin"
-	  "/usr/bin"
-	  "/usr/local/bin"
-	  "/usr/sbin"))
 
   (run-with-idle-timer
    1 t
