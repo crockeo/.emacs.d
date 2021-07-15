@@ -13,12 +13,11 @@
     diff-hl
     dired-sidebar
     ivy
-    magit
-    projectile
-    vterm))
+    projectile))
 
 (ch/pkg languages
   (ch/use-pkgs
+    bazel
     go
     lisp
     org
