@@ -13,6 +13,7 @@
     diff-hl
     dired-sidebar
     ivy
+    magit
     projectile))
 
 (ch/pkg languages
@@ -20,6 +21,7 @@
     bazel
     cpp
     go
+    javascript
     lisp
     org
     proto
