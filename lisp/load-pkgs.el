@@ -18,11 +18,13 @@
 (ch/pkg languages
   (ch/use-pkgs
     bazel
+    cpp
     go
     lisp
     org
     proto
     python
+    rust
     yaml))
 
 (ch/use-pkgs
