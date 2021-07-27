@@ -29,6 +29,7 @@
     ;; TODO: make this prettier :)
     (setq org-agenda-skip-scheduled-if-done t)
     (setq org-todo-keywords '((sequence "TODO" "WAITING" "DONE")))
+    (setq org-log-done 'time)
     (progn
       (require 'hawaii-theme)
       (setq org-todo-keyword-faces
