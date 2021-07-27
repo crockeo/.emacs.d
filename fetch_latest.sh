@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
 
+set -e
 
 fetch_sha() {
     # TODO: test that this nonsense works
@@ -9,6 +10,7 @@ fetch_sha() {
     if [ ! -d .git ]; then
 	git init
     fi
+    git remote add origin https://github.com/emacs-mirror/emacs
     git fetch origin "$target_sha"
     git reset --hard FETCH_HEAD
     cd ..
@@ -25,6 +27,7 @@ if [ -d ./emacs ]; then
     fi
 else
     fetch_sha "$SHA"
+    cd emacs
 fi
 
 ./autogen.sh
@@ -33,9 +36,8 @@ fi
     --with-json \
     --with-native-compilation \
     --with-x \
-    --with-xwidgets \
     --without-mailutils \
     CFLAGS="-O3 -mtune=native -march=native -fomit-frame-pointer"
 
 make
-make install
+sudo make install
