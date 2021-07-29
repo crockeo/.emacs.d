@@ -46,12 +46,19 @@
 	  (org-agenda-list)
 	  (select-window home-window)))))
 
+  (defun ch/evil/kill-buffers/filter (buffer-list)
+    (let ((current-buffer (current-buffer)))
+      (seq-filter (lambda (buffer)
+		    (not (or (eq buffer current-buffer)
+			     (company-box--is-box-buffer buffer))))
+		  buffer-list)))
+
   (defun ch/evil/kill-buffers ()
     (interactive)
     (when (yes-or-no-p "Close all buffers? ")
       (switch-to-buffer "*scratch*")
       (mapc #'kill-buffer
-	    (delq (current-buffer) (buffer-list)))))
+	    (ch/evil/kill-buffers/filter (buffer-list)))))
 
   (use-package undo-fu)
 
