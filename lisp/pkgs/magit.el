@@ -9,7 +9,7 @@
       (replace-regexp-in-string
        "git@github\\.com:"
        ""
-       (magit-get "remote" (magit-get-remote) "url"))
+       (magit-get "remote" (magit-get-remote "master") "url"))
       "/pull/new/"
       (magit-get-current-branch))))
 
