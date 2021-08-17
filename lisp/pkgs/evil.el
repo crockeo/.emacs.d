@@ -60,6 +60,15 @@
       (mapc #'kill-buffer
 	    (ch/evil/kill-buffers/filter (buffer-list)))))
 
+  (defun ch/evil/copy-file-link ()
+    (interactive)
+    (let ((file-link (concat "file:"
+			     (file-truename buffer-file-name)
+			     "::"
+			     (number-to-string (line-number-at-pos)))))
+      (kill-new file-link)
+      (message "copied link: %s" file-link)))
+
   (use-package undo-fu)
 
   (use-package evil
@@ -77,6 +86,8 @@
       ";" 'ch/evil/last-file-buffer
 
       (kbd "C-c c") 'evilnc-comment-or-uncomment-lines
+
+      (kbd "C-c f l") 'ch/evil/copy-file-link
 
       (kbd "C-c j b") 'xref-pop-marker-stack
       (kbd "C-c j g") 'lsp-find-definition
