@@ -28,12 +28,13 @@
     :config
     ;; TODO: make this prettier :)
     (setq org-agenda-skip-scheduled-if-done t)
-    (setq org-todo-keywords '((sequence "TODO" "WAITING" "|" "DONE")))
+    (setq org-todo-keywords '((sequence "TODO" "NEEDS-REVIEW" "WAITING" "|" "DONE")))
     (setq org-log-done 'time)
     (progn
       (require 'hawaii-theme)
       (setq org-todo-keyword-faces
 	    `(("TODO" . org-warning)
+	      ("NEEDS-REVIEW" . ,hawaii-highlight-blue)
 	      ("WAITING" . ,hawaii-comment)
 	      ("DONE" . ,hawaii-highlight-green))))
     :hook
