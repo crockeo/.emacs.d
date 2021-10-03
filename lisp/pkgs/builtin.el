@@ -11,6 +11,27 @@
 	read-process-output-max (* 1024 1024 4) ;; 2MB
 	ring-bell-function 'ignore)
 
+  (defun get-shell-path-entries ()
+    (split-string
+     (string-trim
+      (with-temp-buffer
+	(call-process "zsh"
+		      nil
+		      t
+		      nil
+		      "-c"
+		      ". ~/.zprofile && echo $PATH")
+	(buffer-string)))
+     ":"))
+
+  (dolist (path (get-shell-path-entries))
+    (push path exec-path))
+
+  (setq auto-save-file-name-transforms
+	'((".*" "~/.emacs.d/autosave/" t)))
+
+  (setq create-lockfiles nil)
+
   ;; TODO: do something similar for linux
   (when (string= system-type "darwin")
     (dolist (path '("~/.emacs.d/emacs/nextstep/Emacs.app/Contents/MacOS/libexec"
