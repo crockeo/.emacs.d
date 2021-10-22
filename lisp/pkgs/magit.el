@@ -17,4 +17,5 @@
 
   (use-package magit
     :config
-    (define-key magit-mode-map "h" #'ch/magit/visit-pr)))
+    (define-key magit-mode-map "h" #'ch/magit/visit-pr)
+    (setq magit-clone-default-directory (expand-file-name "~/src/"))))

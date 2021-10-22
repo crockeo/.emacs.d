@@ -14,6 +14,7 @@
     dired-sidebar
     ivy
     magit
+    olivetti
     projectile))
 
 (ch/pkg languages

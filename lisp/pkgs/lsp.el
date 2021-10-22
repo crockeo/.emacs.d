@@ -14,7 +14,8 @@
 	  lsp-enable-snippet nil
 	  lsp-enable-symbol-highlighting nil
 	  lsp-headerline-breadcrumb-enable nil
-	  lsp-idle-delay 0.25)
+	  lsp-idle-delay 0.25
+	  lsp-modeline-diagnostics-scope :file)
 
     ;; prevents LSP from opening all projects
     ;; associated with the language server
