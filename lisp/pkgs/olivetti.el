@@ -10,4 +10,7 @@
     :config
     (setq olivetti-minimuma-body-width 120))
 
-  (add-hook 'window-size-change-functions #'ch/olivetti/auto-olivetti))
+  ;; NOTE: this is actually kind of breaking things
+  ;; unfortunately :(
+  ;; (add-hook 'window-size-change-functions #'ch/olivetti/auto-olivetti)
+  )
