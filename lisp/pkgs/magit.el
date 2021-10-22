@@ -7,8 +7,6 @@
      ""
      remote))
 
-  (ch/magit/visit-pr/get-repo-name "git@github.com:lyft/piptools.git")
-
   (defun ch/magit/visit-pr ()
     (interactive)
     (browse-url
