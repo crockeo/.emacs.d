@@ -1,4 +1,6 @@
+*~
 .cache/
+.fetched_dependencies
 .lsp-session-v1
 auto-save-list/
 eln-cache/
@@ -10,4 +12,3 @@ recentf
 straight/build
 straight/build-cache.el
 straight/repos
-*~
