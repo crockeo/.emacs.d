@@ -1,6 +1,9 @@
 (ch/pkg builtin
   (add-hook 'before-save-hook #'delete-trailing-whitespace)
 
+  (set-face-attribute 'default nil
+		      :height 140)
+
   (setq backup-directory-alist `(("." . ,(concat user-emacs-directory "backups")))
 	exec-path (split-string (getenv "PATH") ":")
 	inhibit-startup-screen t
