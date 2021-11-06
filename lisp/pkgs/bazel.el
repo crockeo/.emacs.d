@@ -6,5 +6,5 @@
 	   :host github
 	   :repo "bazelbuild/emacs-bazel-mode"))
 
-  (dolist (filename '("BUILD\\'" "WORKSPACE\\'"))
+  (dolist (filename '("BUILD\\'" "BUILD.overlay\\'" "WORKSPACE\\'"))
     (add-to-list 'auto-mode-alist `(,filename . bazel-starlark-mode))))
