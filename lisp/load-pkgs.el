@@ -28,6 +28,7 @@
     proto
     python
     rust
+    swift
     yaml))
 
 (ch/use-pkgs
