@@ -8,7 +8,9 @@ elpa/
 emacs/
 projectile-bookmarks.eld
 projectile.cache
+projects
 recentf
 straight/build
 straight/build-cache.el
 straight/repos
+transient/
