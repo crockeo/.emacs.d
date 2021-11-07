@@ -22,7 +22,7 @@
  ("ht.el" . "c4c1be487d6ecb353d07881526db05d7fc90ea87")
  ("hydra" . "2d553787aca1aceb3e6927e426200e9bb9f056f1")
  ("let-alist" . "6708ec0b2e6dff80ff5b64698aa009d9070a2ed2")
- ("lsp-mode" . "52048d47014b03a5de32b19f9a307af92e465192")
+ ("lsp-mode" . "293a43819a96eb94b90bc14b6cb11ebfd090e8c8")
  ("lsp-pyright" . "71a79760938d2132923fbff58dc25301892b1654")
  ("lsp-sourcekit" . "97ff36b228a61e69734c7180f33cc6951b1a600f")
  ("lsp-ui" . "240a7de26400cf8b13312c3f9acf7ce653bdaa8a")
