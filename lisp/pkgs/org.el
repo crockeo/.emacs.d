@@ -48,6 +48,7 @@
 	  (doct '(("Task"
 		   :keys "t"
 		   :file "~/home.org"
+		   :prepend t
 		   :olp ("todos")
 		   :template ("* TODO %^{Description}"
 			      "SCHEDULED: %^{Scheduled}t"
