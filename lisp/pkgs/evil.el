@@ -75,6 +75,8 @@
   (use-package evil
     :init (evil-mode 1)
     :config
+    (evil-set-initial-state 'xref--xref-buffer-mode 'emacs)
+
     (ch/evil/define-key-all (evil-insert-state-map evil-normal-state-map evil-visual-state-map)
       "\C-a" 'ch/evil/start-of-line
       "\C-e" 'ch/evil/end-of-line)
