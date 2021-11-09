@@ -49,7 +49,7 @@
 		   :keys "t"
 		   :file "~/home.org"
 		   :prepend t
-		   :olp ("todos")
+		   :olp ("todos" "scheduled")
 		   :template ("* TODO %^{Description}"
 			      "SCHEDULED: %^{Scheduled}t"
                               "%?"))
