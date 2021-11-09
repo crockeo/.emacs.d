@@ -5,6 +5,7 @@
  ("diff-hl" . "992559f98a1f0367ae2b73e94f69503da73f3a83")
  ("dired-hacks" . "7c0ef09d57a80068a11edc74c3568e5ead5cc15a")
  ("dired-sidebar" . "6be2dad2782e28dae2f50c0cbfd82042b2b6ba8d")
+ ("doct" . "c1919a4297e5479d3a22ded90095245317b29935")
  ("el-get" . "ec135b5353867ce3564a675e99024944b834395d")
  ("emacs-bazel-mode" . "667554f76696a3cbb50c4c01b121c1aef882195a")
  ("emacs-undo-fu" . "e0ad06b5ef2ac2733dad2ad48e3957b5c36edfa5")
