@@ -44,6 +44,7 @@
 	      (agenda-window (split-window-horizontally)))
 	  (select-window agenda-window)
 	  (org-agenda-list)
+	  (org-agenda-day-view)
 	  (select-window home-window)))))
 
   (defun ch/evil/kill-buffers/filter (buffer-list)
