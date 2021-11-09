@@ -28,6 +28,7 @@
     :config
     ;; TODO: make this prettier :)
     (setq org-agenda-skip-scheduled-if-done t)
+    (setq org-capture-bookmark nil)
     (setq org-todo-keywords '((sequence "TODO" "NEEDS-REVIEW" "WAITING" "|" "DONE")))
     (setq org-log-done 'time)
     (progn
@@ -39,4 +40,22 @@
 	      ("DONE" . ,hawaii-highlight-green))))
     :hook
     ((org-mode . ch/org/config)
-     (org-mode . ch/org/register-update-all-agendas))))
+     (org-mode . ch/org/register-update-all-agendas)))
+
+  (use-package doct
+    :config
+    (setq org-capture-templates
+	  (doct '(("Task"
+		   :keys "t"
+		   :file "~/home.org"
+		   :olp ("todos")
+		   :template ("* TODO %^{Description}"
+			      "SCHEDULED: %^{Scheduled}t"
+                              "%?"))
+		  ("Note"
+		   :keys "n"
+		   :file "~/home.org"
+		   :prepend t
+		   :olp ("notes")
+		   :template ("* %^{Description}"
+			      "%?")))))))
