@@ -24,6 +24,24 @@
     (org-indent-mode 1)
     (visual-line-mode 1))
 
+  (defun ch/org/heading-sort-order ()
+    (let ((todo-keyword (nth 2 (org-heading-components))))
+      `(,@(org-get-scheduled-time nil)
+	,(cl-position todo-keyword
+		      (cdar org-todo-keywords)
+		      :test #'string-equal))))
+
+  (defun ch/org/heading-sort-compare ()
+    ;; TODO
+    )
+
+  (defun ch/org/sort-todos ()
+    (interactive)
+    (org-sort-entries
+     nil
+     ?f
+     #'ch/org/heading-sort-order))
+
   (use-package org
     :config
     ;; TODO: make this prettier :)
