@@ -70,11 +70,13 @@
 		   :olp ("todos" "scheduled")
 		   :template ("* TODO %^{Description}"
 			      "SCHEDULED: %^{Scheduled}t"
-                              "%?"))
+                              "%?"
+			      ""))
 		  ("Note"
 		   :keys "n"
 		   :file "~/home.org"
 		   :prepend t
 		   :olp ("notes")
 		   :template ("* %^{Description}"
-			      "%?")))))))
+			      "%?"
+			      "")))))))
