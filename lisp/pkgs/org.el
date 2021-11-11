@@ -26,7 +26,10 @@
 
   (defun ch/org/todo-sort/order ()
     (let ((todo-keyword (nth 2 (org-heading-components))))
-      `(,@(org-get-scheduled-time nil)
+      `(,@(let ((scheduled-time (org-get-scheduled-time nil)))
+	    (if scheduled-time
+		scheduled-time
+	      (org-get-deadline-time nil)))
 	,(cl-position todo-keyword
 		      (cdar org-todo-keywords)
 		      :test #'string-equal))))
@@ -38,6 +41,7 @@
 	     if (> x y) return nil))
 
   (defun ch/org/todo-sort ()
+    (interactive)
     (org-sort-entries
      nil
      ?f
