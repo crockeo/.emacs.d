@@ -119,6 +119,10 @@
       (kbd "C-s o") 'other-window
       (kbd "C-s C-o") 'other-window
       (kbd "C-s %") 'split-window-right
-      (kbd "C-s \"") 'split-window-below))
+      (kbd "C-s \"") 'split-window-below)
+
+    (when (require 'org)
+     (evil-define-key 'normal org-mode-map
+       (kbd "C-c o s") 'ch/org/todo-sort)))
 
   (use-package evil-nerd-commenter))

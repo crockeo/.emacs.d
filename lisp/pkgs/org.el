@@ -24,23 +24,25 @@
     (org-indent-mode 1)
     (visual-line-mode 1))
 
-  (defun ch/org/heading-sort-order ()
+  (defun ch/org/todo-sort/order ()
     (let ((todo-keyword (nth 2 (org-heading-components))))
       `(,@(org-get-scheduled-time nil)
 	,(cl-position todo-keyword
 		      (cdar org-todo-keywords)
 		      :test #'string-equal))))
 
-  (defun ch/org/heading-sort-compare ()
-    ;; TODO
-    )
+  (defun ch/org/todo-sort/cmp (order1 order2)
+    (cl-loop for x in order1
+	     for y in order2
+	     if (< x y) return t
+	     if (> x y) return nil))
 
-  (defun ch/org/sort-todos ()
-    (interactive)
+  (defun ch/org/todo-sort ()
     (org-sort-entries
      nil
      ?f
-     #'ch/org/heading-sort-order))
+     #'ch/org/todo-sort/order
+     #'ch/org/todo-sort/cmp))
 
   (use-package org
     :config
