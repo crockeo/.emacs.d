@@ -29,25 +29,6 @@
 			       (cadr file-buffers))))
       (switch-to-buffer last-file-buffer)))
 
-  (defvar ch/evil/toggle-home--window-config nil)
-
-  (defun ch/evil/toggle-home ()
-    (interactive)
-    (if ch/evil/toggle-home--window-config
-	(progn
-	  (set-window-configuration ch/evil/toggle-home--window-config)
-	  (setq ch/evil/toggle-home--window-config nil))
-      (progn
-	(setq ch/evil/toggle-home--window-config (current-window-configuration))
-	(delete-other-windows)
-	(find-file "~/home.org")
-	(let ((home-window (get-buffer-window))
-	      (agenda-window (split-window-horizontally)))
-	  (select-window agenda-window)
-	  (org-agenda-list)
-	  (org-agenda-day-view)
-	  (select-window home-window)))))
-
   (defun ch/evil/kill-buffers/filter (buffer-list)
     (let ((current-buffer (current-buffer)))
       (seq-filter (lambda (buffer)
@@ -110,8 +91,6 @@
       (kbd "C-c k") 'ch/evil/kill-buffers
 
       (kbd "C-c s") 'lsp-format-buffer
-
-      (kbd "C-c C-w") 'ch/evil/toggle-home
 
       "u" 'undo-fu-only-undo
       (kbd "C-r") 'undo-fu-only-redo

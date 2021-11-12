@@ -14,12 +14,6 @@
 	(when (derived-mode-p 'org-agenda-mode)
 	  (org-agenda-redo t)))))
 
-  (defun ch/org/register-update-all-agendas ()
-    (add-hook 'after-save-hook
-	      #'ch/org/update-all-agendas
-	      nil
-	      'local))
-
   (defun ch/org/config ()
     (setq org-agenda-window-setup 'current-window
 	  org-adapt-indentation nil
@@ -28,7 +22,12 @@
     (auto-fill-mode 0)
     (display-line-numbers-mode 0)
     (org-indent-mode 1)
-    (visual-line-mode 1))
+    (visual-line-mode 1)
+
+    (add-hook 'after-save-hook
+	      #'ch/org/update-all-agendas
+	      nil
+	      'local))
 
   (defun ch/org/todo-sort/order ()
     ;; provides a multi-layered sort order for TODOs such that:
@@ -102,6 +101,49 @@
 
   (add-hook 'org-capture-after-finalize-hook #'ch/org/capture-hook)
 
+  (defvar ch/org/home/window-configuration nil)
+
+  (defmacro ch/org/home/toggle (&rest body)
+    (declare (indent defun))
+    `(if ch/org/home/window-configuration
+	 (progn
+	   (set-window-configuration ch/org/home/window-configuration)
+	   (setq ch/org/home/window-configuration nil))
+       (progn
+	 (setq ch/org/home/window-configuration (current-window-configuration))
+	 ,@body)))
+
+  (defun ch/org/home/go-home ()
+    (interactive)
+    (ch/org/home/toggle
+      (delete-other-windows)
+      (find-file "~/home.org")
+      (let ((home-window (get-buffer-window))
+	    (agenda-window (split-window-horizontally)))
+	(select-window agenda-window)
+	(org-agenda-list)
+	(org-agenda-day-view)
+	(select-window home-window))))
+
+  (defun ch/org/home/go-week ()
+    (interactive)
+    (ch/org/home/toggle
+      (org-agenda-list)))
+
+  (defun ch/org/home/go-today ()
+    (interactive)
+    (ch/org/home/toggle
+      (org-agenda-list)
+      (org-agenda-day-view)))
+
+  (defun ch/org/home/go-back ()
+    (interactive)
+    (if ch/org/home/window-configuration
+	(progn
+	  (set-window-configuration ch/org/home/window-configuration)
+	  (setq ch/org/home/window-configuration nil))
+      (message "No prior window configuration.")))
+
   (use-package org
     :config
     ;; TODO: make this prettier :)
@@ -116,9 +158,32 @@
 	      ("NEEDS-REVIEW" . ,hawaii-highlight-blue)
 	      ("WAITING" . ,hawaii-comment)
 	      ("DONE" . ,hawaii-highlight-green))))
+
+    :bind
+    (:map global-map
+     ("C-c w h" . ch/org/home/go-home)
+     ("C-c w w" . ch/org/home/go-week)
+     ("C-c w t" . ch/org/home/go-today)
+     ("C-c w b" . ch/org/home/go-back)
+
+     ;; TODO: figure out binding to org-agenda work
+     )
+
     :hook
     ((org-mode . ch/org/config)
      (org-mode . ch/org/register-update-all-agendas)))
+
+  ;; (1) filing TODOS in the OLP structure ("todos" "<date of scheduling>")
+  ;;
+  ;; - info on how to file to date tree
+  ;;   https://emacs.stackexchange.com/questions/12576/is-it-possible-to-file-a-capture-template-in-a-subheading-of-a-day-in-a-datetree
+  ;;
+  ;; (2) providing a function to reschedule a headline AND to move it to the appropriate OLP of ("todos" "<date of scheduling">)
+  ;;
+  ;; (3) marking items as done and refiling them to complete
+  ;;
+  ;; alternate approach: ignore the actual org headlines entirely
+  ;; and use org-search and org-agenda for my organization
 
   (use-package doct
     :config

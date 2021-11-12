@@ -7,6 +7,7 @@
 (ch/pkg interface
   (ch/use-pkgs
     colorscheme
+    crockeo
     company
     evil
     flycheck
