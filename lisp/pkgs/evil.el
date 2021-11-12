@@ -54,6 +54,7 @@
 
   (use-package undo-fu)
 
+  ;; TODO: move global hotkeys over to crockeo.el instead
   (use-package evil
     :init (evil-mode 1)
     :config
