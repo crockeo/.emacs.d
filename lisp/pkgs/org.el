@@ -51,14 +51,14 @@
 	     if (< x y) return t
 	     if (> x y) return nil))
 
-  (defun ch/org/todo-sort ()
+  (defun ch/org/todo-sort/sort ()
     (org-sort-entries
      nil
      ?f
      #'ch/org/todo-sort/order
      #'ch/org/todo-sort/cmp))
 
-  (defun ch/org/goto-olp/elements-on-olp (olp org-headlines)
+  (defun ch/org/todo-sort/elements-on-olp (olp org-headlines)
     (let* ((head (car org-headlines))
 	   (head-text (org-element-property :raw-value head)))
      (cond
@@ -71,28 +71,36 @@
       ;; TODO: account for the fact that we could be beyond the span
       ;; doesn't matter yet, but will if i move my org around
       ((string-equal head-text (car olp))
-       (cons head (ch/org/goto-olp/elements-on-olp (cdr olp) (cdr org-headlines))))
+       (cons head (ch/org/todo-sort/elements-on-olp (cdr olp) (cdr org-headlines))))
 
       ;; otherwise we just keep searching with remaining arguments :)
       (t
-       (ch/org/goto-olp/elements-on-olp olp (cdr org-headlines))))))
+       (ch/org/todo-sort/elements-on-olp olp (cdr org-headlines))))))
 
-  (defun ch/org/goto-olp/position (olp)
+  (defun ch/org/todo-sort/position (olp)
     (let* ((elements (org-element-map (org-element-parse-buffer 'headline) 'headline #'identity))
-	   (elements-on-olp (ch/org/goto-olp/elements-on-olp olp elements)))
+	   (elements-on-olp (ch/org/todo-sort/elements-on-olp olp elements)))
       (org-element-property :begin (car (last elements-on-olp)))))
 
-  (defun ch/org/goto-olp (olp)
-    (goto-char (ch/org/goto-olp/position olp)))
+  (defun ch/org/todo-sort/todo-sort (olp)
+    (goto-char (ch/org/todo-sort/position olp)))
+
+  (defun ch/org/todo-sort ()
+    (interactive)
+    (with-current-buffer (find-file-noselect "~/home.org")
+      (ch/org/todo-sort/todo-sort '("todos" "scheduled"))
+      (ch/org/todo-sort/sort)
+      ;; org-sort always puts the headline into SUBTREE
+      ;; so cycling twice brings us to CHILDREN,
+      ;; which we want.
+      ;; TODO: better way of doing this
+      (org-cycle)
+      (org-cycle)))
 
   (defun ch/org/capture-hook ()
-    (with-current-buffer (find-file-noselect "~/home.org")
-      (ch/org/goto-olp '("todos" "scheduled"))
-      (ch/org/todo-sort)
-      (org-overview)))
+    (ch/org/todo-sort))
 
-  ;; borked right now because of sorting while not actually in the org file
-  ;; (add-hook 'org-capture-after-finalize-hook #'ch/org/capture-hook)
+  (add-hook 'org-capture-after-finalize-hook #'ch/org/capture-hook)
 
   (use-package org
     :config
