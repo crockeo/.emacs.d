@@ -1,6 +1,12 @@
 ;;; org.el -*- lexical-binding: t; -*-
 
 (ch/pkg org
+  ;; for some reason i'm getting a nil defun issue
+  ;; when attempting to close emacs
+  ;; defining an empty function for org-clocking-buffer
+  ;; seems to solve the problem
+  (defun org-clocking-buffer ())
+
   (defun ch/org/update-all-agendas ()
     (interactive)
     (dolist (buffer (buffer-list))
