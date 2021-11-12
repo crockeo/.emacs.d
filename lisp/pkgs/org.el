@@ -25,11 +25,16 @@
     (visual-line-mode 1))
 
   (defun ch/org/todo-sort/order ()
+    ;; provides a multi-layered sort order for TODOs such that:
+    ;;
+    ;; - items scheduled before other items are listed first
+    ;; - items due before other items are listed first
+    ;; - items in a more actionable state are listed first
+    ;;
+    ;; in that order
     (let ((todo-keyword (nth 2 (org-heading-components))))
-      `(,@(let ((scheduled-time (org-get-scheduled-time nil)))
-	    (if scheduled-time
-		scheduled-time
-	      (org-get-deadline-time nil)))
+      `(,@(org-get-scheduled-time nil)
+	,@(org-get-deadline-time nil)
 	,(cl-position todo-keyword
 		      (cdar org-todo-keywords)
 		      :test #'string-equal))))
@@ -41,23 +46,52 @@
 	     if (> x y) return nil))
 
   (defun ch/org/todo-sort ()
-    (interactive)
     (org-sort-entries
      nil
      ?f
      #'ch/org/todo-sort/order
      #'ch/org/todo-sort/cmp))
 
+  (defun ch/org/goto-olp/elements-on-olp (olp org-headlines)
+    (let* ((head (car org-headlines))
+	   (head-text (org-element-property :raw-value head)))
+     (cond
+      ;; if either olp or org-headlines is nil
+      ;; then we've find our element,
+      ;; or exhausted our search, respectively
+      ((or (null olp) (null org-headlines))
+       nil)
+
+      ;; TODO: account for the fact that we could be beyond the span
+      ;; doesn't matter yet, but will if i move my org around
+      ((string-equal head-text (car olp))
+       (cons head (ch/org/goto-olp/elements-on-olp (cdr olp) (cdr org-headlines))))
+
+      ;; otherwise we just keep searching with remaining arguments :)
+      (t
+       (ch/org/goto-olp/elements-on-olp olp (cdr org-headlines))))))
+
+  (defun ch/org/goto-olp/position (olp)
+    (let* ((elements (org-element-map (org-element-parse-buffer 'headline) 'headline #'identity))
+	   (elements-on-olp (ch/org/goto-olp/elements-on-olp olp elements)))
+      (org-element-property :begin (car elements-on-olp))))
+
+  (defun ch/org/goto-olp (olp)
+    (goto-char (ch/org/goto-olp/position olp)))
+
+  (with-current-buffer (find-file-noselect "~/home.org")
+    (ch/org/goto-olp '("todos" "scheduled"))
+    (ch/org/todo-sort)
+    (org-overview))
+
   (defun ch/org/capture-hook ()
     (with-current-buffer (find-file-noselect "~/home.org")
-      ;; TODO: go to ("todo" "scheduled")
-      ;; TODO: enable
-      ;; (ch/org/todo-sort)
+      (ch/org/goto-olp '("todos" "scheduled"))
+      (ch/org/todo-sort)
       (org-overview)))
 
-
-
-  (add-hook 'org-capture-after-finalize-hook #'ch/org/capture-hook)
+  ;; borked right now because of sorting while not actually in the org file
+  ;; (add-hook 'org-capture-after-finalize-hook #'ch/org/capture-hook)
 
   (use-package org
     :config
