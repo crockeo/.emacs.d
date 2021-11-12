@@ -79,11 +79,6 @@
   (defun ch/org/goto-olp (olp)
     (goto-char (ch/org/goto-olp/position olp)))
 
-  (with-current-buffer (find-file-noselect "~/home.org")
-    (ch/org/goto-olp '("todos" "scheduled"))
-    (ch/org/todo-sort)
-    (org-overview))
-
   (defun ch/org/capture-hook ()
     (with-current-buffer (find-file-noselect "~/home.org")
       (ch/org/goto-olp '("todos" "scheduled"))
