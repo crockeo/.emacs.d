@@ -74,7 +74,7 @@
   (defun ch/org/goto-olp/position (olp)
     (let* ((elements (org-element-map (org-element-parse-buffer 'headline) 'headline #'identity))
 	   (elements-on-olp (ch/org/goto-olp/elements-on-olp olp elements)))
-      (org-element-property :begin (car elements-on-olp))))
+      (org-element-property :begin (car (last elements-on-olp)))))
 
   (defun ch/org/goto-olp (olp)
     (goto-char (ch/org/goto-olp/position olp)))
