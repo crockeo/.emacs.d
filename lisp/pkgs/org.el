@@ -48,6 +48,17 @@
      #'ch/org/todo-sort/order
      #'ch/org/todo-sort/cmp))
 
+  (defun ch/org/capture-hook ()
+    (with-current-buffer (find-file-noselect "~/home.org")
+      ;; TODO: go to ("todo" "scheduled")
+      ;; TODO: enable
+      ;; (ch/org/todo-sort)
+      (org-overview)))
+
+
+
+  (add-hook 'org-capture-after-finalize-hook #'ch/org/capture-hook)
+
   (use-package org
     :config
     ;; TODO: make this prettier :)
@@ -72,7 +83,6 @@
 	  (doct '(("Task"
 		   :keys "t"
 		   :file "~/home.org"
-		   :prepend t
 		   :olp ("todos" "scheduled")
 		   :template ("* TODO %^{Description}"
 			      "SCHEDULED: %^{Scheduled}t"

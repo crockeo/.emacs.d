@@ -33,9 +33,10 @@
 
   (defun ch/evil/toggle-home ()
     (interactive)
-    (if (and (equal (buffer-name) "home.org")
-	     ch/evil/toggle-home--window-config)
-	(set-window-configuration ch/evil/toggle-home--window-config)
+    (if ch/evil/toggle-home--window-config
+	(progn
+	  (set-window-configuration ch/evil/toggle-home--window-config)
+	  (setq ch/evil/toggle-home--window-config nil))
       (progn
 	(setq ch/evil/toggle-home--window-config (current-window-configuration))
 	(delete-other-windows)
