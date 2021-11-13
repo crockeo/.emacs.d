@@ -170,8 +170,7 @@
      )
 
     :hook
-    ((org-mode . ch/org/config)
-     (org-mode . ch/org/register-update-all-agendas)))
+    ((org-mode . ch/org/config)))
 
   ;; (1) filing TODOS in the OLP structure ("todos" "<date of scheduling>")
   ;;
