@@ -117,24 +117,20 @@
   ;;
   ;;   return None
   (defun ch/org/headline/impl (olp outline-tree)
-    (when olp
-      (pcase outline-tree
-	('nil nil)
-	(`(,head . ,tail)
-	 (let* ((element (car head))
-		(element-value (org-element-property :raw-value element))
-		(children (cdr head)))
-	   (pcase olp
-	     (`(,headline . nil)
-	      (if (string-equal headline element-value)
-		  element
-		(ch/org/headline/impl olp tail)))
+    (pcase `(,olp ,outline-tree)
+      (`(nil _) nil)
+      (`(_ nil) nil)
+      (`((,headline . ,remaining-olp) ((,element . ,children) . ,tail))
+       (cond
+	((not (string-equal headline
+			    (org-element-property :raw-value element)))
+	 (ch/org/headline/impl olp tail))
 
-	     (`(,headline . ,remaining-olp)
-	      (if (equal headline element-value)
-		  (or (ch/org/headline/impl remaining-olp children)
-		      (ch/org/headline/impl olp tail))
-		(ch/org/headline/impl olp tail)))))))))
+	((null remaining-olp)
+	 element)
+
+	(t (or (ch/org/headline/impl remaining-olp children)
+	       (ch/org/headline/impl olp tail)))))))
 
   (defun ch/org/headline (olp)
     (ch/org/headline/impl olp (ch/org/outline-tree)))
