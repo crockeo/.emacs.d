@@ -88,6 +88,34 @@
 			      (ch/org/current-olp/impl point head-children (cons (org-element-property :raw-value head-element) olp))
 			    (ch/org/current-olp/impl point tail olp))))))
 
+
+  ;; thinking about how to do better emacs lisp...
+  ;; the following function should be equivalent to ch/org/headline/impl
+  ;; but it seems SO much easier to read than the elisp implementation.
+  ;; a couple of questions:
+  ;;
+  ;; 1. is it actually easier to read or am i just more experienced in python
+  ;;
+  ;; 2. how to get my emacs lisp code looking the same way?
+  ;;    are there just secrets in the language i don't know about yet?
+  ;;
+  ;; def find_headline(olp: list[str], outline_tree: dict[str, any]) -> Headline | None:
+  ;;   if not olp:
+  ;;       return None
+  ;;
+  ;;   next_olp = olp[0]
+  ;;   for element, children in outline_tree.items():
+  ;;       if element.raw_value != next_olp:
+  ;;           continue
+  ;;
+  ;;       if len(olp) == 1:
+  ;;           return element
+  ;;
+  ;;       headline = find_headline(olp[1:], children)
+  ;;       if headline is not None:
+  ;;           return headline
+  ;;
+  ;;   return None
   (defun ch/org/headline/impl (olp outline-tree)
     (when olp
       (pcase outline-tree
@@ -97,8 +125,10 @@
 		(element-value (org-element-property :raw-value element))
 		(children (cdr head)))
 	   (pcase olp
-	     (`(,headline . nil) (and (equal headline element-value)
-				      element))
+	     (`(,headline . nil)
+	      (if (string-equal headline element-value)
+		  element
+		(ch/org/headline/impl olp tail)))
 
 	     (`(,headline . ,remaining-olp)
 	      (if (equal headline element-value)
@@ -108,6 +138,66 @@
 
   (defun ch/org/headline (olp)
     (ch/org/headline/impl olp (ch/org/outline-tree)))
+
+  ;; TODO: get this to actually do what i want
+  ;; we're really close, but need more text editing tools
+  ;; e.g. rewriting the values in org-elements
+  ;; and then serializing that
+  ;; rather than trying to copy/paste text
+  ;;
+  ;; (defun ch/org/archive (olp)
+  ;;   (let* ((original-point (point))
+  ;; 	   (headline (ch/org/headline olp))
+  ;; 	   (begin (org-element-property :begin headline))
+  ;; 	   (end (org-element-property :end headline))
+  ;; 	   (archive-headline (ch/org/make-headline (cons "archive" (butlast olp)))))
+  ;;     (message "%d %d" begin end)
+  ;;     (set-mark begin)
+  ;;     (goto-char end)
+  ;;     (kill-region begin end)
+
+  ;;     (goto-char (org-element-property :end archive-headline))
+  ;;     (yank)
+  ;;     (goto-char original-point)))
+
+  ;; (defun ch/org/make-olp (olp &optional to-make)
+  ;;   (pcase olp
+  ;;     ('nil nil)
+  ;;     (`(,head . ,tail)
+  ;;      ))
+
+
+  ;;   (let ((headline (ch/org/headline olp)))
+  ;;     (if headline
+  ;; 	  headline
+  ;; 	(pcase olp
+  ;; 	  ('nil nil)
+  ;; 	  (`(,top-level . ,nil)
+  ;; 	   ;; TODO: do the complicated thing here of making the top-most element
+  ;; 	   )
+  ;; 	  (olp
+  ;; 	   (let ((but-last (ch/org/headline olp)))
+  ;; 	     ())))))
+  ;;   (pcase olp
+  ;;     ('nil nil)
+  ;;     (`(,top-level . ,nil)
+  ;;      ;; TODO: do something here
+  ;;      )
+  ;;     (olp
+  ;;      (unless (ch/org/headline olp)
+  ;; 	 (let ((but-last (butlast olp)))
+  ;; 	   (ch/org/make-olp but-last)
+
+  ;; 	   ))
+  ;;      (let ((but-last (butlasp olp)))
+  ;; 	 (ch/org/make-olp (butlast olp)))
+  ;;      (ch/org/make-olp (butlast olp))
+  ;;      (let ((headline (ch/org/headline ))))))
+  ;;   (when olp
+  ;;     (let ((butlast))
+  ;;      (ch/org/make-olp (butlast olp))))
+
+  ;;   (bultast))
 
   (defun ch/org/current-olp ()
     (let ((outline-tree (ch/org/outline-tree)))
