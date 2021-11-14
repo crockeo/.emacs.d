@@ -88,9 +88,39 @@
 			      (ch/org/current-olp/impl point head-children (cons (org-element-property :raw-value head-element) olp))
 			    (ch/org/current-olp/impl point tail olp))))))
 
+  (defun ch/org/headline/impl (olp outline-tree)
+    (when olp
+      (pcase outline-tree
+	('nil nil)
+	(`(,head . ,tail)
+	 (let* ((element (car head))
+		(element-value (org-element-property :raw-value element))
+		(children (cdr head)))
+	   (pcase olp
+	     (`(,headline . nil) (and (equal headline element-value)
+				      element))
+
+	     (`(,headline . ,remaining-olp)
+	      (if (equal headline element-value)
+		  (or (ch/org/headline/impl remaining-olp children)
+		      (ch/org/headline/impl olp tail))
+		(ch/org/headline/impl olp tail)))))))))
+
+  (defun ch/org/headline (olp)
+    (ch/org/headline/impl olp (ch/org/outline-tree)))
+
   (defun ch/org/current-olp ()
     (let ((outline-tree (ch/org/outline-tree)))
       (ch/org/current-olp/impl (point) outline-tree '())))
+
+  (defun ch/org/current-headline ()
+    (ch/org/headline (ch/org/current-olp)))
+
+  ;; TODO: do something with this tech about moving stuff around
+  (defun ch/org/kill-current-headline ()
+    (let ((headline (ch/org/current-headline)))
+      (kill-region (org-element-property :begin headline)
+		   (org-element-property :end headline))))
 
   (defun ch/org/todo-sort/order ()
     ;; provides a multi-layered sort order for TODOs such that:
