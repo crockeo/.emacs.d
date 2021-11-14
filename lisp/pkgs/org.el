@@ -29,6 +29,69 @@
 	      nil
 	      'local))
 
+  (defun ch/org/outline ()
+    (org-element-map (org-element-parse-buffer 'headline) 'headline #'identity))
+
+  (defun ch/org/outline-tree/impl/partition-level (outline level)
+    ;; splits an outline (only headlines of org doc)
+    ;; into two lists:
+    ;;
+    ;;   - contiguous elements which are at a greater level than the provided level
+    ;;   - everything after them
+    ;;
+    ;; so that other functions can operate on "children" of an outline
+    (let* ((head (car outline))
+	   (head-level (org-element-property :level head))
+	   (tail (cdr outline)))
+      (cond
+       ((null outline) `(,nil ,nil))
+       ((<= head-level level) `(,nil ,outline))
+       (t
+	(let ((next (ch/org/outline-tree/impl/partition-level tail level)))
+	  `(,(cons head (car next)) ,(cadr next)))))))
+
+  (defun ch/org/outline-tree/impl (outline)
+    ;; converts a flat org outline into a hierarchy
+    ;; such that each headline contains each of the headlines beneath it
+    ;; e.g.
+    ;;
+    ;; * container
+    ;;   * sub-container
+    ;;   * sub-container peer
+    ;; * container peer
+    ;;
+    ;; becomes
+    ;;
+    ;; ((container (sub-container) (sub-container peer))
+    ;;  (container peer))
+    (let* ((container (car outline))
+	   (level (org-element-property :level container)))
+      (when container
+	(pcase-let* ((`(,children ,remaining) (ch/org/outline-tree/impl/partition-level (cdr outline) level))
+		     (sub-trees (ch/org/outline-tree/impl children))
+		     (peer-trees (ch/org/outline-tree/impl remaining)))
+	  `((,container . ,sub-trees)
+	    ,@peer-trees)))))
+
+  (defun ch/org/outline-tree ()
+    (ch/org/outline-tree/impl (ch/org/outline)))
+
+  (defun ch/org/current-olp/impl (point outline-tree olp)
+    ;; given a point and an outline, as constructed by ch/org/outline-tree,
+    ;; provide the outline path that corresponds to the current location
+    (pcase outline-tree
+      ('nil (reverse olp))
+      (`(,head . ,tail) (let ((head-element (car head))
+			      (head-children (cdr head)))
+			  (if (and (>= point (org-element-property :begin head-element))
+				   (<= point (org-element-property :end head-element)))
+			      (ch/org/current-olp/impl point head-children (cons (org-element-property :raw-value head-element) olp))
+			    (ch/org/current-olp/impl point tail olp))))))
+
+  (defun ch/org/current-olp ()
+    (let ((outline-tree (ch/org/outline-tree)))
+      (ch/org/current-olp/impl (point) outline-tree '())))
+
   (defun ch/org/todo-sort/order ()
     ;; provides a multi-layered sort order for TODOs such that:
     ;;
@@ -123,7 +186,8 @@
 	(select-window agenda-window)
 	(org-agenda-list)
 	(org-agenda-day-view)
-	(select-window home-window))))
+	(select-window home-window)
+	(org-overview))))
 
   (defun ch/org/home/go-week ()
     (interactive)
@@ -184,22 +248,30 @@
   ;; alternate approach: ignore the actual org headlines entirely
   ;; and use org-search and org-agenda for my organization
 
+  (setq org-refile-use-outline-path t)
+
   (use-package doct
     :config
     (setq org-capture-templates
 	  (doct '(("Task"
 		   :keys "t"
 		   :file "~/home.org"
-		   :olp ("todos" "scheduled")
+		   :olp ("captures" "tasks")
 		   :template ("* TODO %^{Description}"
 			      "SCHEDULED: %^{Scheduled}t"
-                              "%?"
-			      ""))
+                              "%?"))
+
+		  ("Backlog"
+		   :keys "b"
+		   :file "~/home.org"
+		   :olp ("captures" "backlog")
+		   :template ("* TODO %^{Description}"
+			      "%?"))
+
 		  ("Note"
 		   :keys "n"
 		   :file "~/home.org"
 		   :prepend t
-		   :olp ("notes")
+		   :olp ("captures" "notes")
 		   :template ("* %^{Description}"
-			      "%?"
-			      "")))))))
+			      "%?")))))))
