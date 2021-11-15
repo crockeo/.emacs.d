@@ -248,11 +248,17 @@
     (ch/org/home/toggle
       (org-agenda-list)))
 
-  (defun ch/org/home/go-today ()
+  (defun ch/org/home/go-day ()
     (interactive)
     (ch/org/home/toggle
       (org-agenda-list)
       (org-agenda-day-view)))
+
+  (defun ch/org/home/go-recent ()
+    (interactive)
+    (ch/org/home/toggle
+      (org-ql-view-recent-items :num-days 7
+				:type 'closed)))
 
   (defun ch/org/home/go-back ()
     (interactive)
@@ -291,6 +297,9 @@
     ((org-mode . ch/org/config)))
 
   (use-package org-ml
+    :after org)
+
+  (use-package org-ql
     :after org)
 
   ;; (1) filing TODOS in the OLP structure ("todos" "<date of scheduling>")

@@ -20,9 +20,10 @@
     `(mapc #'ch/crockeo/register-keys/impl ',keymaps))
 
   (ch/crockeo/register-keys
+    ("C-c C-w C-b" . ch/org/home/go-back)
+    ("C-c C-w C-d" . ch/org/home/go-day)
     ("C-c C-w C-h" . ch/org/home/go-home)
-    ("C-c C-w C-w" . ch/org/home/go-week)
-    ("C-c C-w C-t" . ch/org/home/go-today)
-    ("C-c C-w C-b" . ch/org/home/go-back))
+    ("C-c C-w C-r" . ch/org/home/go-recent)
+    ("C-c C-w C-w" . ch/org/home/go-week))
 
   (crockeo-mode 1))
