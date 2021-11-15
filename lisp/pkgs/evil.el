@@ -103,7 +103,9 @@
       (kbd "C-s \"") 'split-window-below)
 
     (when (require 'org)
-     (evil-define-key 'normal org-mode-map
-       (kbd "C-c o s") 'ch/org/todo-sort)))
+      (evil-define-key 'normal org-mode-map
+	(kbd "C-c o a") 'ch/org/archive
+	(kbd "C-c o c") 'ch/org/complete
+	(kbd "C-c o s") 'ch/org/todo-sort)))
 
   (use-package evil-nerd-commenter))

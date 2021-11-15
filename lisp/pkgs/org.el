@@ -29,6 +29,60 @@
 	      nil
 	      'local))
 
+  (defun ch/org/archive/demote (headline)
+    (let ((demoted-children (org-ml-headline-map-subheadlines
+			      (lambda (subheadlines)
+				(mapcar #'ch/org/archive/demote
+					subheadlines))
+			      headline)))
+      (org-ml-set-property :level (+ 1 (org-ml-get-property :level demoted-children))
+			   demoted-children)))
+
+  (defun ch/org/create-path/get-element (path-part tree)
+    (pcase tree
+      ('nil nil)
+      (`(,head . ,tail)
+       (if (string-equal path-part (org-element-property :raw-value head))
+	   head
+	 (ch/org/create-path/get-element path-part tail)))))
+
+  (defun ch/org/create-path/impl (path tree insert-point insert-level)
+    (pcase path
+      ('nil insert-point)
+      (`(,head . ,tail)
+       (let ((element (or (ch/org/create-path/get-element head tree)
+			  (org-ml-insert (or insert-point (point-max))
+					 (org-ml-build-headline! :level insert-level
+								 :title-text head)))))
+	 (ch/org/create-path/impl tail
+					  (org-ml-get-children element)
+					  (or (org-element-property :end element)
+					      (+ 2 insert-point (seq-length head) insert-level))
+					  (+ 1 insert-level))))))
+
+  (defun ch/org/create-path (path)
+    (ch/org/create-path/impl path (org-ml-parse-subtrees 'all) nil 1))
+
+  (defun ch/org/archive ()
+    (interactive)
+    (let* ((headline (org-ml-parse-this-subtree))
+	   (demoted-headline (ch/org/archive/demote headline))
+	   (path (ch/org/current-olp)))
+      (kill-region (org-element-property :begin headline)
+		   (org-element-property :end headline))
+      (let* ((insert-path (cons "archive" (butlast path)))
+	     (insert-point (ch/org/create-path insert-path)))
+	(org-ml-insert insert-point demoted-headline))))
+
+  (defun ch/org/complete ()
+    (interactive)
+    (org-ml-update (lambda (headline)
+		     (->> headline
+		       (org-ml-set-property :todo-keyword "DONE")
+		       (org-ml-headline-set-planning (org-ml-build-planning! :closed (org-ml-unixtime-to-time-long (current-time))))))
+		   (org-ml-parse-this-headline))
+    (ch/org/archive))
+
   (defun ch/org/outline ()
     (org-element-map (org-element-parse-buffer 'headline) 'headline #'identity))
 
@@ -88,125 +142,9 @@
 			      (ch/org/current-olp/impl point head-children (cons (org-element-property :raw-value head-element) olp))
 			    (ch/org/current-olp/impl point tail olp))))))
 
-
-  ;; thinking about how to do better emacs lisp...
-  ;; the following function should be equivalent to ch/org/headline/impl
-  ;; but it seems SO much easier to read than the elisp implementation.
-  ;; a couple of questions:
-  ;;
-  ;; 1. is it actually easier to read or am i just more experienced in python
-  ;;
-  ;; 2. how to get my emacs lisp code looking the same way?
-  ;;    are there just secrets in the language i don't know about yet?
-  ;;
-  ;; def find_headline(olp: list[str], outline_tree: dict[str, any]) -> Headline | None:
-  ;;   if not olp:
-  ;;       return None
-  ;;
-  ;;   next_olp = olp[0]
-  ;;   for element, children in outline_tree.items():
-  ;;       if element.raw_value != next_olp:
-  ;;           continue
-  ;;
-  ;;       if len(olp) == 1:
-  ;;           return element
-  ;;
-  ;;       headline = find_headline(olp[1:], children)
-  ;;       if headline is not None:
-  ;;           return headline
-  ;;
-  ;;   return None
-  (defun ch/org/headline/impl (olp outline-tree)
-    (pcase `(,olp ,outline-tree)
-      (`(nil _) nil)
-      (`(_ nil) nil)
-      (`((,headline . ,remaining-olp) ((,element . ,children) . ,tail))
-       (cond
-	((not (string-equal headline
-			    (org-element-property :raw-value element)))
-	 (ch/org/headline/impl olp tail))
-
-	((null remaining-olp)
-	 element)
-
-	(t (or (ch/org/headline/impl remaining-olp children)
-	       (ch/org/headline/impl olp tail)))))))
-
-  (defun ch/org/headline (olp)
-    (ch/org/headline/impl olp (ch/org/outline-tree)))
-
-  ;; TODO: get this to actually do what i want
-  ;; we're really close, but need more text editing tools
-  ;; e.g. rewriting the values in org-elements
-  ;; and then serializing that
-  ;; rather than trying to copy/paste text
-  ;;
-  ;; (defun ch/org/archive (olp)
-  ;;   (let* ((original-point (point))
-  ;; 	   (headline (ch/org/headline olp))
-  ;; 	   (begin (org-element-property :begin headline))
-  ;; 	   (end (org-element-property :end headline))
-  ;; 	   (archive-headline (ch/org/make-headline (cons "archive" (butlast olp)))))
-  ;;     (message "%d %d" begin end)
-  ;;     (set-mark begin)
-  ;;     (goto-char end)
-  ;;     (kill-region begin end)
-
-  ;;     (goto-char (org-element-property :end archive-headline))
-  ;;     (yank)
-  ;;     (goto-char original-point)))
-
-  ;; (defun ch/org/make-olp (olp &optional to-make)
-  ;;   (pcase olp
-  ;;     ('nil nil)
-  ;;     (`(,head . ,tail)
-  ;;      ))
-
-
-  ;;   (let ((headline (ch/org/headline olp)))
-  ;;     (if headline
-  ;; 	  headline
-  ;; 	(pcase olp
-  ;; 	  ('nil nil)
-  ;; 	  (`(,top-level . ,nil)
-  ;; 	   ;; TODO: do the complicated thing here of making the top-most element
-  ;; 	   )
-  ;; 	  (olp
-  ;; 	   (let ((but-last (ch/org/headline olp)))
-  ;; 	     ())))))
-  ;;   (pcase olp
-  ;;     ('nil nil)
-  ;;     (`(,top-level . ,nil)
-  ;;      ;; TODO: do something here
-  ;;      )
-  ;;     (olp
-  ;;      (unless (ch/org/headline olp)
-  ;; 	 (let ((but-last (butlast olp)))
-  ;; 	   (ch/org/make-olp but-last)
-
-  ;; 	   ))
-  ;;      (let ((but-last (butlasp olp)))
-  ;; 	 (ch/org/make-olp (butlast olp)))
-  ;;      (ch/org/make-olp (butlast olp))
-  ;;      (let ((headline (ch/org/headline ))))))
-  ;;   (when olp
-  ;;     (let ((butlast))
-  ;;      (ch/org/make-olp (butlast olp))))
-
-  ;;   (bultast))
-
   (defun ch/org/current-olp ()
     (let ((outline-tree (ch/org/outline-tree)))
       (ch/org/current-olp/impl (point) outline-tree '())))
-
-  (defun ch/org/current-headline ()
-    (ch/org/headline (ch/org/current-olp)))
-
-  ;; TODO: do something with this tech about moving stuff around
-  (defun ch/org/kill-current-headline ()
-    (let ((headline (ch/org/current-headline)))
-      (kill-region (org-element-property :begin headline)
-		   (org-element-property :end headline))))
 
   (defun ch/org/todo-sort/order ()
     ;; provides a multi-layered sort order for TODOs such that:
@@ -351,6 +289,9 @@
 
     :hook
     ((org-mode . ch/org/config)))
+
+  (use-package org-ml
+    :after org)
 
   ;; (1) filing TODOS in the OLP structure ("todos" "<date of scheduling>")
   ;;
