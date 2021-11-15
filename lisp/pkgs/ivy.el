@@ -3,7 +3,11 @@
 
 (ch/pkg ivy
   (use-package ivy
-    :init (ivy-mode 1))
+    :init (ivy-mode 1)
+    :config
+    (define-key ivy-minibuffer-map
+      (kbd "S-SPC")
+      (lambda () (interactive) (insert " "))))
 
   (use-package prescient)
 
