@@ -188,6 +188,12 @@
       (org-ql-view-recent-items :num-days 7
 				:type 'closed)))
 
+  (defun ch/org/home/go-yesterday ()
+    (interactive)
+    (ch/org/home/toggle
+      (org-ql-view-recent-items :num-days 1
+				:type 'closed)))
+
   (defun ch/org/home/go-back ()
     (interactive)
     (if ch/org/home/window-configuration
@@ -210,16 +216,6 @@
 	      ("NEEDS-REVIEW" . ,hawaii-highlight-blue)
 	      ("WAITING" . ,hawaii-comment)
 	      ("DONE" . ,hawaii-highlight-green))))
-
-    :bind
-    (:map global-map
-     ("C-c w h" . ch/org/home/go-home)
-     ("C-c w w" . ch/org/home/go-week)
-     ("C-c w t" . ch/org/home/go-today)
-     ("C-c w b" . ch/org/home/go-back)
-
-     ;; TODO: figure out binding to org-agenda work
-     )
 
     :hook
     ((org-mode . ch/org/config)))
