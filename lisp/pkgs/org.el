@@ -29,13 +29,13 @@
 	      nil
 	      'local))
 
-  (defun ch/org/archive/demote (headline)
+  (defun ch/org/change-level (headline level-diff)
     (let ((demoted-children (org-ml-headline-map-subheadlines
 			      (lambda (subheadlines)
-				(mapcar #'ch/org/archive/demote
+				(mapcar (lambda (el) (ch/org/change-level el level-diff))
 					subheadlines))
 			      headline)))
-      (org-ml-set-property :level (+ 1 (org-ml-get-property :level demoted-children))
+      (org-ml-set-property :level (+ level-diff (org-ml-get-property :level demoted-children))
 			   demoted-children)))
 
   (defun ch/org/create-path/get-element (path-part tree)
@@ -55,18 +55,54 @@
 					 (org-ml-build-headline! :level insert-level
 								 :title-text head)))))
 	 (ch/org/create-path/impl tail
-					  (org-ml-get-children element)
-					  (or (org-element-property :end element)
-					      (+ 2 insert-point (seq-length head) insert-level))
-					  (+ 1 insert-level))))))
+				  (org-ml-get-children element)
+				  (or (org-element-property :end element)
+				      (+ 2 insert-point (seq-length head) insert-level))
+				  (+ 1 insert-level))))))
 
   (defun ch/org/create-path (path)
     (ch/org/create-path/impl path (org-ml-parse-subtrees 'all) nil 1))
 
+  (defvar ch/org/tree-paths/ignored-nodes '("backlog" "notes" "tasks"))
+
+  (defun ch/org/tree-paths/impl (tree path)
+    (pcase tree
+      ('nil nil)
+      (`(,head . ,tail)
+       (let ((value (org-element-property :raw-value head)))
+	 (when (and value
+		    (not (member value ch/org/tree-paths/ignored-nodes)))
+	   (cons `(,(string-join (reverse (cons value path)) "/") . ,head)
+		(append (ch/org/tree-paths/impl (org-ml-get-children head) (cons value path))
+			(ch/org/tree-paths/impl tail path))))))))
+
+  (defun ch/org/tree-paths ()
+    (ch/org/tree-paths/impl (org-ml-parse-subtrees 'all) nil))
+
+  (defun ch/org/select-headline ()
+    (let* ((tree-paths (ch/org/tree-paths))
+	   (chosen-path (ivy-read "Choose headline: "
+				  tree-paths
+				  :require-match t)))
+      (cdr (assoc chosen-path tree-paths))))
+
+  ;; TODO: integrate this better with existing refile?
+  ;; which may also handle the part about like
+  ;; demoting or promoting the levels of each thing
+  (defun ch/org/custom-refile ()
+    (interactive)
+    (let* ((headline (org-ml-parse-this-subtree))
+	   (dest (ch/org/select-headline))
+	   (leveled-headline (ch/org/change-level headline (+ 1 (- (org-element-property :level dest)
+								   (org-element-property :level headline))))))
+      (kill-region (org-element-property :begin headline)
+		   (org-element-property :end headline))
+      (org-ml-insert (org-element-property :end dest) leveled-headline)))
+
   (defun ch/org/archive ()
     (interactive)
     (let* ((headline (org-ml-parse-this-subtree))
-	   (demoted-headline (ch/org/archive/demote headline))
+	   (demoted-headline (ch/org/change-level headline 1))
 	   (path (ch/org/current-olp)))
       (kill-region (org-element-property :begin headline)
 		   (org-element-property :end headline))
