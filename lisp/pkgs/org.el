@@ -69,8 +69,10 @@
     (pcase tree
       ('nil nil)
       (`(,head . ,tail)
-       (let ((value (org-element-property :raw-value head)))
+       (let ((value (org-element-property :raw-value head))
+	     (todo-keyword (org-element-property :todo-keyword head)))
 	 (when (and value
+		    (not todo-keyword)
 		    (not (member value ch/org/tree-paths/ignored-nodes)))
 	   (cons `(,(string-join (reverse (cons value path)) "/") . ,head)
 		(append (ch/org/tree-paths/impl (org-ml-get-children head) (cons value path))
