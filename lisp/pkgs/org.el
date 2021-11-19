@@ -94,12 +94,22 @@
   (defun ch/org/custom-refile ()
     (interactive)
     (let* ((headline (org-ml-parse-this-subtree))
+	   (begin (org-element-property :begin headline))
+	   (end (org-element-property :end headline))
+
 	   (dest (ch/org/select-headline))
+	   (dest-end (org-element-property :end dest))
+
+	   (insert-pos (- dest-end
+			  (if (< end dest-end)
+			      (- end begin)
+			    0)))
+
 	   (leveled-headline (ch/org/change-level headline (+ 1 (- (org-element-property :level dest)
 								   (org-element-property :level headline))))))
       (kill-region (org-element-property :begin headline)
 		   (org-element-property :end headline))
-      (org-ml-insert (org-element-property :end dest) leveled-headline)))
+      (org-ml-insert insert-pos leveled-headline)))
 
   (defun ch/org/archive ()
     (interactive)
