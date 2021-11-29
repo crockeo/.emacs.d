@@ -63,7 +63,7 @@
   (defun ch/org/create-path (path)
     (ch/org/create-path/impl path (org-ml-parse-subtrees 'all) nil 1))
 
-  (defvar ch/org/tree-paths/ignored-nodes '("backlog" "notes" "tasks"))
+  (defvar ch/org/tree-paths/ignored-nodes '("archive" "backlog" "notes" "tasks"))
 
   (defun ch/org/tree-paths/impl (tree path)
     (pcase tree
@@ -249,6 +249,12 @@
 	  (set-window-configuration ch/org/home/window-configuration)
 	  (setq ch/org/home/window-configuration nil))
       (message "No prior window configuration.")))
+
+  (defun ch/org/capture-hook ()
+    (ch/org/custom-refile))
+
+  (add-hook 'org-capture-before-finalize-hook #'ch/org/capture-hook)
+  ;; (remove-hook 'org-capture-after-finalize-hook #'ch/org/capture-hook)
 
   (use-package org
     :config
