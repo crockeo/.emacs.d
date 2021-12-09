@@ -300,22 +300,22 @@
 	  (doct '(("Task"
 		   :keys "t"
 		   :file "~/home.org"
-		   :olp ("captures" "tasks")
-		   :template ("* TODO %^{Description}"
+		   :olp ("captures")
+		   :template ("* TODO %^{Description} :%^G:"
 			      "SCHEDULED: %^{Scheduled}t"
                               "%?"))
 
 		  ("Backlog"
 		   :keys "b"
 		   :file "~/home.org"
-		   :olp ("captures" "backlog")
-		   :template ("* TODO %^{Description}"
+		   :olp ("captures")
+		   :template ("* TODO %^{Description} :%^G:"
 			      "%?"))
 
 		  ("Note"
 		   :keys "n"
 		   :file "~/home.org"
 		   :prepend t
-		   :olp ("captures" "notes")
+		   :olp ("captures")
 		   :template ("* %^{Description}"
 			      "%?")))))))
