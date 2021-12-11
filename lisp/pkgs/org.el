@@ -88,39 +88,44 @@
 				  :require-match t)))
       (cdr (assoc chosen-path tree-paths))))
 
-  ;; TODO: integrate this better with existing refile?
-  ;; which may also handle the part about like
-  ;; demoting or promoting the levels of each thing
-  (defun ch/org/custom-refile ()
+  (defun ch/org/refile/core (subtree insert-point &optional level-diff)
+    (let* ((begin (org-element-property :begin subtree))
+	   (end (org-element-property :end subtree))
+	   (insert-point (- insert-point
+			    (if (< end insert-point)
+				(- end begin)
+			      0)))
+	   (level-diff (or level-diff 0))
+	   (leveled-subtree (ch/org/change-level subtree level-diff)))
+      (kill-region begin end)
+      (org-ml-insert insert-point leveled-subtree)))
+
+  (defun ch/org/refile/headline (dest-headline)
+    (let* ((subtree (org-ml-parse-this-subtree))
+	   (level-diff (+ 1 (- (org-element-property :level dest-headline)
+			       (org-element-property :level subtree)))))
+      (ch/org/refile/core subtree
+			  (org-element-property :end dest-headline)
+			  level-diff)))
+
+  (defun ch/org/refile/olp (dest-olp)
+    (let* ((subtree (org-ml-parse-this-subtree))
+	   (insert-point (ch/org/create-path dest-olp))
+	   (level-diff (- (+ 1 (length dest-olp))
+			  (org-element-property :level subtree))))
+      (ch/org/refile/core subtree
+			  insert-point
+			  level-diff)))
+
+  (defun ch/org/refile ()
     (interactive)
-    (let* ((headline (org-ml-parse-this-subtree))
-	   (begin (org-element-property :begin headline))
-	   (end (org-element-property :end headline))
-
-	   (dest (ch/org/select-headline))
-	   (dest-end (org-element-property :end dest))
-
-	   (insert-pos (- dest-end
-			  (if (< end dest-end)
-			      (- end begin)
-			    0)))
-
-	   (leveled-headline (ch/org/change-level headline (+ 1 (- (org-element-property :level dest)
-								   (org-element-property :level headline))))))
-      (kill-region (org-element-property :begin headline)
-		   (org-element-property :end headline))
-      (org-ml-insert insert-pos leveled-headline)))
+    (let ((dest-headline (ch/org/select-headline)))
+      (ch/org/refile/headline dest-headline)))
 
   (defun ch/org/archive ()
     (interactive)
-    (let* ((headline (org-ml-parse-this-subtree))
-	   (demoted-headline (ch/org/change-level headline 1))
-	   (path (ch/org/current-olp)))
-      (kill-region (org-element-property :begin headline)
-		   (org-element-property :end headline))
-      (let* ((insert-path (cons "archive" (butlast path)))
-	     (insert-point (ch/org/create-path insert-path)))
-	(org-ml-insert insert-point demoted-headline))))
+    (let ((path (ch/org/current-olp)))
+      (ch/org/refile/olp (cons "archive" (butlast path)))))
 
   (defun ch/org/complete ()
     (interactive)
@@ -251,7 +256,7 @@
       (message "No prior window configuration.")))
 
   (defun ch/org/capture-hook ()
-    (ch/org/custom-refile))
+    (ch/org/refile))
 
   (add-hook 'org-capture-before-finalize-hook #'ch/org/capture-hook)
   ;; (remove-hook 'org-capture-after-finalize-hook #'ch/org/capture-hook)
