@@ -256,7 +256,9 @@
       (message "No prior window configuration.")))
 
   (defun ch/org/capture-hook ()
-    (ch/org/refile))
+    (let* ((tag (car (org-ml-get-property :tags (org-ml-parse-this-headline))))
+	   (dest-olp `("projects" ,tag)))
+      (ch/org/refile/olp dest-olp)))
 
   (add-hook 'org-capture-before-finalize-hook #'ch/org/capture-hook)
   ;; (remove-hook 'org-capture-after-finalize-hook #'ch/org/capture-hook)
