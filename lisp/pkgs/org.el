@@ -7,6 +7,15 @@
   ;; seems to solve the problem
   (defun org-clocking-buffer ())
 
+  (defvar ch/org/home-file
+    (let ((beorg-home (expand-file-name "~/Library/Mobile Documents/iCloud~com~appsonthemove~beorg/Documents/org/home.org"))
+	  (default-home (expand-file-name "~/home.org")))
+      (if (file-exists-p beorg-home)
+	  beorg-home
+	default-home)))
+
+  (setq org-agenda-files `(,ch/org/home-file))
+
   (defun ch/org/update-all-agendas ()
     (interactive)
     (dolist (buffer (buffer-list))
@@ -215,7 +224,7 @@
     (interactive)
     (ch/org/home/toggle
       (delete-other-windows)
-      (find-file "~/home.org")
+      (find-file ch/org/home-file)
       (let ((home-window (get-buffer-window))
 	    (agenda-window (split-window-horizontally)))
 	(select-window agenda-window)
@@ -306,7 +315,7 @@
     (setq org-capture-templates
 	  (doct '(("Task"
 		   :keys "t"
-		   :file "~/home.org"
+		   :file ch/org/home-file
 		   :olp ("captures")
 		   :template ("* TODO %^{Description} :%^G:"
 			      "SCHEDULED: %^{Scheduled}t"
@@ -314,15 +323,15 @@
 
 		  ("Backlog"
 		   :keys "b"
-		   :file "~/home.org"
+		   :file ch/org/home-file
 		   :olp ("captures")
 		   :template ("* TODO %^{Description} :%^G:"
 			      "%?"))
 
 		  ("Note"
 		   :keys "n"
-		   :file "~/home.org"
+		   :file ch/org/home-file
 		   :prepend t
-		   :olp ("captures")
+		   :olp ("notes")
 		   :template ("* %^{Description}"
 			      "%?")))))))
