@@ -242,6 +242,11 @@
       (org-ql-view-recent-items :num-days 1
 				:type 'closed)))
 
+  (defun ch/org/home/go-todo ()
+    (interactive)
+    (ch/org/home/toggle
+      (org-todo-list)))
+
   (defun ch/org/home/go-back ()
     (interactive)
     (if ch/org/home/window-configuration
@@ -255,6 +260,14 @@
 
   (add-hook 'org-capture-before-finalize-hook #'ch/org/capture-hook)
   ;; (remove-hook 'org-capture-after-finalize-hook #'ch/org/capture-hook)
+
+  ;; without this, we leave a stray ch/org/home/window-configuration
+  ;; which messes up the next ch/org/home/go-*
+  (defadvice org-agenda-quit (around advice-org-agenda-quit activate)
+    (interactive)
+    (if ch/org/home/window-configuration
+	(ch/org/home/go-back)
+      (advice-org-agenda-quit)))
 
   (use-package org
     :config
