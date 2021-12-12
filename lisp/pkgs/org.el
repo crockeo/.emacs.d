@@ -329,7 +329,6 @@
 	  (doct '(("Task"
 		   :keys "t"
 		   :file ch/org/home-file
-		   :olp ("captures")
 		   :template ("* TODO %^{Description} :%^G:"
 			      "SCHEDULED: %^{Scheduled}t"
                               "%?"))
@@ -337,14 +336,11 @@
 		  ("Backlog"
 		   :keys "b"
 		   :file ch/org/home-file
-		   :olp ("captures")
 		   :template ("* TODO %^{Description} :%^G:"
 			      "%?"))
 
 		  ("Note"
 		   :keys "n"
 		   :file ch/org/home-file
-		   :prepend t
-		   :olp ("notes")
-		   :template ("* %^{Description}"
+		   :template ("* %^{Description} :%^G:"
 			      "%?")))))))
