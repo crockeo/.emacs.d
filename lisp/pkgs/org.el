@@ -14,8 +14,6 @@
 	  beorg-home
 	default-home)))
 
-  (setq org-agenda-files `(,ch/org/home-file))
-
   (defun ch/org/update-all-agendas ()
     (interactive)
     (dolist (buffer (buffer-list))
@@ -27,6 +25,15 @@
     (setq org-agenda-window-setup 'current-window
 	  org-adapt-indentation nil
           org-hide-emphasis-markers t)
+
+
+    (setq org-agenda-sorting-strategy
+	  '((agenda category-keep todo-state-up habit-down time-up priority-down)
+	    (todo todo-state-up priority-down category-keep)
+	    (tags todo-state-up priority-down category-keep)
+	    (search todo-state-up category-keep)))
+
+    (setq org-agenda-files `(,ch/org/home-file))
 
     (auto-fill-mode 0)
     (display-line-numbers-mode 0)
