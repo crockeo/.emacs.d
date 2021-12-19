@@ -258,13 +258,13 @@
       (ch/org/refile/olp dest-olp)))
 
   (defun ch/org/agenda/goto-indirect ()
-    ;; FIXME: figure out how to use org-tree-to-indirect buffer better
-    ;; and replace this custom nonsense with some built-in org stuff
     (interactive)
     (let* ((marker (org-get-at-bol 'org-marker))
 	   (buffer (marker-buffer marker))
 	   (pos (marker-position marker)))
 
+      ;; FIXME: figure out how to get a concrete reference to the window
+      ;; and then (select-window) instead of (other-window)
       (with-current-buffer buffer
 	(goto-char pos)
 	(org-tree-to-indirect-buffer))
