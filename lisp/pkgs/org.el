@@ -315,7 +315,8 @@
 	      'local))
 
   (defun ch/org/config-agenda ()
-    (define-key org-agenda-keymap (kbd "TAB") #'ch/org/agenda/goto-indirect))
+    (dolist (key '("<tab>" "TAB"))
+      (define-key org-agenda-keymap (kbd key) #'ch/org/agenda/goto-indirect)))
 
   (use-package org
     :config
