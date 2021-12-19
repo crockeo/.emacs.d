@@ -263,7 +263,7 @@
     (interactive)
     (let* ((marker (org-get-at-bol 'org-marker))
 	   (buffer (marker-buffer marker))
-	   (indirect-buffer-name (concat (buffer-name) "-ch/org/agenda/goto-indirect"))
+	   (indirect-buffer-name (concat (buffer-name buffer) "-ch/org/agenda/goto-indirect"))
 	   (indirect-buffer (or (get-buffer indirect-buffer-name)
 				(make-indirect-buffer buffer indirect-buffer-name)))
 	   (pos (marker-position marker)))
@@ -277,7 +277,11 @@
 	     (beg (org-element-property :begin headline))
 	     (end (org-element-property :end headline))
 	     (overlay (make-overlay beg end buffer)))
-	(narrow-to-region beg end))))
+	(narrow-to-region beg end))
+
+      (unless (equal major-mode 'org-mode)
+	(org-mode))
+      (org-reveal)))
 
   (add-hook 'org-capture-before-finalize-hook #'ch/org/capture-hook)
   ;; (remove-hook 'org-capture-after-finalize-hook #'ch/org/capture-hook)
