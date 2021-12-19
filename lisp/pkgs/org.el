@@ -21,30 +21,6 @@
 	(when (derived-mode-p 'org-agenda-mode)
 	  (org-agenda-redo t)))))
 
-  (defun ch/org/config ()
-    (setq org-agenda-window-setup 'current-window
-	  org-adapt-indentation nil
-          org-hide-emphasis-markers t)
-
-
-    (setq org-agenda-sorting-strategy
-	  '((agenda category-keep todo-state-up habit-down time-up priority-down)
-	    (todo todo-state-up priority-down category-keep)
-	    (tags todo-state-up priority-down category-keep)
-	    (search todo-state-up category-keep)))
-
-    (setq org-agenda-files `(,ch/org/home-file))
-
-    (auto-fill-mode 0)
-    (display-line-numbers-mode 0)
-    (org-indent-mode 1)
-    (visual-line-mode 1)
-
-    (add-hook 'after-save-hook
-	      #'ch/org/update-all-agendas
-	      nil
-	      'local))
-
   (defun ch/org/change-level (headline level-diff)
     (let ((demoted-children (org-ml-headline-map-subheadlines
 			      (lambda (subheadlines)
@@ -281,6 +257,28 @@
 	   (dest-olp `("projects" ,tag)))
       (ch/org/refile/olp dest-olp)))
 
+  (defun ch/org/agenda/goto-indirect ()
+    ;; FIXME: figure out how to use org-tree-to-indirect buffer better
+    ;; and replace this custom nonsense with some built-in org stuff
+    (interactive)
+    (let* ((marker (org-get-at-bol 'org-marker))
+	   (buffer (marker-buffer marker))
+	   (indirect-buffer-name (concat (buffer-name) "-ch/org/agenda/goto-indirect"))
+	   (indirect-buffer (or (get-buffer indirect-buffer-name)
+				(make-indirect-buffer buffer indirect-buffer-name)))
+	   (pos (marker-position marker)))
+
+      (switch-to-buffer-other-window indirect-buffer)
+      (widen)
+      (push-mark)
+      (goto-char pos)
+
+      (let* ((headline (org-ml-parse-this-subtree))
+	     (beg (org-element-property :begin headline))
+	     (end (org-element-property :end headline))
+	     (overlay (make-overlay beg end buffer)))
+	(narrow-to-region beg end))))
+
   (add-hook 'org-capture-before-finalize-hook #'ch/org/capture-hook)
   ;; (remove-hook 'org-capture-after-finalize-hook #'ch/org/capture-hook)
 
@@ -291,6 +289,33 @@
     (if ch/org/home/window-configuration
 	(ch/org/home/go-back)
       (advice-org-agenda-quit)))
+
+  (defun ch/org/config ()
+    (setq org-agenda-window-setup 'current-window
+	  org-adapt-indentation nil
+          org-hide-emphasis-markers t)
+
+
+    (setq org-agenda-sorting-strategy
+	  '((agenda category-keep todo-state-up habit-down time-up priority-down)
+	    (todo todo-state-up priority-down category-keep)
+	    (tags todo-state-up priority-down category-keep)
+	    (search todo-state-up category-keep)))
+
+    (setq org-agenda-files `(,ch/org/home-file))
+
+    (auto-fill-mode 0)
+    (display-line-numbers-mode 0)
+    (org-indent-mode 1)
+    (visual-line-mode 1)
+
+    (add-hook 'after-save-hook
+	      #'ch/org/update-all-agendas
+	      nil
+	      'local))
+
+  (defun ch/org/config-agenda ()
+    (define-key org-agenda-keymap (kbd "TAB") #'ch/org/agenda/goto-indirect))
 
   (use-package org
     :config
@@ -308,7 +333,8 @@
 	      ("DONE" . ,hawaii-highlight-green))))
 
     :hook
-    ((org-mode . ch/org/config)))
+    ((org-mode . ch/org/config)
+     (org-agenda-mode . ch/org/config-agenda)))
 
   (use-package org-ml
     :after org)
