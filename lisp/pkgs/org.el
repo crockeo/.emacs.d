@@ -257,18 +257,25 @@
 	   (dest-olp `("projects" ,tag)))
       (ch/org/refile/olp dest-olp)))
 
+  (defmacro ch/org/agenda/with-headline (&rest body)
+    (declare (indent defun))
+    `(let* ((marker (org-get-at-bol 'org-marker))
+	    (buffer (marker-buffer marker))
+	    (pos (marker-position marker)))
+       (with-current-buffer buffer
+	 (goto-char pos)
+	 ,@body)))
+
+  (defun ch/org/agenda/complete ()
+    (interactive)
+    (ch/org/agenda/with-headline
+      (ch/org/complete)
+      (ch/org/update-all-agendas)))
+
   (defun ch/org/agenda/goto-indirect ()
     (interactive)
-    (let* ((marker (org-get-at-bol 'org-marker))
-	   (buffer (marker-buffer marker))
-	   (pos (marker-position marker)))
-
-      ;; FIXME: figure out how to get a concrete reference to the window
-      ;; and then (select-window) instead of (other-window)
-      (with-current-buffer buffer
-	(goto-char pos)
-	(org-tree-to-indirect-buffer))
-
+    (ch/org/agenda/with-headline
+      (org-tree-to-indirect-buffer)
       (other-window 1)))
 
   (add-hook 'org-capture-before-finalize-hook #'ch/org/capture-hook)
@@ -308,7 +315,9 @@
 
   (defun ch/org/config-agenda ()
     (dolist (key '("<tab>" "TAB"))
-      (define-key org-agenda-keymap (kbd key) #'ch/org/agenda/goto-indirect)))
+      (define-key org-agenda-keymap (kbd key) #'ch/org/agenda/goto-indirect))
+
+    (define-key org-agenda-keymap (kbd "C-c o c") #'ch/org/agenda/complete))
 
   (use-package org
     :config
