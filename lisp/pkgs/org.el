@@ -321,11 +321,11 @@
 
   (use-package org
     :config
-    ;; TODO: make this prettier :)
-    (setq org-agenda-skip-scheduled-if-done t)
-    (setq org-capture-bookmark nil)
-    (setq org-todo-keywords '((sequence "TODO" "NEEDS-REVIEW" "WAITING" "|" "DONE")))
-    (setq org-log-done 'time)
+    (setq org-agenda-skip-scheduled-if-done t
+	  org-capture-bookmark nil
+	  org-directory (expand-file-name "~/org")
+	  org-todo-keywords '((sequence "TODO" "NEEDS-REVIEW" "WAITING" "|" "DONE"))
+	  org-log-done 'time)
     (progn
       (require 'hawaii-theme)
       (setq org-todo-keyword-faces
