@@ -21,11 +21,9 @@
 	(when (derived-mode-p 'org-agenda-mode)
 	  (org-agenda-redo t)))))
 
-  (defun ch/org/change-level (headline level-diff)
+  (defun ch/org/change-level (level-diff headline)
     (let ((demoted-children (org-ml-headline-map-subheadlines
-			      (lambda (subheadlines)
-				(mapcar (lambda (el) (ch/org/change-level el level-diff))
-					subheadlines))
+			      (-partial #'-map (-partial #'ch/org/change-level level-diff))
 			      headline)))
       (org-ml-set-property :level (+ level-diff (org-ml-get-property :level demoted-children))
 			   demoted-children)))
@@ -88,7 +86,7 @@
 				(- end begin)
 			      0)))
 	   (level-diff (or level-diff 0))
-	   (leveled-subtree (ch/org/change-level subtree level-diff)))
+	   (leveled-subtree (ch/org/change-level level-diff subtree)))
       (kill-region begin end)
       (org-ml-insert insert-point leveled-subtree)))
 
@@ -206,15 +204,7 @@
   (defun ch/org/home/go-home ()
     (interactive)
     (ch/org/home/toggle
-      (delete-other-windows)
-      (find-file ch/org/home-file)
-      (let ((home-window (get-buffer-window))
-	    (agenda-window (split-window-horizontally)))
-	(select-window agenda-window)
-	(org-agenda-list)
-	(org-agenda-day-view)
-	(select-window home-window)
-	(org-overview))))
+      (find-file ch/org/home-file)))
 
   (defun ch/org/home/go-week ()
     (interactive)
@@ -343,20 +333,6 @@
 
   (use-package org-ql
     :after org)
-
-  ;; (1) filing TODOS in the OLP structure ("todos" "<date of scheduling>")
-  ;;
-  ;; - info on how to file to date tree
-  ;;   https://emacs.stackexchange.com/questions/12576/is-it-possible-to-file-a-capture-template-in-a-subheading-of-a-day-in-a-datetree
-  ;;
-  ;; (2) providing a function to reschedule a headline AND to move it to the appropriate OLP of ("todos" "<date of scheduling">)
-  ;;
-  ;; (3) marking items as done and refiling them to complete
-  ;;
-  ;; alternate approach: ignore the actual org headlines entirely
-  ;; and use org-search and org-agenda for my organization
-
-  (setq org-refile-use-outline-path t)
 
   (use-package doct
     :config
