@@ -9,6 +9,7 @@
     colorscheme
     crockeo
     company
+    dash
     evil
     flycheck
     diff-hl
