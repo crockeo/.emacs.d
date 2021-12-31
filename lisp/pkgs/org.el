@@ -252,11 +252,6 @@
 	  (setq ch/org/home/window-configuration nil))
       (message "No prior window configuration.")))
 
-  (defun ch/org/capture-hook ()
-    (let* ((tag (car (org-ml-get-property :tags (org-ml-parse-this-headline))))
-	   (dest-olp `("projects" ,tag)))
-      (ch/org/refile/olp dest-olp)))
-
   (defmacro ch/org/agenda/with-headline (&rest body)
     (declare (indent defun))
     `(let* ((marker (org-get-at-bol 'org-marker))
@@ -277,6 +272,13 @@
     (ch/org/agenda/with-headline
       (org-tree-to-indirect-buffer)
       (other-window 1)))
+
+  (defun ch/org/capture-hook ()
+    (let* ((headline (org-ml-parse-this-headline))
+	   (tags (when headline (org-ml-get-property :tags headline)))
+	   (dest-olp (when tags `("project" ,(car tags)))))
+      (when dest-olp
+	(ch/org/refile-olp dest-olp))))
 
   (add-hook 'org-capture-before-finalize-hook #'ch/org/capture-hook)
   ;; (remove-hook 'org-capture-after-finalize-hook #'ch/org/capture-hook)
