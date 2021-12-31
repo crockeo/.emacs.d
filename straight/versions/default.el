@@ -32,7 +32,6 @@
  ("map" . "7ef991a4e234195f125dc2b2ad4cad5a1d11a7d5")
  ("markdown-mode" . "1c7d29d52986b2cb153b5f643167ea49417de469")
  ("melpa" . "452c6f2768921d73609bb3dd4c70df538c501f54")
- ("olivetti" . "a31ac05a161a91fe5c157930b62a6c07037982ee")
  ("org" . "9aa304f957578be87c5c6d3eba84d2dd37f7f81e")
  ("org-ml" . "5d61f456b0a639e178d6ae4f210e28be5621a620")
  ("org-ql" . "31aeb0a2505acf8044c07824888ddec7f3e529c1")

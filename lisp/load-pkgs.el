@@ -4,19 +4,22 @@
 (dolist (file (directory-files "~/.emacs.d/lisp/pkgs" t "\\.el$"))
   (load file))
 
+(ch/pkg core
+  (ch/use-pkgs
+    dash
+    request))
+
 (ch/pkg interface
   (ch/use-pkgs
     colorscheme
     crockeo
     company
-    dash
     evil
     flycheck
     diff-hl
     dired-sidebar
     ivy
     magit
-    olivetti
     projectile))
 
 (ch/pkg languages
@@ -35,6 +38,7 @@
 
 (ch/use-pkgs
   builtin
+  core
   interface
   languages
   lsp)
