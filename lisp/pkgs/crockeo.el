@@ -22,6 +22,7 @@
   (ch/crockeo/register-keys
     ("C-c C-w C-b" . ch/org/home/go-back)
     ("C-c C-w C-d" . ch/org/home/go-day)
+    ("C-c C-w C-f" . ch/org/home/go-roam-find)
     ("C-c C-w C-h" . ch/org/home/go-home)
     ("C-c C-w C-r" . ch/org/home/go-recent)
     ("C-c C-w C-t" . ch/org/home/go-todo)

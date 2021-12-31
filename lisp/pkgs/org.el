@@ -7,12 +7,15 @@
   ;; seems to solve the problem
   (defun org-clocking-buffer ())
 
+  (defvar ch/org/org-directory
+    (let ((path (expand-file-name "~/org")))
+      (unless (file-exists-p path)
+	(make-directory path))
+      (file-truename path)))
+
   (defvar ch/org/home-file
-    (let ((beorg-home (expand-file-name "~/Library/Mobile Documents/iCloud~com~appsonthemove~beorg/Documents/org/home.org"))
-	  (default-home (expand-file-name "~/home.org")))
-      (if (file-exists-p beorg-home)
-	  beorg-home
-	default-home)))
+    (concat (file-name-as-directory ch/org/org-directory)
+	    "home.org"))
 
   (defun ch/org/update-all-agendas ()
     (interactive)
@@ -234,6 +237,13 @@
     (ch/org/home/toggle
       (org-todo-list)))
 
+  (defun ch/org/home/go-roam-find ()
+    (interactive)
+    (ch/org/home/toggle
+      (condition-case ()
+	  (org-roam-node-find)
+	(quit (ch/org/home/go-back)))))
+
   (defun ch/org/home/go-back ()
     (interactive)
     (if ch/org/home/window-configuration
@@ -313,7 +323,7 @@
     :config
     (setq org-agenda-skip-scheduled-if-done t
 	  org-capture-bookmark nil
-	  org-directory (expand-file-name "~/org")
+	  org-directory ch/org/org-directory
 	  org-todo-keywords '((sequence "TODO" "NEEDS-REVIEW" "WAITING" "|" "DONE"))
 	  org-log-done 'time)
     (progn
@@ -334,7 +344,14 @@
   (use-package org-ql
     :after org)
 
+  (use-package org-roam
+    :after org
+    :config
+    (setq org-roam-directory ch/org/org-directory)
+    (org-roam-db-autosync-mode))
+
   (use-package doct
+    :after org
     :config
     (setq org-capture-templates
 	  (doct '(("Task"

@@ -80,7 +80,8 @@
       (kbd "C-c j i") 'lsp-find-implementation
       (kbd "C-c j r") 'lsp-find-references
 
-      (kbd "C-c n") 'org-capture
+      (kbd "C-c n o") 'org-capture
+      (kbd "C-c n r") 'org-roam-capture
 
       (kbd "C-c p a") 'counsel-projectile-ag
       (kbd "C-c p f") 'counsel-projectile-find-file
@@ -106,6 +107,7 @@
       (evil-define-key 'normal org-mode-map
 	(kbd "C-c o a") 'ch/org/archive
 	(kbd "C-c o c") 'ch/org/complete
+	(kbd "C-c o i") 'org-roam-node-insert
 	(kbd "C-c o r") 'ch/org/refile
 	(kbd "C-c o s") 'ch/org/todo-sort)))
 
