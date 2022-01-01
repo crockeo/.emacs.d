@@ -276,9 +276,9 @@
   (defun ch/org/capture-hook ()
     (let* ((headline (org-ml-parse-this-headline))
 	   (tags (when headline (org-ml-get-property :tags headline)))
-	   (dest-olp (when tags `("project" ,(car tags)))))
+	   (dest-olp (when tags `("projects" ,(car tags)))))
       (when dest-olp
-	(ch/org/refile-olp dest-olp))))
+	(ch/org/refile/olp dest-olp))))
 
   (add-hook 'org-capture-before-finalize-hook #'ch/org/capture-hook)
   ;; (remove-hook 'org-capture-after-finalize-hook #'ch/org/capture-hook)
