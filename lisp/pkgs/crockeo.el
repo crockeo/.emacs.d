@@ -20,13 +20,14 @@
     `(mapc #'ch/crockeo/register-keys/impl ',keymaps))
 
   (ch/crockeo/register-keys
-    ("C-c C-w C-b" . ch/org/home/go-back)
-    ("C-c C-w C-d" . ch/org/home/go-day)
-    ("C-c C-w C-f" . ch/org/home/go-roam-find)
-    ("C-c C-w C-h" . ch/org/home/go-home)
-    ("C-c C-w C-r" . ch/org/home/go-recent)
-    ("C-c C-w C-t" . ch/org/home/go-todo)
-    ("C-c C-w C-w" . ch/org/home/go-week)
-    ("C-c C-w C-y" . ch/org/home/go-yesterday))
+    ("C-c C-w C-q" . ch/org/agenda/pop-winconf)
+
+    ("C-c C-w C-d" . ch/org/agenda/go-day)
+    ("C-c C-w C-f" . ch/org/agenda/go-roam-find)
+    ("C-c C-w C-h" . ch/org/agenda/go-home)
+    ("C-c C-w C-r" . ch/org/agenda/go-recent)
+    ("C-c C-w C-t" . ch/org/agenda/go-todo)
+    ("C-c C-w C-w" . ch/org/agenda/go-week)
+    ("C-c C-w C-y" . ch/org/agenda/go-yesterday))
 
   (crockeo-mode 1))

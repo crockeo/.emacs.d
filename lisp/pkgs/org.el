@@ -192,65 +192,59 @@
     (let ((outline-tree (ch/org/outline-tree)))
       (ch/org/current-olp/impl (point) outline-tree '())))
 
-  (defvar ch/org/home/window-configuration nil)
+  (defvar ch/org/agenda/winconf nil)
 
-  (defmacro ch/org/home/toggle (&rest body)
-    (declare (indent defun))
-    `(if ch/org/home/window-configuration
-	 (progn
-	   (set-window-configuration ch/org/home/window-configuration)
-	   (setq ch/org/home/window-configuration nil))
-       (progn
-	 (setq ch/org/home/window-configuration (current-window-configuration))
-	 ,@body)))
+  (defun ch/org/agenda/save-winconf ()
+    (unless ch/org/agenda/winconf
+      (setq ch/org/agenda/winconf (current-window-configuration))))
 
-  (defun ch/org/home/go-home ()
+  (defun ch/org/agenda/pop-winconf ()
     (interactive)
-    (ch/org/home/toggle
-      (find-file ch/org/home-file)))
-
-  (defun ch/org/home/go-week ()
-    (interactive)
-    (ch/org/home/toggle
-      (org-agenda-list)))
-
-  (defun ch/org/home/go-day ()
-    (interactive)
-    (ch/org/home/toggle
-      (org-agenda-list)
-      (org-agenda-day-view)))
-
-  (defun ch/org/home/go-recent ()
-    (interactive)
-    (ch/org/home/toggle
-      (org-ql-view-recent-items :num-days 7
-				:type 'closed)))
-
-  (defun ch/org/home/go-yesterday ()
-    (interactive)
-    (ch/org/home/toggle
-      (org-ql-view-recent-items :num-days 1
-				:type 'closed)))
-
-  (defun ch/org/home/go-todo ()
-    (interactive)
-    (ch/org/home/toggle
-      (org-todo-list)))
-
-  (defun ch/org/home/go-roam-find ()
-    (interactive)
-    (ch/org/home/toggle
-      (condition-case ()
-	  (org-roam-node-find)
-	(quit (ch/org/home/go-back)))))
-
-  (defun ch/org/home/go-back ()
-    (interactive)
-    (if ch/org/home/window-configuration
+    (if ch/org/agenda/winconf
 	(progn
-	  (set-window-configuration ch/org/home/window-configuration)
-	  (setq ch/org/home/window-configuration nil))
+	  (set-window-configuration ch/org/agenda/winconf)
+	  (setq ch/org/agenda/winconf nil))
       (message "No prior window configuration.")))
+
+  (defun ch/org/agenda/go-home ()
+    (interactive)
+    (ch/org/agenda/save-winconf)
+    (find-file ch/org/home-file))
+
+  (defun ch/org/agenda/go-week ()
+    (interactive)
+    (ch/org/agenda/save-winconf)
+    (org-agenda-list))
+
+  (defun ch/org/agenda/go-day ()
+    (interactive)
+    (ch/org/agenda/save-winconf)
+    (org-agenda-list)
+    (org-agenda-day-view))
+
+  (defun ch/org/agenda/go-recent ()
+    (interactive)
+    (ch/org/agenda/save-winconf)
+    (org-ql-view-recent-items :num-days 7
+			      :type 'closed))
+
+  (defun ch/org/agenda/go-yesterday ()
+    (interactive)
+    (ch/org/agenda/save-winconf)
+    (org-ql-view-recent-items :num-days 1
+			      :type 'closed))
+
+  (defun ch/org/agenda/go-todo ()
+    (interactive)
+    (ch/org/agenda/save-winconf)
+    (org-todo-list))
+
+  (defun ch/org/agenda/go-roam-find ()
+    (interactive)
+    (ch/org/agenda/save-winconf)
+    (condition-case ()
+	(org-roam-node-find)
+      (quit (ch/org/agenda/go-back))))
 
   (defmacro ch/org/agenda/with-headline (&rest body)
     (declare (indent defun))
@@ -287,8 +281,8 @@
   ;; which messes up the next ch/org/home/go-*
   (defadvice org-agenda-quit (around advice-org-agenda-quit activate)
     (interactive)
-    (if ch/org/home/window-configuration
-	(ch/org/home/go-back)
+    (if ch/org/agenda/winconf
+	(ch/org/agenda/pop-winconf)
       (advice-org-agenda-quit)))
 
   (defun ch/org/config ()

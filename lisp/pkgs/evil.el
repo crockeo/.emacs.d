@@ -105,6 +105,9 @@
 
     (when (require 'org)
       (evil-define-key 'normal org-mode-map
+	(kbd "C-c j g") 'org-open-at-point
+	(kbd "C-c j b") 'org-mark-ring-goto
+
 	(kbd "C-c o a") 'ch/org/archive
 	(kbd "C-c o c") 'ch/org/complete
 	(kbd "C-c o i") 'org-roam-node-insert
