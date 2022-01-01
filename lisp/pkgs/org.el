@@ -325,12 +325,13 @@
           org-agenda-skip-scheduled-if-done t
 	  org-capture-bookmark nil
 	  org-directory ch/org/org-directory
-	  org-todo-keywords '((sequence "TODO" "NEEDS-REVIEW" "WAITING" "|" "DONE"))
+	  org-todo-keywords '((sequence "TODO" "IN-PROGRESS" "NEEDS-REVIEW" "WAITING" "|" "DONE"))
 	  org-log-done 'time)
     (progn
       (require 'hawaii-theme)
       (setq org-todo-keyword-faces
 	    `(("TODO" . org-warning)
+	      ("IN-PROGRESS" . ,hawaii-highlight-orange)
 	      ("NEEDS-REVIEW" . ,hawaii-highlight-blue)
 	      ("WAITING" . ,hawaii-comment)
 	      ("DONE" . ,hawaii-highlight-green))))
