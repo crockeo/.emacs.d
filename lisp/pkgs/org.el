@@ -303,8 +303,6 @@
 	    (tags todo-state-up priority-down category-keep)
 	    (search todo-state-up category-keep)))
 
-    (setq org-agenda-files `(,ch/org/home-file))
-
     (auto-fill-mode 0)
     (display-line-numbers-mode 0)
     (org-indent-mode 1)
@@ -323,7 +321,8 @@
 
   (use-package org
     :config
-    (setq org-agenda-skip-scheduled-if-done t
+    (setq org-agenda-files (list ch/org/org-directory)
+          org-agenda-skip-scheduled-if-done t
 	  org-capture-bookmark nil
 	  org-directory ch/org/org-directory
 	  org-todo-keywords '((sequence "TODO" "NEEDS-REVIEW" "WAITING" "|" "DONE"))
