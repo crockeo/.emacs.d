@@ -13,283 +13,129 @@
 	(make-directory path))
       (file-truename path)))
 
-  (defvar ch/org/home-file
+  (defvar ch/org/inbox-file
     (concat (file-name-as-directory ch/org/org-directory)
-	    "home.org"))
+	    "inbox"
+	    "-"
+	    (system-name)
+	    ".org"))
 
-  (defun ch/org/update-all-agendas ()
+  (defun ch/org/get-buffer-prop (name)
+    ;; taken from:
+    ;; https://d12frosted.io/posts/2020-06-24-task-management-with-roam-vol2.html
+    (org-with-point-at 1
+      (when (re-search-forward (concat "^#\\+" name ": \\(.*\\)")
+                               (point-max) t)
+	(buffer-substring-no-properties
+	 (match-beginning 1)
+	 (match-end 1)))))
+
+  (defun ch/org/category (&optional max-length)
+    ;; inspired
+    ;; https://d12frosted.io/posts/2020-06-24-task-management-with-roam-vol2.html
+    (let* ((title (ch/org/get-buffer-prop "title"))
+	   (category (org-get-category))
+	   (file-name (when buffer-file-name (file-name-sans-extension (file-name-nondirectory buffer-file-name))))
+	   (result (or title category file-name "")))
+      (if (and max-length
+	       (> (length result) max-length))
+	  (concat (substring result 0 (- max-length 3)) "...")
+	result)))
+
+  (defun ch/org/get-filetags ()
+    (-filter
+     (-compose #'not #'string-empty-p)
+     (split-string (ch/org/get-buffer-prop "filetags") ":")))
+
+  (defun ch/org/ensure-filetags (new-tags)
+    (let ((title (ch/org/get-buffer-prop "title"))
+	  (tags (ch/org/get-filetags)))
+      (when (seq-contains new-tags "person")
+	(org-roam-tag-add (list (concat "@" title))))))
+
+  (defun ch/org/add-filetags ()
     (interactive)
-    (dolist (buffer (buffer-list))
-      (with-current-buffer buffer
-	(when (derived-mode-p 'org-agenda-mode)
-	  (org-agenda-redo t)))))
+    (let ((tags (call-interactively #'org-roam-tag-add)))
+      (when tags
+	(ch/org/ensure-filetags tags))))
 
-  (defun ch/org/change-level (level-diff headline)
-    (let ((demoted-children (org-ml-headline-map-subheadlines
-			      (-partial #'-map (-partial #'ch/org/change-level level-diff))
-			      headline)))
-      (org-ml-set-property :level (+ level-diff (org-ml-get-property :level demoted-children))
-			   demoted-children)))
+  (defvar ch/org/winconf nil)
 
-  (defun ch/org/create-path/get-element (path-part tree)
-    (pcase tree
-      ('nil nil)
-      (`(,head . ,tail)
-       (if (string-equal path-part (org-element-property :raw-value head))
-	   head
-	 (ch/org/create-path/get-element path-part tail)))))
+  (defun ch/org/save-winconf ()
+    (unless ch/org/winconf
+      (setq ch/org/winconf (current-window-configuration))))
 
-  (defun ch/org/create-path/impl (path tree insert-point insert-level)
-    (pcase path
-      ('nil insert-point)
-      (`(,head . ,tail)
-       (let ((element (or (ch/org/create-path/get-element head tree)
-			  (org-ml-insert (or insert-point (point-max))
-					 (org-ml-build-headline! :level insert-level
-								 :title-text head)))))
-	 (ch/org/create-path/impl tail
-				  (org-ml-get-children element)
-				  (or (org-element-property :end element)
-				      (+ 2 insert-point (seq-length head) insert-level))
-				  (+ 1 insert-level))))))
-
-  (defun ch/org/create-path (path)
-    (ch/org/create-path/impl path (org-ml-parse-subtrees 'all) nil 1))
-
-  (defvar ch/org/tree-paths/ignored-nodes '("archive" "backlog" "notes" "tasks"))
-
-  (defun ch/org/tree-paths/impl (tree path)
-    (pcase tree
-      ('nil nil)
-      (`(,head . ,tail)
-       (let ((value (org-element-property :raw-value head))
-	     (todo-keyword (org-element-property :todo-keyword head)))
-	 (when (and value
-		    (not todo-keyword)
-		    (not (member value ch/org/tree-paths/ignored-nodes)))
-	   (cons `(,(string-join (reverse (cons value path)) "/") . ,head)
-		(append (ch/org/tree-paths/impl (org-ml-get-children head) (cons value path))
-			(ch/org/tree-paths/impl tail path))))))))
-
-  (defun ch/org/tree-paths ()
-    (ch/org/tree-paths/impl (org-ml-parse-subtrees 'all) nil))
-
-  (defun ch/org/select-headline ()
-    (let* ((tree-paths (ch/org/tree-paths))
-	   (chosen-path (ivy-read "Choose headline: "
-				  tree-paths
-				  :require-match t)))
-      (cdr (assoc chosen-path tree-paths))))
-
-  (defun ch/org/refile/core (subtree insert-point &optional level-diff)
-    (let* ((begin (org-element-property :begin subtree))
-	   (end (org-element-property :end subtree))
-	   (insert-point (- insert-point
-			    (if (< end insert-point)
-				(- end begin)
-			      0)))
-	   (level-diff (or level-diff 0))
-	   (leveled-subtree (ch/org/change-level level-diff subtree)))
-      (kill-region begin end)
-      (org-ml-insert insert-point leveled-subtree)))
-
-  (defun ch/org/refile/headline (dest-headline)
-    (let* ((subtree (org-ml-parse-this-subtree))
-	   (level-diff (+ 1 (- (org-element-property :level dest-headline)
-			       (org-element-property :level subtree)))))
-      (ch/org/refile/core subtree
-			  (org-element-property :end dest-headline)
-			  level-diff)))
-
-  (defun ch/org/refile/olp (dest-olp)
-    (let* ((subtree (org-ml-parse-this-subtree))
-	   (insert-point (ch/org/create-path dest-olp))
-	   (level-diff (- (+ 1 (length dest-olp))
-			  (org-element-property :level subtree))))
-      (ch/org/refile/core subtree
-			  insert-point
-			  level-diff)))
-
-  (defun ch/org/refile ()
+  (defun ch/org/pop-winconf ()
     (interactive)
-    (let ((dest-headline (ch/org/select-headline)))
-      (ch/org/refile/headline dest-headline)))
-
-  (defun ch/org/archive ()
-    (interactive)
-    (let ((path (ch/org/current-olp)))
-      (ch/org/refile/olp (cons "archive" (butlast path)))))
-
-  (defun ch/org/complete ()
-    (interactive)
-    (org-ml-update (lambda (headline)
-		     (->> headline
-		       (org-ml-set-property :todo-keyword "DONE")
-		       (org-ml-headline-set-planning (org-ml-build-planning! :closed (org-ml-unixtime-to-time-long (current-time))))))
-		   (org-ml-parse-this-headline))
-    (ch/org/archive))
-
-  (defun ch/org/outline ()
-    (org-element-map (org-element-parse-buffer 'headline) 'headline #'identity))
-
-  (defun ch/org/outline-tree/impl/partition-level (outline level)
-    ;; splits an outline (only headlines of org doc)
-    ;; into two lists:
-    ;;
-    ;;   - contiguous elements which are at a greater level than the provided level
-    ;;   - everything after them
-    ;;
-    ;; so that other functions can operate on "children" of an outline
-    (let* ((head (car outline))
-	   (head-level (org-element-property :level head))
-	   (tail (cdr outline)))
-      (cond
-       ((null outline) `(,nil ,nil))
-       ((<= head-level level) `(,nil ,outline))
-       (t
-	(let ((next (ch/org/outline-tree/impl/partition-level tail level)))
-	  `(,(cons head (car next)) ,(cadr next)))))))
-
-  (defun ch/org/outline-tree/impl (outline)
-    ;; converts a flat org outline into a hierarchy
-    ;; such that each headline contains each of the headlines beneath it
-    ;; e.g.
-    ;;
-    ;; * container
-    ;;   * sub-container
-    ;;   * sub-container peer
-    ;; * container peer
-    ;;
-    ;; becomes
-    ;;
-    ;; ((container (sub-container) (sub-container peer))
-    ;;  (container peer))
-    (let* ((container (car outline))
-	   (level (org-element-property :level container)))
-      (when container
-	(pcase-let* ((`(,children ,remaining) (ch/org/outline-tree/impl/partition-level (cdr outline) level))
-		     (sub-trees (ch/org/outline-tree/impl children))
-		     (peer-trees (ch/org/outline-tree/impl remaining)))
-	  `((,container . ,sub-trees)
-	    ,@peer-trees)))))
-
-  (defun ch/org/outline-tree ()
-    (ch/org/outline-tree/impl (ch/org/outline)))
-
-  (defun ch/org/current-olp/impl (point outline-tree olp)
-    ;; given a point and an outline, as constructed by ch/org/outline-tree,
-    ;; provide the outline path that corresponds to the current location
-    (pcase outline-tree
-      ('nil (reverse olp))
-      (`(,head . ,tail) (let ((head-element (car head))
-			      (head-children (cdr head)))
-			  (if (and (>= point (org-element-property :begin head-element))
-				   (<= point (org-element-property :end head-element)))
-			      (ch/org/current-olp/impl point head-children (cons (org-element-property :raw-value head-element) olp))
-			    (ch/org/current-olp/impl point tail olp))))))
-
-  (defun ch/org/current-olp ()
-    (let ((outline-tree (ch/org/outline-tree)))
-      (ch/org/current-olp/impl (point) outline-tree '())))
-
-  (defvar ch/org/agenda/winconf nil)
-
-  (defun ch/org/agenda/save-winconf ()
-    (unless ch/org/agenda/winconf
-      (setq ch/org/agenda/winconf (current-window-configuration))))
-
-  (defun ch/org/agenda/pop-winconf ()
-    (interactive)
-    (if ch/org/agenda/winconf
+    (if ch/org/winconf
 	(progn
-	  (set-window-configuration ch/org/agenda/winconf)
-	  (setq ch/org/agenda/winconf nil))
+	  (set-window-configuration ch/org/winconf)
+	  (setq ch/org/winconf nil))
       (message "No prior window configuration.")))
 
-  (defun ch/org/agenda/go-home ()
+  (defun ch/org/go-inbox ()
     (interactive)
-    (ch/org/agenda/save-winconf)
-    (find-file ch/org/home-file))
+    (ch/org/save-winconf)
+    (find-file ch/org/inbox-file))
 
-  (defun ch/org/agenda/go-week ()
+  (defun ch/org/go-week ()
     (interactive)
-    (ch/org/agenda/save-winconf)
+    (ch/org/save-winconf)
     (org-agenda-list))
 
-  (defun ch/org/agenda/go-day ()
+  (defun ch/org/go-day ()
     (interactive)
-    (ch/org/agenda/save-winconf)
+    (ch/org/save-winconf)
     (org-agenda-list)
     (org-agenda-day-view))
 
-  (defun ch/org/agenda/go-recent ()
+  (defun ch/org/go-recent ()
     (interactive)
-    (ch/org/agenda/save-winconf)
+    (ch/org/save-winconf)
     (org-ql-view-recent-items :num-days 7
-			      :type 'closed))
+			      :type 'closed)
+    (delete-other-windows))
 
-  (defun ch/org/agenda/go-yesterday ()
+  (defun ch/org/go-yesterday ()
     (interactive)
-    (ch/org/agenda/save-winconf)
+    (ch/org/save-winconf)
     (org-ql-view-recent-items :num-days 1
-			      :type 'closed))
+			      :type 'closed)
+    (delete-other-windows))
 
-  (defun ch/org/agenda/go-todo ()
+  (defun ch/org/go-todo ()
     (interactive)
-    (ch/org/agenda/save-winconf)
+    (ch/org/save-winconf)
     (org-todo-list))
 
-  (defun ch/org/agenda/go-roam-find ()
+  (defun ch/org/go-roam-find ()
     (interactive)
-    (ch/org/agenda/save-winconf)
+    (ch/org/save-winconf)
     (condition-case ()
 	(org-roam-node-find)
-      (quit (ch/org/agenda/go-back))))
+      (quit (ch/org/go-back))))
 
-  (defmacro ch/org/agenda/with-headline (&rest body)
-    (declare (indent defun))
-    `(let* ((marker (org-get-at-bol 'org-marker))
-	    (buffer (marker-buffer marker))
-	    (pos (marker-position marker)))
-       (with-current-buffer buffer
-	 (goto-char pos)
-	 ,@body)))
-
-  (defun ch/org/agenda/complete ()
+  (defun ch/org/agenda-quit ()
     (interactive)
-    (ch/org/agenda/with-headline
-      (ch/org/complete)
-      (ch/org/update-all-agendas)))
-
-  (defun ch/org/agenda/goto-indirect ()
-    (interactive)
-    (ch/org/agenda/with-headline
-      (org-tree-to-indirect-buffer)
-      (other-window 1)))
-
-  (defun ch/org/capture-hook ()
-    (let* ((headline (org-ml-parse-this-headline))
-	   (tags (when headline (org-ml-get-property :tags headline)))
-	   (dest-olp (when tags `("projects" ,(car tags)))))
-      (when dest-olp
-	(ch/org/refile/olp dest-olp))))
-
-  (add-hook 'org-capture-before-finalize-hook #'ch/org/capture-hook)
-  ;; (remove-hook 'org-capture-after-finalize-hook #'ch/org/capture-hook)
-
-  ;; without this, we leave a stray ch/org/home/window-configuration
-  ;; which messes up the next ch/org/home/go-*
-  (defadvice org-agenda-quit (around advice-org-agenda-quit activate)
-    (interactive)
-    (if ch/org/agenda/winconf
-	(ch/org/agenda/pop-winconf)
-      (advice-org-agenda-quit)))
+    (if ch/org/winconf
+	(ch/org/pop-winconf)
+      (org-agenda-quit)))
 
   (defun ch/org/config ()
-    (setq org-agenda-window-setup 'current-window
-	  org-adapt-indentation nil
+    (setq org-adapt-indentation nil
+	  org-agenda-window-setup 'current-window
           org-hide-emphasis-markers t)
 
+    (auto-fill-mode 0)
+    (display-line-numbers-mode 0)
+    (org-indent-mode 1)
+    (visual-line-mode 1))
+
+  (defun ch/org/config-agenda ()
+    (setq org-agenda-prefix-format '((agenda . " %i %-12(ch/org/category 12) %?-12t% s")
+				     (todo . " %i %-12(ch/org/category 12) ")
+				     (tags . " %i %-12(ch/org/category 12) ")
+				     (search . " %i %-12(ch/org/category 12) ")))
 
     (setq org-agenda-sorting-strategy
 	  '((agenda category-keep todo-state-up habit-down time-up priority-down)
@@ -297,21 +143,9 @@
 	    (tags todo-state-up priority-down category-keep)
 	    (search todo-state-up category-keep)))
 
-    (auto-fill-mode 0)
-    (display-line-numbers-mode 0)
-    (org-indent-mode 1)
-    (visual-line-mode 1)
-
-    (add-hook 'after-save-hook
-	      #'ch/org/update-all-agendas
-	      nil
-	      'local))
-
-  (defun ch/org/config-agenda ()
-    (dolist (key '("<tab>" "TAB"))
-      (define-key org-agenda-keymap (kbd key) #'ch/org/agenda/goto-indirect))
-
-    (define-key org-agenda-keymap (kbd "C-c o c") #'ch/org/agenda/complete))
+    (org-remap org-agenda-mode-map
+	       'org-agenda-quit
+	       'ch/org/agenda-quit))
 
   (use-package org
     :config
@@ -320,15 +154,12 @@
 	  org-capture-bookmark nil
 	  org-directory ch/org/org-directory
 	  org-todo-keywords '((sequence "TODO" "IN-PROGRESS" "NEEDS-REVIEW" "WAITING" "|" "DONE"))
-	  org-log-done 'time)
-    (progn
-      (require 'hawaii-theme)
-      (setq org-todo-keyword-faces
-	    `(("TODO" . org-warning)
-	      ("IN-PROGRESS" . ,hawaii-highlight-orange)
-	      ("NEEDS-REVIEW" . ,hawaii-highlight-blue)
-	      ("WAITING" . ,hawaii-comment)
-	      ("DONE" . ,hawaii-highlight-green))))
+	  org-log-done 'time
+	  org-todo-keyword-faces `(("TODO" . org-warning)
+				   ("IN-PROGRESS" . ,hawaii-highlight-orange)
+				   ("NEEDS-REVIEW" . ,hawaii-highlight-blue)
+				   ("WAITING" . ,hawaii-comment)
+				   ("DONE" . ,hawaii-highlight-green)))
 
     :hook
     ((org-mode . ch/org/config)
@@ -352,19 +183,19 @@
     (setq org-capture-templates
 	  (doct '(("Task"
 		   :keys "t"
-		   :file ch/org/home-file
-		   :template ("* TODO %^{Description} :%^G:"
+		   :file ch/org/inbox-file
+		   :template ("* TODO %^{Description}"
 			      "SCHEDULED: %^{Scheduled}t"
                               "%?"))
 
 		  ("Backlog"
 		   :keys "b"
-		   :file ch/org/home-file
-		   :template ("* TODO %^{Description} :%^G:"
+		   :file ch/org/inbox-file
+		   :template ("* TODO %^{Description}"
 			      "%?"))
 
 		  ("Note"
 		   :keys "n"
-		   :file ch/org/home-file
-		   :template ("* %^{Description} :%^G:"
+		   :file ch/org/inbox-file
+		   :template ("* %^{Description}"
 			      "%?")))))))

@@ -1,6 +1,5 @@
 ;;; evil.el -*- lexical-binding: t; -*-
 
-
 (ch/pkg evil
   (defmacro ch/evil/define-key-all (states &rest body)
     (declare (indent defun))
@@ -80,8 +79,7 @@
       (kbd "C-c j i") 'lsp-find-implementation
       (kbd "C-c j r") 'lsp-find-references
 
-      (kbd "C-c n o") 'org-capture
-      (kbd "C-c n r") 'org-roam-capture
+      (kbd "C-c n") 'org-capture
 
       (kbd "C-c p a") 'counsel-projectile-ag
       (kbd "C-c p f") 'counsel-projectile-find-file
@@ -108,10 +106,8 @@
 	(kbd "C-c j g") 'org-open-at-point
 	(kbd "C-c j b") 'org-mark-ring-goto
 
-	(kbd "C-c o a") 'ch/org/archive
-	(kbd "C-c o c") 'ch/org/complete
 	(kbd "C-c o i") 'org-roam-node-insert
-	(kbd "C-c o r") 'ch/org/refile
-	(kbd "C-c o s") 'ch/org/todo-sort)))
+	(kbd "C-c o r") 'org-roam-refile
+	(kbd "C-c o t") 'ch/org/add-filetags)))
 
   (use-package evil-nerd-commenter))
