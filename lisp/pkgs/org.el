@@ -20,27 +20,35 @@
 	    (system-name)
 	    ".org"))
 
-  (defmacro ch/org/with-headline (&rest body)
+  ;; these functions provide interfaces to org headlines
+  ;; as though i had the files themselves open.
+  ;; i like this as a means to interact with content
+  ;; through org-agenda, instead of having to open full files
+  (defmacro ch/org/with-headline (reload &rest body)
     (declare (indent defun))
     `(let* ((marker (org-get-at-bol 'org-marker))
 	    (buffer (marker-buffer marker))
 	    (pos (marker-position marker)))
        (with-current-buffer buffer
 	 (goto-char pos)
-	 ,@body)))
-
-  (defun ch/org/agenda-goto ()
-    (interactive)
-    (ch/org/with-headline
-     (org-tree-to-indirect-buffer)
-     (other-window 1)))
+	 ,@body)
+       ,@(when reload
+	   ;; most buffers bind some kind of "reload" to 'g'.
+	   ;; this disgusting little hack leverages that
+	   ;; to dynamically call the current buffer's reload
+	   '((funcall (lookup-key (current-local-map) "g"))))))
 
   (defun ch/org/agenda-refile ()
     (interactive)
-    (ch/org/with-headline
+    (ch/org/with-headline t
       (org-roam-refile)
-      (save-buffer))
-    (org-agenda-redo t))
+      (save-buffer)))
+
+  (defun ch/org/agenda-goto ()
+    (interactive)
+    (ch/org/with-headline nil
+      (org-tree-to-indirect-buffer)
+      (other-window 1)))
 
   (defun ch/org/quit-indirect-buffer ()
     (interactive)
@@ -89,6 +97,12 @@
       (when tags
 	(ch/org/ensure-filetags tags))))
 
+  ;; i interact with my org files primarily through various views
+  ;; built on top of data that is stored inside of org-roam nodes
+  ;; these functions define:
+  ;;
+  ;; - how to go to each of the views
+  ;; - how to return to the prior window configuration
   (defvar ch/org/winconf nil)
 
   (defun ch/org/save-winconf ()
@@ -117,15 +131,23 @@
   (defun ch/org/go-recent ()
     (interactive)
     (ch/org/save-winconf)
-    (org-ql-view-recent-items :num-days 7
-			      :type 'closed)
+    (org-ql-view-recent-items
+     :num-days 7
+     :type 'closed
+     :groups '((:auto-category t)
+	       (:auto-parent t)
+	       (:auto-todo t)))
     (delete-other-windows))
 
   (defun ch/org/go-yesterday ()
     (interactive)
     (ch/org/save-winconf)
-    (org-ql-view-recent-items :num-days 1
-			      :type 'closed)
+    (org-ql-view-recent-items
+     :num-days 1
+     :type 'closed
+     :groups '((:auto-category t)
+	       (:auto-parent t)
+	       (:auto-todo t)))
     (delete-other-windows))
 
   (defun ch/org/go-backlog ()
@@ -135,7 +157,8 @@
       #'org-agenda-files
       '(and (todo) (not (scheduled)))
       :title "Backlog"
-      :super-groups '((:auto-parent t)
+      :super-groups '((:auto-category t)
+		      (:auto-parent t)
 		      (:auto-todo t)))
     (delete-other-windows))
 
@@ -166,6 +189,9 @@
 	(ch/org/pop-winconf)
       (org-agenda-quit)))
 
+  ;; not sure why, but some config items must be set
+  ;; after loading org-mode / org-agenda-mode.
+  ;; these functions provide that configuration
   (defun ch/org/config ()
     (setq org-adapt-indentation nil
           org-hide-emphasis-markers t)
@@ -227,6 +253,9 @@
     :config
     (setq org-roam-directory ch/org/org-directory)
     (org-roam-db-autosync-mode))
+
+  (use-package org-super-agenda
+    :after org)
 
   (use-package doct
     :after org
