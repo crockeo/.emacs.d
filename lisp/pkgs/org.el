@@ -123,7 +123,6 @@
 
   (defun ch/org/config ()
     (setq org-adapt-indentation nil
-	  org-agenda-window-setup 'current-window
           org-hide-emphasis-markers t)
 
     (auto-fill-mode 0)
@@ -151,6 +150,7 @@
     :config
     (setq org-agenda-files (list ch/org/org-directory)
           org-agenda-skip-scheduled-if-done t
+	  org-agenda-window-setup 'current-window
 	  org-capture-bookmark nil
 	  org-directory ch/org/org-directory
 	  org-todo-keywords '((sequence "TODO" "IN-PROGRESS" "NEEDS-REVIEW" "WAITING" "|" "DONE"))
