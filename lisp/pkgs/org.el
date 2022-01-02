@@ -202,10 +202,10 @@
     (visual-line-mode 1))
 
   (defun ch/org/config-agenda ()
-    (setq org-agenda-prefix-format '((agenda . " %i %-12(ch/org/category 12) %?-12t% s")
-				     (todo . " %i %-12(ch/org/category 12) ")
-				     (tags . " %i %-12(ch/org/category 12) ")
-				     (search . " %i %-12(ch/org/category 12) ")))
+    (setq org-agenda-prefix-format '((agenda . " %i %?-12t% s")
+				     (todo . " %i ")
+				     (tags . " %i ")
+				     (search . " %i ")))
 
     (setq org-agenda-sorting-strategy
 	  '((agenda category-keep todo-state-up habit-down time-up priority-down)
@@ -255,7 +255,10 @@
     (org-roam-db-autosync-mode))
 
   (use-package org-super-agenda
-    :after org)
+    :after org
+    :config
+    (setq org-super-agenda-groups '((:auto-map (lambda (item) (ch/org/category)))))
+    :hook ((org-agenda-mode . org-super-agenda-mode)))
 
   (use-package doct
     :after org
