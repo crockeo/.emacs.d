@@ -38,7 +38,8 @@
   (defun ch/org/agenda-refile ()
     (interactive)
     (ch/org/with-headline
-      (org-roam-refile))
+      (org-roam-refile)
+      (save-buffer))
     (org-agenda-redo t))
 
   (defun ch/org/quit-indirect-buffer ()
@@ -102,11 +103,6 @@
 	  (setq ch/org/winconf nil))
       (message "No prior window configuration.")))
 
-  (defun ch/org/go-inbox ()
-    (interactive)
-    (ch/org/save-winconf)
-    (find-file ch/org/inbox-file))
-
   (defun ch/org/go-week ()
     (interactive)
     (ch/org/save-winconf)
@@ -138,8 +134,18 @@
     (org-ql-search
       #'org-agenda-files
       '(and (todo) (not (scheduled)))
+      :title "Backlog"
       :super-groups '((:auto-parent t)
 		      (:auto-todo t)))
+    (delete-other-windows))
+
+  (defun ch/org/go-inbox ()
+    (interactive)
+    (ch/org/save-winconf)
+    (org-ql-search
+      #'org-agenda-files
+      '(tags "refile")
+      :title "Inbox")
     (delete-other-windows))
 
   (defun ch/org/go-todo ()
@@ -152,7 +158,7 @@
     (ch/org/save-winconf)
     (condition-case ()
 	(org-roam-node-find)
-      (quit (ch/org/go-back))))
+      (quit (ch/org/pop-winconf))))
 
   (defun ch/org/agenda-quit ()
     (interactive)
