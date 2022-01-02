@@ -22,6 +22,7 @@
   (ch/crockeo/register-keys
     ("C-c C-w C-q" . ch/org/pop-winconf)
 
+    ("C-c C-w C-b" . ch/org/go-backlog)
     ("C-c C-w C-d" . ch/org/go-day)
     ("C-c C-w C-f" . ch/org/go-roam-find)
     ("C-c C-w C-h" . ch/org/go-inbox)

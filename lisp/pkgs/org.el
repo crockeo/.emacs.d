@@ -126,6 +126,16 @@
 			      :type 'closed)
     (delete-other-windows))
 
+  (defun ch/org/go-backlog ()
+    (interactive)
+    (ch/org/save-winconf)
+    (org-ql-search
+      #'org-agenda-files
+      '(and (todo) (not (scheduled)))
+      :super-groups '((:auto-parent t)
+		      (:auto-todo t)))
+    (delete-other-windows))
+
   (defun ch/org/go-todo ()
     (interactive)
     (ch/org/save-winconf)
