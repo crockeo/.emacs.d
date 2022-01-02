@@ -103,6 +103,8 @@
 
     (when (require 'org)
       (evil-define-key 'normal org-mode-map
+	(kbd "q") 'ch/org/quit-indirect-buffer
+
 	(kbd "C-c j g") 'org-open-at-point
 	(kbd "C-c j b") 'org-mark-ring-goto
 

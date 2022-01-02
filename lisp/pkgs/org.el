@@ -20,6 +20,29 @@
 	    (system-name)
 	    ".org"))
 
+  (defmacro ch/org/with-headline (&rest body)
+    (declare (indent defun))
+    `(let* ((marker (org-get-at-bol 'org-marker))
+	    (buffer (marker-buffer marker))
+	    (pos (marker-position marker)))
+       (with-current-buffer buffer
+	 (goto-char pos)
+	 ,@body)))
+
+  (defun ch/org/agenda-goto ()
+    (interactive)
+    (ch/org/with-headline
+     (org-tree-to-indirect-buffer)
+     (other-window 1)))
+
+  (defun ch/org/quit-indirect-buffer ()
+    (interactive)
+    (let ((is-indirect-buffer (buffer-base-buffer))
+	  (window-count (length (window-list))))
+      (when (and is-indirect-buffer
+		 (> window-count 1))
+	(delete-window))))
+
   (defun ch/org/get-buffer-prop (name)
     ;; taken from:
     ;; https://d12frosted.io/posts/2020-06-24-task-management-with-roam-vol2.html
@@ -143,8 +166,8 @@
 	    (search todo-state-up category-keep)))
 
     (org-remap org-agenda-mode-map
-	       'org-agenda-quit
-	       'ch/org/agenda-quit))
+	       'org-agenda-goto 'ch/org/agenda-goto
+	       'org-agenda-quit 'ch/org/agenda-quit))
 
   (use-package org
     :config
