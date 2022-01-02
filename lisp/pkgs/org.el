@@ -35,6 +35,12 @@
      (org-tree-to-indirect-buffer)
      (other-window 1)))
 
+  (defun ch/org/agenda-refile ()
+    (interactive)
+    (ch/org/with-headline
+      (org-roam-refile))
+    (org-agenda-redo t))
+
   (defun ch/org/quit-indirect-buffer ()
     (interactive)
     (let ((is-indirect-buffer (buffer-base-buffer))
@@ -175,6 +181,7 @@
 	    (tags todo-state-up priority-down category-keep)
 	    (search todo-state-up category-keep)))
 
+    (define-key org-agenda-mode-map (kbd "C-c o r") #'ch/org/agenda-refile)
     (org-remap org-agenda-mode-map
 	       'org-agenda-goto 'ch/org/agenda-goto
 	       'org-agenda-quit 'ch/org/agenda-quit))
