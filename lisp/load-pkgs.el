@@ -11,7 +11,6 @@
 
 (ch/pkg interface
   (ch/use-pkgs
-    colorscheme
     crockeo
     company
     evil
@@ -20,7 +19,8 @@
     dired-sidebar
     ivy
     magit
-    projectile))
+    projectile
+    zenburn))
 
 (ch/pkg languages
   (ch/use-pkgs

@@ -195,15 +195,20 @@
 	  org-directory ch/org/org-directory
 	  org-todo-keywords '((sequence "TODO" "IN-PROGRESS" "NEEDS-REVIEW" "WAITING" "|" "DONE"))
 	  org-log-done 'time
-	  org-todo-keyword-faces `(("TODO" . org-warning)
-				   ("IN-PROGRESS" . ,hawaii-highlight-orange)
-				   ("NEEDS-REVIEW" . ,hawaii-highlight-blue)
-				   ("WAITING" . ,hawaii-comment)
-				   ("DONE" . ,hawaii-highlight-green)))
+	  org-todo-keyword-faces `(("TODO" . ,(ch/zenburn/color "red"))
+				   ("IN-PROGRESS" . ,(ch/zenburn/color "yellow"))
+				   ("NEEDS-REVIEW" . ,(ch/zenburn/color "blue"))
+				   ("WAITING" . ,(ch/zenburn/color "bg+3"))
+				   ("DONE" . ,(ch/zenburn/color "green"))))
 
     :hook
     ((org-mode . ch/org/config)
      (org-agenda-mode . ch/org/config-agenda)))
+
+  (use-package org-bullets
+    :after org
+    :hook
+    ((org-mode . org-bullets-mode)))
 
   (use-package org-ml
     :after org)
