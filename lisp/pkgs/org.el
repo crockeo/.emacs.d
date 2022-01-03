@@ -85,11 +85,16 @@
      (-compose #'not #'string-empty-p)
      (split-string (ch/org/get-buffer-prop "filetags") ":")))
 
+  (defun ch/org/title-to-tag (title)
+    (->> title
+      (string-replace "-" "_")
+      (string-replace " " "_")))
+
   (defun ch/org/ensure-filetags (new-tags)
     (let ((title (ch/org/get-buffer-prop "title"))
 	  (tags (ch/org/get-filetags)))
       (when (seq-contains new-tags "person")
-	(org-roam-tag-add (list (concat "@" title))))))
+	(org-roam-tag-add (list (concat "@" (ch/org/title-to-tag title)))))))
 
   (defun ch/org/add-filetags ()
     (interactive)
