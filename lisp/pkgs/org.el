@@ -105,9 +105,9 @@
   ;; - how to return to the prior window configuration
   (defvar ch/org/winconf nil)
 
-  (defun ch/org/save-winconf ()
+  (defun ch/org/save-winconf (&optional winconf)
     (unless ch/org/winconf
-      (setq ch/org/winconf (current-window-configuration))))
+      (setq ch/org/winconf (or winconf (current-window-configuration)))))
 
   (defun ch/org/pop-winconf ()
     (interactive)
@@ -178,10 +178,12 @@
 
   (defun ch/org/go-roam-find ()
     (interactive)
-    (ch/org/save-winconf)
-    (condition-case ()
-	(org-roam-node-find)
-      (quit (ch/org/pop-winconf))))
+    (let ((winconf (current-window-configuration)))
+      (condition-case ()
+	  (progn
+	    (org-roam-node-find)
+	    (ch/org/save-winconf winconf))
+	(quit ()))))
 
   (defun ch/org/agenda-quit ()
     (interactive)
