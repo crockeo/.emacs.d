@@ -139,9 +139,7 @@
     (org-ql-view-recent-items
      :num-days 7
      :type 'closed
-     :groups '((:auto-category t)
-	       (:auto-parent t)
-	       (:auto-todo t)))
+     :groups '((:auto-map (lambda (item) (ch/org/category)))))
     (delete-other-windows))
 
   (defun ch/org/go-yesterday ()
@@ -150,9 +148,7 @@
     (org-ql-view-recent-items
      :num-days 1
      :type 'closed
-     :groups '((:auto-category t)
-	       (:auto-parent t)
-	       (:auto-todo t)))
+     :groups '((:auto-map (lambda (item) (ch/org/category)))))
     (delete-other-windows))
 
   (defun ch/org/go-backlog ()
@@ -162,9 +158,7 @@
       #'org-agenda-files
       '(and (todo) (not (scheduled)))
       :title "Backlog"
-      :super-groups '((:auto-category t)
-		      (:auto-parent t)
-		      (:auto-todo t)))
+      :super-groups '((:auto-map (lambda (item) (ch/org/category)))))
     (delete-other-windows))
 
   (defun ch/org/go-inbox ()
@@ -173,7 +167,8 @@
     (org-ql-search
       #'org-agenda-files
       '(tags "refile")
-      :title "Inbox")
+      :title "Inbox"
+      :super-groups '((:auto-map (lambda (item) (ch/org/category)))))
     (delete-other-windows))
 
   (defun ch/org/go-todo ()
