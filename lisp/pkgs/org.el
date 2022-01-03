@@ -29,14 +29,15 @@
     `(let* ((marker (org-get-at-bol 'org-marker))
 	    (buffer (marker-buffer marker))
 	    (pos (marker-position marker)))
-       (with-current-buffer buffer
-	 (goto-char pos)
-	 ,@body)
-       ,@(when reload
-	   ;; most buffers bind some kind of "reload" to 'g'.
-	   ;; this disgusting little hack leverages that
-	   ;; to dynamically call the current buffer's reload
-	   '((funcall (lookup-key (current-local-map) "g"))))))
+       (save-excursion
+	 (with-current-buffer buffer
+	   (goto-char pos)
+	   ,@body)
+	 ,@(when reload
+	     ;; most buffers bind some kind of "reload" to 'g'.
+	     ;; this disgusting little hack leverages that
+	     ;; to dynamically call the current buffer's reload
+	     '((funcall (lookup-key (current-local-map) "g")))))))
 
   (defun ch/org/agenda-refile ()
     (interactive)
