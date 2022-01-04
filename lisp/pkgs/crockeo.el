@@ -26,6 +26,7 @@
     ("C-c C-w C-d" . ch/org/go-day)
     ("C-c C-w C-f" . ch/org/go-roam-find)
     ("C-c C-w C-i" . ch/org/go-inbox)
+    ("C-c C-w C-n" . ch/org/go-next)
     ("C-c C-w C-r" . ch/org/go-recent)
     ("C-c C-w C-t" . ch/org/go-todo)
     ("C-c C-w C-w" . ch/org/go-week)

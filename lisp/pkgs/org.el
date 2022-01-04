@@ -51,6 +51,14 @@
       (org-tree-to-indirect-buffer)
       (other-window 1)))
 
+  (defun ch/org/agenda-next ()
+    (interactive)
+    (ch/org/with-headline t
+      (save-excursion
+	(ignore-errors
+	  (outline-back-to-heading)
+	  (org-set-tags (seq-uniq (cons "next" (org-get-tags))))))))
+
   (defun ch/org/quit-indirect-buffer ()
     (interactive)
     (let ((is-indirect-buffer (buffer-base-buffer))
@@ -162,6 +170,15 @@
       :super-groups '((:auto-map (lambda (item) (ch/org/category)))))
     (delete-other-windows))
 
+  (defun ch/org/go-next ()
+    (interactive)
+    (ch/org/save-winconf)
+    (org-ql-search
+      #'org-agenda-files
+      '(and (todo) (tags "next"))
+      :title "Next"
+      :super-groups '((:auto-map (lambda (item) (ch/org/category))))))
+
   (defun ch/org/go-inbox ()
     (interactive)
     (ch/org/save-winconf)
@@ -217,6 +234,7 @@
 	    (search todo-state-up category-keep)))
 
     (define-key org-agenda-mode-map (kbd "C-c o r") #'ch/org/agenda-refile)
+    (define-key org-agenda-mode-map (kbd "C-c o n") #'ch/org/agenda-next)
     (org-remap org-agenda-mode-map
 	       'bury-buffer 'ch/org/agenda-quit
 	       'org-agenda-goto 'ch/org/agenda-goto
