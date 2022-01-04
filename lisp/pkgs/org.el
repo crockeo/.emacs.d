@@ -131,6 +131,15 @@
 	  (setq ch/org/winconf nil))
       (message "No prior window configuration.")))
 
+  (defun ch/org/search (title query)
+    (ch/org/save-winconf)
+    (org-ql-search
+      #'org-agenda-files
+      query
+      :title title
+      :super-groups '((:auto-map (lambda (item) (ch/org/category)))))
+    (delete-other-windows))
+
   (defun ch/org/go-week ()
     (interactive)
     (ch/org/save-winconf)
@@ -162,37 +171,23 @@
 
   (defun ch/org/go-backlog ()
     (interactive)
-    (ch/org/save-winconf)
-    (org-ql-search
-      #'org-agenda-files
-      '(and (todo) (not (scheduled)))
-      :title "Backlog"
-      :super-groups '((:auto-map (lambda (item) (ch/org/category)))))
-    (delete-other-windows))
+    (ch/org/search
+     "Backlog"
+     '(and (todo)
+	   (not (ts-active))
+	   (not (tags "refile")))))
 
   (defun ch/org/go-next ()
     (interactive)
-    (ch/org/save-winconf)
-    (org-ql-search
-      #'org-agenda-files
-      '(and (todo) (tags "next"))
-      :title "Next"
-      :super-groups '((:auto-map (lambda (item) (ch/org/category))))))
+    (ch/org/search
+     "Next"
+     '(and (not (done)) (tags "next"))))
 
   (defun ch/org/go-inbox ()
     (interactive)
-    (ch/org/save-winconf)
-    (org-ql-search
-      #'org-agenda-files
-      '(tags "refile")
-      :title "Inbox"
-      :super-groups '((:auto-map (lambda (item) (ch/org/category)))))
-    (delete-other-windows))
-
-  (defun ch/org/go-todo ()
-    (interactive)
-    (ch/org/save-winconf)
-    (org-todo-list))
+    (ch/org/search
+     "Inbox"
+     '(tags "refile")))
 
   (defun ch/org/go-roam-find ()
     (interactive)
