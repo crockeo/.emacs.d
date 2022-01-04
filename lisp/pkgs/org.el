@@ -218,6 +218,7 @@
 
     (define-key org-agenda-mode-map (kbd "C-c o r") #'ch/org/agenda-refile)
     (org-remap org-agenda-mode-map
+	       'bury-buffer 'ch/org/agenda-quit
 	       'org-agenda-goto 'ch/org/agenda-goto
 	       'org-agenda-quit 'ch/org/agenda-quit))
 
