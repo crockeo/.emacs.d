@@ -128,7 +128,8 @@
     (if ch/org/winconf
 	(progn
 	  (set-window-configuration ch/org/winconf)
-	  (setq ch/org/winconf nil))
+	  (setq ch/org/winconf nil)
+	  (org-save-all-org-buffers))
       (message "No prior window configuration.")))
 
   (defun ch/org/search (title query)
