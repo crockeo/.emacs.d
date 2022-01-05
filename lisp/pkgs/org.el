@@ -286,14 +286,7 @@
 		   :keys "t"
 		   :file ch/org/inbox-file
 		   :template ("* TODO %^{Description}"
-			      "SCHEDULED: %^{Scheduled}t"
                               "%?"))
-
-		  ("Backlog"
-		   :keys "b"
-		   :file ch/org/inbox-file
-		   :template ("* TODO %^{Description}"
-			      "%?"))
 
 		  ("Note"
 		   :keys "n"
