@@ -138,8 +138,7 @@
       #'org-agenda-files
       query
       :title title
-      :super-groups '((:auto-parent)
-		      (:auto-map (lambda (item) (ch/org/category)))))
+      :super-groups '((:auto-map (lambda (item) (ch/org/category)))))
     (delete-other-windows))
 
   (defun ch/org/go-week ()
