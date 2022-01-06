@@ -54,10 +54,14 @@
   (defun ch/org/agenda-next ()
     (interactive)
     (ch/org/with-headline t
-      (save-excursion
-	(ignore-errors
-	  (outline-back-to-heading)
-	  (org-set-tags (seq-uniq (cons "next" (org-get-tags))))))))
+      (ch/org/set-next)))
+
+  (defun ch/org/set-next ()
+    (interactive)
+    (save-excursion
+      (ignore-errors
+	(outline-back-to-heading)
+	(org-set-tags (seq-uniq (cons "next" (org-get-tags)))))))
 
   (defun ch/org/quit-indirect-buffer ()
     (interactive)
@@ -224,7 +228,7 @@
 				     (search . " %i ")))
 
     (setq org-agenda-sorting-strategy
-	  '((agenda category-keep todo-state-up habit-down time-up priority-down)
+	  '((agenda todo-state-up habit-down time-up priority-down)
 	    (todo todo-state-up priority-down category-keep)
 	    (tags todo-state-up priority-down category-keep)
 	    (search todo-state-up category-keep)))
@@ -239,7 +243,9 @@
   (use-package org
     :config
     (setq org-agenda-files (list ch/org/org-directory)
-          org-agenda-skip-scheduled-if-done t
+	  org-agenda-skip-scheduled-if-done t
+	  org-agenda-scheduled-leaders '("" "")
+	  org-agenda-use-time-grid nil
 	  org-agenda-window-setup 'current-window
 	  org-capture-bookmark nil
 	  org-directory ch/org/org-directory

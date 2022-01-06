@@ -108,7 +108,9 @@
 	(kbd "C-c j g") 'org-open-at-point
 	(kbd "C-c j b") 'org-mark-ring-goto
 
+	(kbd "C-c o e") 'org-roam-extract-subtree
 	(kbd "C-c o i") 'org-roam-node-insert
+	(kbd "C-c o n") 'ch/org/set-next
 	(kbd "C-c o r") 'org-roam-refile
 	(kbd "C-c o t") 'ch/org/add-filetags)))
 
