@@ -79,8 +79,6 @@
       (kbd "C-c j i") 'lsp-find-implementation
       (kbd "C-c j r") 'lsp-find-references
 
-      (kbd "C-c n") 'org-capture
-
       (kbd "C-c p a") 'counsel-projectile-ag
       (kbd "C-c p f") 'counsel-projectile-find-file
       ;; TODO: come back and use counsel
@@ -99,19 +97,6 @@
       (kbd "C-s o") 'other-window
       (kbd "C-s C-o") 'other-window
       (kbd "C-s %") 'split-window-right
-      (kbd "C-s \"") 'split-window-below)
-
-    (when (require 'org)
-      (evil-define-key 'normal org-mode-map
-	(kbd "q") 'ch/org/quit-indirect-buffer
-
-	(kbd "C-c j g") 'org-open-at-point
-	(kbd "C-c j b") 'org-mark-ring-goto
-
-	(kbd "C-c o e") 'org-roam-extract-subtree
-	(kbd "C-c o i") 'org-roam-node-insert
-	(kbd "C-c o n") 'ch/org/set-next
-	(kbd "C-c o r") 'org-roam-refile
-	(kbd "C-c o t") 'ch/org/add-filetags)))
+      (kbd "C-s \"") 'split-window-below))
 
   (use-package evil-nerd-commenter))
