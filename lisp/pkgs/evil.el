@@ -79,6 +79,8 @@
       (kbd "C-c j i") 'lsp-find-implementation
       (kbd "C-c j r") 'lsp-find-references
 
+      (kbd "C-c o") 'olivetti-mode
+
       (kbd "C-c p a") 'counsel-projectile-ag
       (kbd "C-c p f") 'counsel-projectile-find-file
       ;; TODO: come back and use counsel
