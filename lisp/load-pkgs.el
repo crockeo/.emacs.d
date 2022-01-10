@@ -19,6 +19,7 @@
     dired-sidebar
     ivy
     magit
+    notion
     olivetti
     projectile
     zenburn))
