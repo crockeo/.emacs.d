@@ -38,6 +38,7 @@
 `\\[ch/notion/finalize]', abort `\\[ch/notion/kill]'.")))
 
   (defun ch/notion/finalize ()
+    ;; TODO: better error handling
     (interactive)
     (let* ((capture-buffer (ch/notion/plist/get :capture-buffer))
 	   (return-winconf (ch/notion/plist/get :return-winconf))
@@ -49,6 +50,7 @@
       (set-window-configuration return-winconf)))
 
   (defun ch/notion/kill ()
+    ;; TODO: better error handling
     (interactive)
     (let ((capture-buffer (ch/notion/plist/get :capture-buffer))
 	  (return-winconf (ch/notion/plist/get :return-winconf)))
@@ -87,37 +89,17 @@
 	      options
 	      :require-match t))
 
-  (defun ch/notion/prompt/body ()
-    "Temporary, empty implementation of this func \
-while I hammer down the real implementation below."
-    "")
-
-  (ch/comment
-    ;; TODO: uncomment this Eventually when i have it working
-    (defun ch/notion/prompt/body (results)
-      ;; what's the exact user experience i want for this?
-      ;;
-      ;; 1. open a new buffer in markdown mode
-      ;;
-      ;; 2. show people the title and properties
-      ;;    for the thing they're editing
-      ;;    in case that extra context is nice for them
-      ;;
-      ;; 3. edit the markdown in-place to construct the like...body of the thing
-      ;;
-      ;; 4. C-c C-c to commit
-      ;;    OR C-c C-k to abort
-      (let ((return-winconf (current-window-configuration))
-	    (capture-buffer (generate-new-buffer "notion-capture")))
-	(ch/notion/plist/put :return-winconf return-winconf
-			     :capture-buffer capture-buffer
-			     :results results)
-	(delete-other-windows)
-	(switch-to-buffer capture-buffer)
-	(markdown-mode)
-	(ch/notion/capture-mode)))
-
-    (ch/notion/prompt/body))
+  (defun ch/notion/prompt/body (results)
+    ;; TODO: better error handling here
+    (let ((return-winconf (current-window-configuration))
+	  (capture-buffer (generate-new-buffer "notion-capture")))
+      (ch/notion/plist/put :return-winconf return-winconf
+			   :capture-buffer capture-buffer
+			   :results results)
+      (delete-other-windows)
+      (switch-to-buffer capture-buffer)
+      (markdown-mode)
+      (ch/notion/capture-mode)))
 
   (defun ch/notion/prompt (prop-name prop)
     (if (string= (ht-get prop "type") "select")
