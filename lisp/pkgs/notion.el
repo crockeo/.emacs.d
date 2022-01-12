@@ -38,30 +38,38 @@
 `\\[ch/notion/finalize]', abort `\\[ch/notion/kill]'.")))
 
   (defun ch/notion/finalize ()
-    ;; TODO: better error handling
     (interactive)
-    (let* ((capture-buffer (ch/notion/plist/get :capture-buffer))
-	   (return-winconf (ch/notion/plist/get :return-winconf))
-	   (results (ch/notion/plist/get :results))
-	   (body (with-current-buffer capture-buffer (buffer-string))))
-      (ht-set results "body" body)
-      (make-thread
-       (lambda ()
-	 (condition-case err
-	     (ch/notion/proc/join (ch/notion/proc/capture results))
-	   (t (thread-signal main-thread (car err) (cdr err))))))
-      (setq ch/notion/plist '())
-      (set-window-configuration return-winconf)
-      (kill-buffer capture-buffer)))
+    (unless ch/notion/capture-mode
+      (error "May only finalize from inside of a notion-capture buffer."))
+
+    (let ((return-winconf (ch/notion/plist/get :return-winconf))
+	  (results (ch/notion/plist/get :results)))
+      (when (and return-winconf results)
+	(ht-set results "body" (buffer-string))
+	(make-thread
+	 (lambda ()
+	   (condition-case err
+	       (ch/notion/proc/join (ch/notion/proc/capture results))
+	     (t (thread-signal main-thread (car err) (cdr err)))))))
+
+      (let ((capture-buffer (current-buffer)))
+	(when return-winconf
+	  (set-window-configuration return-winconf))
+	(kill-buffer capture-buffer))
+
+      (setq ch/notion/plist '())))
 
   (defun ch/notion/kill ()
-    ;; TODO: better error handling
     (interactive)
-    (let ((capture-buffer (ch/notion/plist/get :capture-buffer))
+    (unless ch/notion/capture-mode
+      (error "May only kill from inside of a notion-capture buffer."))
+
+    (let ((capture-buffer (current-buffer))
 	  (return-winconf (ch/notion/plist/get :return-winconf)))
-      (setq ch/notion/plist '())
-      (set-window-configuration return-winconf)
-      (kill-buffer capture-buffer)))
+      (when return-winconf
+	(set-window-configuration return-winconf))
+      (kill capture-buffer)
+      (setq ch/notion/plist '())))
 
   (defun ch/notion/proc/dump ()
     (make-process
@@ -140,7 +148,6 @@
 
       (let ((capture-buffer (generate-new-buffer "notion-capture")))
        (ch/notion/plist/put :return-winconf (current-window-configuration)
-			    :capture-buffer capture-buffer
 			    :results (ht ("properties" results)
 					 ("title" title-name)))
 
