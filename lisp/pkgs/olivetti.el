@@ -10,15 +10,11 @@
   (defun ch/olivetti/ensure ()
     (when (not (equal ch/olivetti/enabled olivetti-mode))
      (olivetti-mode
-      (if ch/olivetti/enabled
-	  nil
-	-1))))
+      (if ch/olivetti/enabled t -1))))
 
   (defun ch/olivetti/toggle-ensure ()
     (interactive)
-    (if ch/olivetti/enabled
-	(setq ch/olivetti/enabled nil)
-      (setq ch/olivetti/enabled t))
+    (setq ch/olivetti/enabled (not ch/olivetti/enabled))
     (dolist (window (window-list))
       (with-current-buffer (window-buffer window)
 	(ch/olivetti/ensure))))
