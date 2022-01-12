@@ -8,10 +8,11 @@
   (defvar ch/olivetti/enabled nil)
 
   (defun ch/olivetti/ensure ()
-    (olivetti-mode
-     (if ch/olivetti/enabled
-	 nil
-       -1)))
+    (when (not (equal ch/olivetti/enabled olivetti-mode))
+     (olivetti-mode
+      (if ch/olivetti/enabled
+	  nil
+	-1))))
 
   (defun ch/olivetti/toggle-ensure ()
     (interactive)
