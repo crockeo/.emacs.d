@@ -3,6 +3,7 @@
 .fetched_dependencies
 .lsp-session-v1
 .org-id-locations
+autosave/
 auto-save-list/
 bookmarks
 eln-cache/

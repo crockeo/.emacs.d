@@ -36,3 +36,14 @@
 (defmacro ch/use-pkgs (&rest packages)
   (declare (indent defun))
   `(ch/use-pkgs-impl ',packages))
+
+;; Set up some commonly used helper functions.
+(defun ch/vec-to-list (vec)
+  "Capturing this little hack I got from @neeasade
+in a self-documenting function."
+  (append vec nil))
+
+
+(defmacro ch/comment (&rest body)
+  (declare (indent defun))
+  nil)
