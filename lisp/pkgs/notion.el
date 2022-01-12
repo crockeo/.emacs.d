@@ -45,9 +45,14 @@
 	   (results (ch/notion/plist/get :results))
 	   (body (with-current-buffer capture-buffer (buffer-string))))
       (ht-set results "body" body)
-      (ch/notion/proc/join (ch/notion/proc/capture results))
-      (kill-buffer capture-buffer)
-      (set-window-configuration return-winconf)))
+      (make-thread
+       (lambda ()
+	 (condition-case err
+	     (ch/notion/proc/join (ch/notion/proc/capture results))
+	   (t (thread-signal main-thread (car err) (cdr err))))))
+      (setq ch/notion/plist '())
+      (set-window-configuration return-winconf)
+      (kill-buffer capture-buffer)))
 
   (defun ch/notion/kill ()
     ;; TODO: better error handling
@@ -55,8 +60,8 @@
     (let ((capture-buffer (ch/notion/plist/get :capture-buffer))
 	  (return-winconf (ch/notion/plist/get :return-winconf)))
       (setq ch/notion/plist '())
-      (kill-buffer capture-buffer)
-      (set-window-configuration return-winconf)))
+      (set-window-configuration return-winconf)
+      (kill-buffer capture-buffer)))
 
   (defun ch/notion/proc/dump ()
     (make-process
@@ -89,18 +94,6 @@
 	      options
 	      :require-match t))
 
-  (defun ch/notion/prompt/body (results)
-    ;; TODO: better error handling here
-    (let ((return-winconf (current-window-configuration))
-	  (capture-buffer (generate-new-buffer "notion-capture")))
-      (ch/notion/plist/put :return-winconf return-winconf
-			   :capture-buffer capture-buffer
-			   :results results)
-      (delete-other-windows)
-      (switch-to-buffer capture-buffer)
-      (markdown-mode)
-      (ch/notion/capture-mode)))
-
   (defun ch/notion/prompt (prop-name prop)
     (if (string= (ht-get prop "type") "select")
 	(ch/notion/prompt/select prop-name (ch/vec-to-list (ht-get prop "options")))
@@ -124,11 +117,19 @@
   (defun ch/notion/capture ()
     (interactive)
     (let* ((proc (ch/notion/proc/dump))
-	   (title (read-string "Task: "))
+
+	   (title (condition-case ()
+		      (read-string "Task: ")
+		    (quit (progn
+			    (ch/notion/proc/join proc)
+			    (keyboard-quit)))))
+
 	   (config (json-parse-string (ch/notion/proc/join proc)))
 	   (prompt-order (ch/notion/prompt-order config))
+
 	   (title-name nil)
 	   (results (ht)))
+
       (dolist (prop-name prompt-order)
 	(let ((prop (ht-get* config "properties" prop-name)))
 	  (if (string= (ht-get prop "type") "title")
@@ -137,5 +138,13 @@
 		(ht-set results prop-name title))
 	    (ht-set results prop-name (ch/notion/prompt prop-name prop)))))
 
-      (ch/notion/prompt/body (ht ("properties" results)
-				 ("title" title-name))))))
+      (let ((capture-buffer (generate-new-buffer "notion-capture")))
+       (ch/notion/plist/put :return-winconf (current-window-configuration)
+			    :capture-buffer capture-buffer
+			    :results (ht ("properties" results)
+					 ("title" title-name)))
+
+       (delete-other-windows)
+       (switch-to-buffer capture-buffer)
+       (markdown-mode)
+       (ch/notion/capture-mode)))))
