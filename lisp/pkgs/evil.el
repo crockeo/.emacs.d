@@ -81,7 +81,7 @@
 
       (kbd "C-c n") 'ch/notion/capture
 
-      (kbd "C-c o") 'olivetti-mode
+      (kbd "C-c o") 'ch/olivetti/toggle-ensure
 
       (kbd "C-c p a") 'counsel-projectile-ag
       (kbd "C-c p f") 'counsel-projectile-find-file
