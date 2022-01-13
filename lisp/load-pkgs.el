@@ -22,6 +22,7 @@
     notion
     olivetti
     projectile
+    which-key
     zenburn))
 
 (ch/pkg languages
