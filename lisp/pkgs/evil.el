@@ -82,7 +82,8 @@
       (kbd "C-c j i") 'lsp-find-implementation
       (kbd "C-c j r") 'lsp-find-references
 
-      (kbd "C-c n") 'ch/notion/capture
+      (kbd "C-c n d") 'org-roam-dailies-capture-today
+      (kbd "C-c n t") 'org-roam-dailies-capture-tomorrow
 
       (kbd "C-c l") 'ch/olivetti/toggle-ensure
 
@@ -104,6 +105,9 @@
       (kbd "C-s o") 'other-window
       (kbd "C-s C-o") 'other-window
       (kbd "C-s %") 'split-window-right
-      (kbd "C-s \"") 'split-window-below))
+      (kbd "C-s \"") 'split-window-below)
+
+    (evil-define-key nil org-mode-map
+      (kbd "C-c o i") 'org-roam-node-insert))
 
   (use-package evil-nerd-commenter))

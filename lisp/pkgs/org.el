@@ -1,6 +1,7 @@
 ;;; org.el -*- lexical-binding: t; -*-
 
 (ch/pkg org
+  (defvar org-directory (expand-file-name "~/org"))
   (defun ch/org/ensure-org-directory ()
     (make-directory org-directory t))
 
@@ -94,12 +95,18 @@
   (use-package org-roam
     :after org
     :config
+    ;; org-roam-dailies isn't loaded by default
+    ;; under straight.el for some reason.
+    ;; manually load it here instead
+    (add-to-list 'load-path (expand-file-name "~/.emacs.d/straight/repos/org-roam/extensions"))
+    (load "org-roam-dailies")
     (require 'org-roam-dailies)
     (setq
-     org-roam-db-update-on-save t
      org-roam-directory org-directory
      org-roam-dailies-directory "dailies/"
      org-roam-dailies-capture-templates '(("d" "default" entry
 					   "* %?"
 					   :target (file+head "%<%Y-%m-%d>.org"
-							      "#+title: %<%Y-%m-%d>\n"))))))
+							      "#+title: %<%Y-%m-%d>\n"))))
+
+    (org-roam-db-autosync-mode t)))
