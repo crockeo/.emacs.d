@@ -74,8 +74,8 @@
 
       (kbd "C-c f l") 'ch/evil/copy-file-link
 
-      (kbd "C-c i g") 'ch/org/pull-files
-      (kbd "C-c i p") 'ch/org/push-files
+      (kbd "C-c i d") 'ch/org/download-files
+      (kbd "C-c i u") 'ch/org/upload-files
 
       (kbd "C-c j b") 'xref-pop-marker-stack
       (kbd "C-c j g") 'lsp-find-definition
