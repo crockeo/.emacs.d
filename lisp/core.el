@@ -43,6 +43,22 @@
 in a self-documenting function."
   (append vec nil))
 
+(defmacro ch/under-dir (dir &rest body)
+  "Perform some action while assuming the directory `dir`."
+  (declare (indent defun))
+  `(let ((pwd default-directory)
+	 (result-slot nil))
+     (condition-case err
+	 (progn
+	   (cd ,dir)
+	   (setq result-slot
+	    (progn ,@body))
+	   (cd pwd)
+	   result-slot)
+       (error
+	(progn
+	  (cd pwd)
+	  (signal (car err) (cdr err)))))))
 
 (defmacro ch/comment (&rest body)
   (declare (indent defun))
