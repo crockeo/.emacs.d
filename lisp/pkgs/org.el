@@ -66,6 +66,7 @@
    (org-roam-dailies-goto-yesterday 1)
    (org-roam-node-find))
 
+  ;; and the rest of this is just plain configuration :)
   (defun ch/org/config ()
     (setq org-adapt-indentation nil
 	  org-hide-emphasis-markers t)
