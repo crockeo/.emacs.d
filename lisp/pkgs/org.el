@@ -96,12 +96,6 @@
   (use-package org-roam
     :after org
     :config
-    ;; org-roam-dailies isn't loaded by default
-    ;; under straight.el for some reason.
-    ;; manually load it here instead
-    (add-to-list 'load-path (expand-file-name "~/.emacs.d/straight/repos/org-roam/extensions"))
-    (load "org-roam-dailies")
-    (require 'org-roam-dailies)
     (setq
      org-roam-directory org-directory
      org-roam-dailies-directory "dailies/"
@@ -110,4 +104,12 @@
 					   :target (file+head "%<%Y-%m-%d>.org"
 							      "#+title: %<%Y-%m-%d>\n"))))
 
-    (org-roam-db-autosync-mode t)))
+    (org-roam-db-autosync-mode t))
+
+  ;; org-roam-dailies isn't loaded by default
+  ;; under straight.el for some reason.
+  ;; manually load it here instead
+  (eval-after-load 'org-roam
+    (progn
+      (add-to-list 'load-path (expand-file-name "~/.emacs.d/straight/repos/org-roam/extensions"))
+      (load "org-roam-dailies"))))
