@@ -5,6 +5,45 @@
   (defun ch/org/ensure-org-directory ()
     (make-directory org-directory t))
 
+  ;; sometimes i want to ping myself about my org config
+  ;; while i'm not actually on a computer
+  ;; these help me export my org TODOs to macOS reminders
+  (defun ch/org/make-reminder/has-time (time)
+    (pcase (decode-time time)
+      (`(,seconds ,minutes ,hours ,_ ,_ ,_ ,_, _ ,_)
+       (not (= (+ seconds minutes hours) 0)))))
+
+  (defun ch/org/make-reminder/format-time (time)
+    (format-time-string
+     (concat "%A, %B %d, %Y at "
+	     (if (ch/org/make-reminder/has-time time)
+		 "%I:%M:%S %p"
+	       "09:00:00 AM"))
+     time))
+
+  (defun ch/org/make-reminder/make-command ()
+    (if-let* ((subtree (org-ml-parse-this-subtree))
+	      (title (org-ml-get-property :raw-value subtree))
+	      (scheduled (org-element-property :scheduled subtree))
+	      (body (buffer-substring (org-ml-get-property :contents-begin subtree)
+				      (org-ml-get-property :contents-end subtree))))
+	(format "
+tell application \"Reminders\"
+    make new reminder with properties {name:\"%s\", body:\"%s\"%s}
+end tell
+"
+		title
+		body
+		(if (not scheduled)
+		    ""
+		  (format ", due date:date \"%s\""
+			  (ch/org/make-reminder/format-time (org-timestamp-to-time scheduled)))))))
+
+  (defun ch/org/make-reminder ()
+    (interactive)
+    (when (y-or-n-p "Export this headline to a macOS reminder? ")
+      (ns-do-applescript (ch/org/make-reminder/make-command))))
+
   ;; these functions help me synchronize my files across devices
   ;; by just sending them to and retrieving them from a git repo!
   (defun ch/org/download-files ()
@@ -90,11 +129,15 @@
 				   ("DONE" . ,(ch/zenburn/color "green"))))
     :hook (org-mode . ch/org/config)
     :bind (:map org-mode-map
+		("C-c o r" . ch/org/make-reminder)
 		("C-c o i" . org-roam-node-insert)))
 
   (use-package org-bullets
     :after org
     :hook ((org-mode . org-bullets-mode)))
+
+  (use-package org-ml
+    :after org)
 
   (use-package org-roam
     :after org
