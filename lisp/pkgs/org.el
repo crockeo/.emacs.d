@@ -61,6 +61,7 @@
 	funcs)))
 
   (ch/org/declare-winconf-funcs
+   (org-roam-dailies-goto-date)
    (org-roam-dailies-goto-today)
    (org-roam-dailies-goto-tomorrow 1)
    (org-roam-dailies-goto-yesterday 1)
