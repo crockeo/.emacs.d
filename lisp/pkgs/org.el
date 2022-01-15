@@ -26,7 +26,7 @@
 	(progn
 	  (ch/under-dir org-directory
 	    (ch/callproc "git" "add" ".")
-	    (ch/callproc "git" "commit" "-m" "syncing org files")
+	    (ch/callproc "git" "commit" "-m" (format "%s: syncing org files" (current-time-string)))
 	    (ch/callproc "git" "push" "-u" "origin" (magit-get-current-branch)))
 	  (message "org.el: Uploaded files!"))
       (error (message "org.el: Failed to upload files."))))
