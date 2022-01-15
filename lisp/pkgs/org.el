@@ -87,7 +87,9 @@
 				   ("IN-PROGRESS" . ,(ch/zenburn/color "yellow"))
 				   ("WAITING" . ,(ch/zenburn/color "bg+3"))
 				   ("DONE" . ,(ch/zenburn/color "green"))))
-    :hook (org-mode . ch/org/config))
+    :hook (org-mode . ch/org/config)
+    :bind (:map org-mode-map
+		("C-c o i" . org-roam-node-insert)))
 
   (use-package org-bullets
     :after org

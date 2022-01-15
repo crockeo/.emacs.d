@@ -105,9 +105,6 @@
       (kbd "C-s o") 'other-window
       (kbd "C-s C-o") 'other-window
       (kbd "C-s %") 'split-window-right
-      (kbd "C-s \"") 'split-window-below)
-
-    (evil-define-key nil org-mode-map
-      (kbd "C-c o i") 'org-roam-node-insert))
+      (kbd "C-s \"") 'split-window-below))
 
   (use-package evil-nerd-commenter))
