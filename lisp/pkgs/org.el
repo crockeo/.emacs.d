@@ -76,9 +76,7 @@ into its encoded time equivalent at 9:00am."
     (let* ((subtree (org-ml-parse-this-subtree))
 	   (title (format "\"%s\"" (org-ml-get-property :raw-value subtree)))
 
-	   (scheduled-timestamp (org-element-property :scheduled subtree))
-	   (scheduled (format "date \"%s\""
-			      (ch/org/make-reminder/format-time (org-timestamp-to-time scheduled-timestamp))))
+	   (scheduled (format "date \"%s\"" (ch/org/make-reminder/get-scheduled subtree)))
 
 	   (body (format "\"%s\"" (buffer-substring (org-ml-get-property :contents-begin subtree)
 						    (org-ml-get-property :contents-end subtree)))))
