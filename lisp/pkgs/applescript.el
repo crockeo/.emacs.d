@@ -28,6 +28,20 @@
 			     ", ")
 		"}"))
 
+      (`(:set ,name ,value)
+       `(format "set %s to %s"
+		,(applescript-command--impl name)
+		,(applescript-command--impl value)))
+
+      (`(:and . ,body)
+       `(string-join (list ,@(-map #'applescript-command--impl body))
+		     " and "))
+
+      (`(:= ,lhs ,rhs)
+       `(format "%s = %s"
+		,(applescript-command--impl lhs)
+		,(applescript-command--impl rhs)))
+
       (`(: . ,body)
        `(string-join (list ,@(-map #'applescript-command--impl body))
 		     " "))

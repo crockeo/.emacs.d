@@ -13,7 +13,7 @@
       (`(,seconds ,minutes ,hours ,_ ,_ ,_ ,_, _ ,_)
        (not (= (+ seconds minutes hours) 0)))))
 
-  (defun ch/org/make-reminder/format-timestamp (time)
+  (defun ch/org/make-reminder/format-time (time)
     (format-time-string
      (concat "%A, %B %d, %Y at "
 	     (if (ch/org/make-reminder/has-time time)
@@ -23,6 +23,21 @@
 
   ;; a good reference:
   ;; https://forum.latenightsw.com/t/create-a-reminder/1001/2
+  ;;
+  ;; some TODOs here:
+  ;;   - make a better system around quoting,
+  ;;     so i don't have to have (format) calls here
+  ;;
+  ;;   - make the scheduled time smarter, so that:
+  ;;     - if there is no time present, notify at 9am
+  ;;     - if there is no "SCHEDULED" present,
+  ;;       find out what day it is from the org-roam heading
+  ;;     - if there is no org-roam heading,
+  ;;       just make a reminder without a due date
+  ;;
+  ;;   - trim the irrelevant contents of a headline
+  ;;     (e.g. "SCHEDULED" and properties)
+  ;;     to reduce noise in the TODOs i create
   (defun ch/org/make-reminder/make-command ()
     (let* ((subtree (org-ml-parse-this-subtree))
 	   (title (format "\"%s\"" (org-ml-get-property :raw-value subtree)))
@@ -35,13 +50,12 @@
 						    (org-ml-get-property :contents-end subtree)))))
       (applescript-command
        (:tell "\"Reminders\""
-	      (: "set existingReminder to reminders where name ="
-		 title
-		 "and due date ="
-		 scheduled
-		 "and body ="
-		 body)
-	      (:if (: "existingReminder =" (:dict))
+	      (:set "existingReminder"
+		    (: "reminders where"
+		       (:and (:= "name" title)
+			     (:= "due date" scheduled)
+			     (:= "body" body))))
+	      (:if (:= "existingReminder" (:dict))
 		   (: "make new reminder with properties"
 		      (:dict ("name" . title)
 			     ("body" . body)
@@ -49,8 +63,7 @@
 
   (defun ch/org/make-reminder ()
     (interactive)
-    (when (y-or-n-p "Export this headline to a macOS reminder? ")
-      (ns-do-applescript (ch/org/make-reminder/make-command))))
+    (do-applescript (ch/org/make-reminder/make-command)))
 
   ;; these functions help me synchronize my files across devices
   ;; by just sending them to and retrieving them from a git repo!
