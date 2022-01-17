@@ -8,6 +8,16 @@
   ;; sometimes i want to ping myself about my org config
   ;; while i'm not actually on a computer
   ;; these help me export my org TODOs to macOS reminders
+  (defun ch/org/make-reminder/get-prop (name)
+    ;; shamelessly stolen from
+    ;; https://d12frosted.io/posts/2020-06-24-task-management-with-roam-vol2.html
+    (org-with-point-at 1
+      (when (re-search-forward (concat "^#\\+" name ": \\(.*\\)")
+                               (point-max) t)
+	(buffer-substring-no-properties
+	 (match-beginning 1)
+	 (match-end 1)))))
+
   (defun ch/org/make-reminder/has-time (time)
     (pcase (decode-time time)
       (`(,seconds ,minutes ,hours ,_ ,_ ,_ ,_, _ ,_)
@@ -20,6 +30,30 @@
 		 "%I:%M:%S %p"
 	       "09:00:00 AM"))
      time))
+
+  (defun ch/org/make-reminder/parse-daily-title ()
+    "Parses the #+title: ... property of an org-mode file \
+into its encoded time equivalent at 9:00am."
+    (if-let* ((title (ch/org/get-prop "title"))
+	      (time (parse-time-string title)))
+	(pcase (parse-time-string title)
+	  (`(,_ ,_ ,_ ,day ,month ,year ,dow ,dst ,utcoff)
+	   (when (and day month year)
+	    (encode-time (list 0 0 9 day month year dow dst utcoff)))))))
+
+  (cl-defun ch/org/make-reminder/get-scheduled (subtree)
+    ;; order of preference here is:
+    ;;
+    ;; 1. org headline SCHEDULED time
+    ;; 2. org-roam-dailies day at 9:00am
+    ;; 3. no due date
+    (when-let ((scheduled (org-element-property :scheduled subtree)))
+      (cl-return-from ch/org/make-reminder/get-scheduled
+	(ch/org/make-reminder/format-time (org-timestamp-to-time scheduled))))
+
+    (when-let* ((title-scheduled (ch/org/make-reminder/parse-daily-title)))
+      (cl-return-from ch/org/make-reminder/get-scheduled
+	(ch/org/make-reminder/format-time title-scheduled))))
 
   ;; a good reference:
   ;; https://forum.latenightsw.com/t/create-a-reminder/1001/2
