@@ -6,6 +6,7 @@
 
 (ch/pkg core
   (ch/use-pkgs
+    applescript
     dash
     request))
 

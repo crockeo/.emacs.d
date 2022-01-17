@@ -13,7 +13,7 @@
       (`(,seconds ,minutes ,hours ,_ ,_ ,_ ,_, _ ,_)
        (not (= (+ seconds minutes hours) 0)))))
 
-  (defun ch/org/make-reminder/format-time (time)
+  (defun ch/org/make-reminder/format-timestamp (time)
     (format-time-string
      (concat "%A, %B %d, %Y at "
 	     (if (ch/org/make-reminder/has-time time)
@@ -21,23 +21,31 @@
 	       "09:00:00 AM"))
      time))
 
+  ;; a good reference:
+  ;; https://forum.latenightsw.com/t/create-a-reminder/1001/2
   (defun ch/org/make-reminder/make-command ()
-    (if-let* ((subtree (org-ml-parse-this-subtree))
-	      (title (org-ml-get-property :raw-value subtree))
-	      (scheduled (org-element-property :scheduled subtree))
-	      (body (buffer-substring (org-ml-get-property :contents-begin subtree)
-				      (org-ml-get-property :contents-end subtree))))
-	(format "
-tell application \"Reminders\"
-    make new reminder with properties {name:\"%s\", body:\"%s\"%s}
-end tell
-"
-		title
-		body
-		(if (not scheduled)
-		    ""
-		  (format ", due date:date \"%s\""
-			  (ch/org/make-reminder/format-time (org-timestamp-to-time scheduled)))))))
+    (let* ((subtree (org-ml-parse-this-subtree))
+	   (title (format "\"%s\"" (org-ml-get-property :raw-value subtree)))
+
+	   (scheduled-timestamp (org-element-property :scheduled subtree))
+	   (scheduled (format "date \"%s\""
+			      (ch/org/make-reminder/format-time (org-timestamp-to-time scheduled-timestamp))))
+
+	   (body (format "\"%s\"" (buffer-substring (org-ml-get-property :contents-begin subtree)
+						    (org-ml-get-property :contents-end subtree)))))
+      (applescript-command
+       (:tell "\"Reminders\""
+	      (: "set existingReminder to reminders where name ="
+		 title
+		 "and due date ="
+		 scheduled
+		 "and body ="
+		 body)
+	      (:if (: "existingReminder =" (:dict))
+		   (: "make new reminder with properties"
+		      (:dict ("name" . title)
+			     ("body" . body)
+			     ("due date" . scheduled))))))))
 
   (defun ch/org/make-reminder ()
     (interactive)
