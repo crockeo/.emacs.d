@@ -66,13 +66,6 @@ into its encoded time equivalent at 9:00am."
   ;;   - make a better system around quoting,
   ;;     so i don't have to have (format) calls here
   ;;
-  ;;   - make the scheduled time smarter, so that:
-  ;;     - if there is no time present, notify at 9am
-  ;;     - if there is no "SCHEDULED" present,
-  ;;       find out what day it is from the org-roam heading
-  ;;     - if there is no org-roam heading,
-  ;;       just make a reminder without a due date
-  ;;
   ;;   - trim the irrelevant contents of a headline
   ;;     (e.g. "SCHEDULED" and properties)
   ;;     to reduce noise in the TODOs i create
