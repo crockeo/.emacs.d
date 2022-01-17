@@ -53,7 +53,11 @@ into its encoded time equivalent at 9:00am."
 
     (when-let* ((title-scheduled (ch/org/make-reminder/parse-daily-title)))
       (cl-return-from ch/org/make-reminder/get-scheduled
-	(ch/org/make-reminder/format-time title-scheduled))))
+	(ch/org/make-reminder/format-time title-scheduled)))
+
+    ;; TODO: make other functions
+    ;; more resilient to missing scheduled date
+    (error "Unable to determine due date for reminder."))
 
   ;; a good reference:
   ;; https://forum.latenightsw.com/t/create-a-reminder/1001/2
