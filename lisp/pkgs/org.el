@@ -5,6 +5,13 @@
   (defun ch/org/ensure-org-directory ()
     (make-directory org-directory t))
 
+  (defun ch/org/ensure-filetags (new-tags))
+
+  (defun ch/org/add-filetags ()
+    (interactive)
+    (when-let ((tags (call-interactively #'org-roam-tag-add)))
+      (ch/org/ensure-filetags tags)))
+
   ;; sometimes i want to ping myself about my org config
   ;; while i'm not actually on a computer
   ;; these help me export my org TODOs to macOS reminders
@@ -180,7 +187,8 @@ into its encoded time equivalent at 9:00am."
     :hook (org-mode . ch/org/config)
     :bind (:map org-mode-map
 		("C-c o r" . ch/org/make-reminder)
-		("C-c o i" . org-roam-node-insert)))
+		("C-c o i" . org-roam-node-insert)
+		("C-c o t" . ch/org/add-filetags)))
 
   (use-package org-bullets
     :after org
