@@ -108,12 +108,13 @@ into its encoded time equivalent at 9:00am."
     (message "org.el: Syncing files...")
     (condition-case ()
 	(ch/under-dir org-directory
-	  (ch/callproc "git" "stash")
-	  (ch/callproc "git" "pull" "origin" (magit-get-current-branch))
-	  (ch/callproc "git" "stash" "pop")
-	  (ch/callproc "git" "add" ".")
-	  (ch/callproc "git" "commit" "-m" (format "%s: syncing org files" (current-time-string)))
-	  (ch/callproc "git" "push" "-u" "origin" (magit-get-current-branch))
+	  (ch/callproc
+	   ("git" "stash")
+	   ("git" "pull" "origin" (magit-get-current-branch))
+	   ("git" "stash" "pop")
+	   ("git" "add" ".")
+	   ("git" "commit" "-m" (format "%s: syncing org files" (current-time-string)))
+	   ("git" "push" "-u" "origin" (magit-get-current-branch)))
 	  (message "org.el: Synced files!"))
       (error (message "org.el: Failed to upload files."))))
 
@@ -124,7 +125,7 @@ into its encoded time equivalent at 9:00am."
     (condition-case ()
 	(progn
 	  (ch/under-dir org-directory
-	    (ch/callproc "git" "pull" "origin" (magit-get-current-branch)))
+	    (ch/callproc ("git" "pull" "origin" (magit-get-current-branch))))
 	  (message "org.el: Downloaded files!"))
       (error (message "org.el: Failed to download files."))))
 
@@ -135,9 +136,10 @@ into its encoded time equivalent at 9:00am."
     (condition-case ()
 	(progn
 	  (ch/under-dir org-directory
-	    (ch/callproc "git" "add" ".")
-	    (ch/callproc "git" "commit" "-m" (format "%s: syncing org files" (current-time-string)))
-	    (ch/callproc "git" "push" "-u" "origin" (magit-get-current-branch)))
+	    (ch/callproc
+	     ("git" "add" ".")
+	     ("git" "commit" "-m" (format "%s: syncing org files" (current-time-string)))
+	     ("git" "push" "-u" "origin" (magit-get-current-branch))))
 	  (message "org.el: Uploaded files!"))
       (error (message "org.el: Failed to upload files."))))
 

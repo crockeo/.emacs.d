@@ -43,10 +43,13 @@
 in a self-documenting function."
   (append vec nil))
 
-(defmacro ch/callproc (&rest args)
+(defmacro ch/callproc (&rest procs)
   "A simpler version of call-process which doesn't have any of the \
 very valuable cruft that I don't need."
-  `(call-process ,(car args) nil nil nil ,@(cdr args)))
+  `(progn
+     ,@(-map
+	(lambda (args) `(call-process ,(car args) nil nil nil ,@(cdr args)))
+	procs)))
 
 (defmacro ch/under-dir (dir &rest body)
   "Perform some action while assuming the directory `dir`."
