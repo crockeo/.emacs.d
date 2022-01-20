@@ -108,6 +108,7 @@ into its encoded time equivalent at 9:00am."
     (message "org.el: Syncing files...")
     (condition-case ()
 	(ch/under-dir org-directory
+	  (org-save-all-org-buffers)
 	  (ch/callproc
 	   ("git" "stash")
 	   ("git" "pull" "origin" (magit-get-current-branch))
@@ -142,6 +143,14 @@ into its encoded time equivalent at 9:00am."
 	     ("git" "push" "-u" "origin" (magit-get-current-branch))))
 	  (message "org.el: Uploaded files!"))
       (error (message "org.el: Failed to upload files."))))
+
+  (run-with-idle-timer
+   (* 60 10) ;; 10 minutes
+   t
+   #'ch/org/sync-files)
+
+  (dolist (hook '(emacs-startup-hook kill-emacs-hook))
+    (add-hook hook #'ch/org/sync-files))
 
   ;; these functions help me go back and forth
   ;; between whatever i'm doing
