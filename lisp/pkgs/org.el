@@ -5,11 +5,7 @@
   (defun ch/org/ensure-org-directory ()
     (make-directory org-directory t))
 
-  (defun ch/org/ensure-filetags (new-tags)
-    (when (seq-contains new-tags "done")
-      (save-excursion
-	(goto-char 0)
-	(org-roam-property-add "CLOSED" (current-time-string)))))
+  (defun ch/org/ensure-filetags (new-tags))
 
   (defun ch/org/add-filetags ()
     (interactive)
