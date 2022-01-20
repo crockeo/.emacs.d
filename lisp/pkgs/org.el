@@ -41,7 +41,7 @@
   (defun ch/org/make-reminder/parse-daily-title ()
     "Parses the #+title: ... property of an org-mode file \
 into its encoded time equivalent at 9:00am."
-    (if-let* ((title (ch/org/get-prop "title"))
+    (if-let* ((title (ch/org/make-reminder/get-prop "title"))
 	      (time (parse-time-string title)))
 	(pcase (parse-time-string title)
 	  (`(,_ ,_ ,_ ,day ,month ,year ,dow ,dst ,utcoff)
