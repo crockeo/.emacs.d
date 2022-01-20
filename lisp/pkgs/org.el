@@ -5,7 +5,11 @@
   (defun ch/org/ensure-org-directory ()
     (make-directory org-directory t))
 
-  (defun ch/org/ensure-filetags (new-tags))
+  (defun ch/org/ensure-filetags (new-tags)
+    (when (seq-contains new-tags "done")
+      (save-excursion
+	(goto-char 0)
+	(org-roam-property-add "CLOSED" (current-time-string)))))
 
   (defun ch/org/add-filetags ()
     (interactive)
@@ -178,7 +182,7 @@ into its encoded time equivalent at 9:00am."
     :config
     (setq org-capture-bookmark nil
 	  org-directory (expand-file-name "~/org")
-	  org-log-time 'done
+	  org-log-done 'time
 	  org-todo-keywords '((sequence "TODO" "IN-PROGRESS" "WAITING" "|" "DONE"))
 	  org-todo-keyword-faces `(("TODO" . ,(ch/zenburn/color "red"))
 				   ("IN-PROGRESS" . ,(ch/zenburn/color "yellow"))
@@ -186,8 +190,10 @@ into its encoded time equivalent at 9:00am."
 				   ("DONE" . ,(ch/zenburn/color "green"))))
     :hook (org-mode . ch/org/config)
     :bind (:map org-mode-map
-		("C-c o r" . ch/org/make-reminder)
 		("C-c o i" . org-roam-node-insert)
+		("C-c o n" . org-id-get-create)
+		("C-c o r" . ch/org/make-reminder)
+		("C-c o s" . org-save-all-org-buffers)
 		("C-c o t" . ch/org/add-filetags)))
 
   (use-package org-bullets
