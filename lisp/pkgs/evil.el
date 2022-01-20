@@ -75,6 +75,7 @@
       (kbd "C-c f l") 'ch/evil/copy-file-link
 
       (kbd "C-c i d") 'ch/org/download-files
+      (kbd "C-c i s") 'ch/org/sync-files
       (kbd "C-c i u") 'ch/org/upload-files
 
       (kbd "C-c j b") 'xref-pop-marker-stack

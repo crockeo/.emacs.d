@@ -103,6 +103,20 @@ into its encoded time equivalent at 9:00am."
 
   ;; these functions help me synchronize my files across devices
   ;; by just sending them to and retrieving them from a git repo!
+  (defun ch/org/sync-files ()
+    (interactive)
+    (message "org.el: Syncing files...")
+    (condition-case ()
+	(ch/under-dir org-directory
+	  (ch/callproc "git" "stash")
+	  (ch/callproc "git" "pull" "origin" (magit-get-current-branch))
+	  (ch/callproc "git" "stash" "pop")
+	  (ch/callproc "git" "add" ".")
+	  (ch/callproc "git" "commit" "-m" (format "%s: syncing org files" (current-time-string)))
+	  (ch/callproc "git" "push" "-u" "origin" (magit-get-current-branch))
+	  (message "org.el: Synced files!"))
+      (error (message "org.el: Failed to upload files."))))
+
   (defun ch/org/download-files ()
     (interactive)
     (message "org.el: Downloading files...")
