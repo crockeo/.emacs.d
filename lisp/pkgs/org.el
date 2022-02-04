@@ -181,7 +181,34 @@ into its encoded time equivalent at 9:00am."
 	       (ch/org/save-winconf winconf))))
 	funcs)))
 
+  (defvar ch/org/roam-hidden-tags
+    '("done" "backlog"))
+
+  (defun ch/org/is-project-hidden (tags)
+    (-any (-partial #'seq-contains-p tags)
+	  ch/org/roam-hidden-tags))
+
+  (defun ch/org/roam-is-project (node)
+    (let ((tags (org-roam-node-tags node)))
+      (and (seq-contains-p tags "project")
+	   (not (ch/org/is-project-hidden tags)))))
+
+  (defun ch/org/roam-is-metaproject (node)
+    (let ((tags (org-roam-node-tags node)))
+      (and (seq-contains-p tags "metaproject")
+	   (not (ch/org/is-project-hidden tags)))))
+
+  (defun ch/org/roam-project-find ()
+    (interactive)
+    (org-roam-node-find nil nil #'ch/org/roam-is-project))
+
+  (defun ch/org/roam-metaproject-find ()
+    (interactive)
+    (org-roam-node-find nil nil #'ch/org/roam-is-metaproject))
+
   (ch/org/declare-winconf-funcs
+   (ch/org/roam-metaproject-find)
+   (ch/org/roam-project-find)
    (org-roam-dailies-goto-date)
    (org-roam-dailies-goto-today)
    (org-roam-dailies-goto-tomorrow 1)
@@ -211,9 +238,10 @@ into its encoded time equivalent at 9:00am."
 				   ("DONE" . ,(ch/zenburn/color "green"))))
     :hook (org-mode . ch/org/config)
     :bind (:map org-mode-map
+		("C-c o e" . ch/org/make-reminder)
 		("C-c o i" . org-roam-node-insert)
 		("C-c o n" . org-id-get-create)
-		("C-c o r" . ch/org/make-reminder)
+		("C-c o r" . org-refile)
 		("C-c o s" . org-save-all-org-buffers)
 		("C-c o t" . ch/org/add-filetags)))
 
