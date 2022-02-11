@@ -184,31 +184,35 @@ into its encoded time equivalent at 9:00am."
   (defvar ch/org/roam-hidden-tags
     '("done" "backlog"))
 
-  (defun ch/org/is-project-hidden (tags)
-    (-any (-partial #'seq-contains-p tags)
-	  ch/org/roam-hidden-tags))
-
-  (defun ch/org/roam-is-project (node)
-    (let ((tags (org-roam-node-tags node)))
-      (and (seq-contains-p tags "project")
-	   (not (ch/org/is-project-hidden tags)))))
-
-  (defun ch/org/roam-is-metaproject (node)
-    (let ((tags (org-roam-node-tags node)))
-      (and (seq-contains-p tags "metaproject")
-	   (not (ch/org/is-project-hidden tags)))))
+  (defun ch/org/roam-node-predicate (pos-tags neg-tags)
+    (lambda (node)
+      (let ((tags (org-roam-node-tags node)))
+	(and (-all? (-partial #'seq-contains-p tags) pos-tags)
+	     (not (-any? (-partial #'seq-contains-p tags) neg-tags))))))
 
   (defun ch/org/roam-project-find ()
     (interactive)
-    (org-roam-node-find nil nil #'ch/org/roam-is-project))
+    (org-roam-node-find
+     nil nil
+     (ch/org/roam-node-predicate '("project")
+				 ch/org/roam-hidden-tags)))
 
   (defun ch/org/roam-metaproject-find ()
     (interactive)
-    (org-roam-node-find nil nil #'ch/org/roam-is-metaproject))
+    (org-roam-node-find
+     nil nil
+     (ch/org/roam-node-predicate '("metaproject")
+				 ch/org/roam-hidden-tags)))
+
+  (defun ch/org/roam-backlog-find ()
+    (interactive)
+    (org-roam-node-find nil nil
+			(ch/org/roam-node-predicate '("project" "backlog") '("done"))))
 
   (ch/org/declare-winconf-funcs
    (ch/org/roam-metaproject-find)
    (ch/org/roam-project-find)
+   (ch/org/roam-backlog-find)
    (org-roam-dailies-goto-date)
    (org-roam-dailies-goto-today)
    (org-roam-dailies-goto-tomorrow 1)

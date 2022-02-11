@@ -24,6 +24,7 @@
     ("C-c C-w C-d" . ch/org/org-roam-dailies-goto-today)
     ("C-c C-w C-f" . ch/org/org-roam-node-find)
     ("C-c C-w C-j" . ch/org/org-roam-dailies-goto-date)
+    ("C-c C-w C-l" . ch/org/ch/org/roam-backlog-find)
     ("C-c C-w C-m" . ch/org/ch/org/roam-metaproject-find)
     ("C-c C-w C-n" . org-roam-dailies-goto-next-note)
     ("C-c C-w C-p" . ch/org/ch/org/roam-project-find)
