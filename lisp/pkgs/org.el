@@ -15,7 +15,7 @@
   ;; sometimes i want to ping myself about my org config
   ;; while i'm not actually on a computer
   ;; these help me export my org TODOs to macOS reminders
-  (defun ch/org/make-reminder/get-prop (name)
+  (defun ch/org/get-buffer-prop (name)
     ;; shamelessly stolen from
     ;; https://d12frosted.io/posts/2020-06-24-task-management-with-roam-vol2.html
     (org-with-point-at 1
@@ -41,7 +41,7 @@
   (defun ch/org/make-reminder/parse-daily-title ()
     "Parses the #+title: ... property of an org-mode file \
 into its encoded time equivalent at 9:00am."
-    (if-let* ((title (ch/org/make-reminder/get-prop "title"))
+    (if-let* ((title (ch/org/get-buffer-prop "title"))
 	      (time (parse-time-string title)))
 	(pcase (parse-time-string title)
 	  (`(,_ ,_ ,_ ,day ,month ,year ,dow ,dst ,utcoff)
@@ -100,6 +100,18 @@ into its encoded time equivalent at 9:00am."
   (defun ch/org/make-reminder ()
     (interactive)
     (do-applescript (ch/org/make-reminder/make-command)))
+
+  (defun ch/org/category (&optional max-length)
+    ;; inspired
+    ;; https://d12frosted.io/posts/2020-06-24-task-management-with-roam-vol2.html
+    (let* ((title (ch/org/get-buffer-prop "title"))
+	   (category (org-get-category))
+	   (file-name (when buffer-file-name (file-name-sans-extension (file-name-nondirectory buffer-file-name))))
+	   (result (or title category file-name "")))
+      (if (and max-length
+	       (> (length result) max-length))
+	  (concat (substring result 0 (- max-length 3)) "...")
+	result)))
 
   ;; these functions help me synchronize my files across devices
   ;; by just sending them to and retrieving them from a git repo!
@@ -170,11 +182,17 @@ into its encoded time equivalent at 9:00am."
     (set-window-configuration ch/org/winconf)
     (setq ch/org/winconf nil))
 
+  (defun ch/org/declare-winconf-funcs/make-symbol (name)
+    (intern
+     (if (s-starts-with-p "ch/org/" name)
+	 (concat name "/wc")
+       (concat "ch/org/" name "/wc"))))
+
   (defmacro ch/org/declare-winconf-funcs (&rest funcs)
     `(progn
      ,@(-map
 	(lambda (func)
-	  `(defun ,(intern (concat "ch/org/" (symbol-name (car func)))) ()
+	  `(defun ,(ch/org/declare-winconf-funcs/make-symbol (symbol-name (car func))) ()
 	     (interactive)
 	     (let ((winconf (current-window-configuration)))
 	       (,@func)
@@ -209,10 +227,40 @@ into its encoded time equivalent at 9:00am."
     (org-roam-node-find nil nil
 			(ch/org/roam-node-predicate '("project" "backlog") '("done"))))
 
+  (defun ch/org/roam-home ()
+    (interactive)
+    (find-file (concat org-directory "/home.org")))
+
+  (defun ch/org/search (title query)
+    (org-ql-search
+      #'org-agenda-files
+      query
+      :title title
+      :super-groups '((:auto-map (lambda (item) (ch/org/category))))))
+
+  (defun ch/org/go-yesterday ()
+    (interactive)
+    (org-ql-view-recent-items
+     :num-days 1
+     :type 'closed
+     :groups '((:auto-map (lambda (item) (ch/org/category)))))
+    (delete-other-windows))
+
+  (defun ch/org/go-week ()
+    (interactive)
+    (org-ql-view-recent-items
+     :num-days 7
+     :type 'closed
+     :groups '((:auto-map (lambda (item) (ch/org/category)))))
+    (delete-other-windows))
+
   (ch/org/declare-winconf-funcs
+   (ch/org/go-week)
+   (ch/org/go-yesterday)
+   (ch/org/roam-backlog-find)
+   (ch/org/roam-home)
    (ch/org/roam-metaproject-find)
    (ch/org/roam-project-find)
-   (ch/org/roam-backlog-find)
    (org-roam-dailies-goto-date)
    (org-roam-dailies-goto-today)
    (org-roam-dailies-goto-tomorrow 1)
@@ -228,11 +276,12 @@ into its encoded time equivalent at 9:00am."
     (display-line-numbers-mode -1)
     (org-indent-mode t)
     (visual-line-mode t)
-    (org-overview))
+    (org-content))
 
   (use-package org
     :config
-    (setq org-capture-bookmark nil
+    (setq org-agenda-files (list org-directory)
+	  org-capture-bookmark nil
 	  org-directory (expand-file-name "~/org")
 	  org-log-done 'time
 	  org-todo-keywords '((sequence "TODO" "IN-PROGRESS" "WAITING" "|" "DONE"))
@@ -242,10 +291,10 @@ into its encoded time equivalent at 9:00am."
 				   ("DONE" . ,(ch/zenburn/color "green"))))
     :hook (org-mode . ch/org/config)
     :bind (:map org-mode-map
-		("C-c o e" . ch/org/make-reminder)
+		("C-c o e" . org-edna-edit)
 		("C-c o i" . org-roam-node-insert)
 		("C-c o n" . org-id-get-create)
-		("C-c o r" . org-refile)
+		("C-c o r" . org-roam-refile)
 		("C-c o s" . org-save-all-org-buffers)
 		("C-c o t" . ch/org/add-filetags)))
 
@@ -254,6 +303,9 @@ into its encoded time equivalent at 9:00am."
     :hook ((org-mode . org-bullets-mode)))
 
   (use-package org-ml
+    :after org)
+
+  (use-package org-ql
     :after org)
 
   (use-package org-roam
@@ -268,6 +320,12 @@ into its encoded time equivalent at 9:00am."
 							      "#+title: %<%Y-%m-%d>\n"))))
 
     (org-roam-db-autosync-mode t))
+
+  (use-package org-super-agenda
+    :after org
+    :config
+    (setq org-super-agenda-groups '((:auto-map (lambda (item) (ch/org/category)))))
+    :hook ((org-agenda-mode . org-super-agenda-mode)))
 
   ;; org-roam-dailies isn't loaded by default
   ;; under straight.el for some reason.

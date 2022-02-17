@@ -81,6 +81,7 @@
       (kbd "C-c j b") 'xref-pop-marker-stack
       (kbd "C-c j g") 'lsp-find-definition
       (kbd "C-c j i") 'lsp-find-implementation
+      (kbd "C-c j q") 'lsp-rename
       (kbd "C-c j r") 'lsp-find-references
 
       (kbd "C-c n d") 'org-roam-dailies-capture-today
