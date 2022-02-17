@@ -291,7 +291,6 @@ into its encoded time equivalent at 9:00am."
 				   ("DONE" . ,(ch/zenburn/color "green"))))
     :hook (org-mode . ch/org/config)
     :bind (:map org-mode-map
-		("C-c o e" . org-edna-edit)
 		("C-c o i" . org-roam-node-insert)
 		("C-c o n" . org-id-get-create)
 		("C-c o r" . org-roam-refile)
