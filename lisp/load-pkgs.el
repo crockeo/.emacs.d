@@ -8,7 +8,8 @@
   (ch/use-pkgs
     applescript
     dash
-    request))
+    request
+    s))
 
 (ch/pkg interface
   (ch/use-pkgs

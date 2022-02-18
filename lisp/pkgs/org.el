@@ -280,7 +280,7 @@ into its encoded time equivalent at 9:00am."
 
   (use-package org
     :config
-    (setq org-agenda-files (list org-directory)
+    (setq org-agenda-files (list org-directory (concat org-directory "/dailies"))
 	  org-capture-bookmark nil
 	  org-directory (expand-file-name "~/org")
 	  org-log-done 'time
