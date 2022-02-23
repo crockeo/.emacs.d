@@ -19,6 +19,7 @@
     flycheck
     diff-hl
     dired-sidebar
+    doom-modeline
     ivy
     magit
     notion

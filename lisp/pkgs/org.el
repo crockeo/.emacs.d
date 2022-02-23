@@ -161,9 +161,6 @@ into its encoded time equivalent at 9:00am."
    t
    #'ch/org/sync-files)
 
-  (dolist (hook '(emacs-startup-hook kill-emacs-hook))
-    (add-hook hook #'ch/org/sync-files))
-
   ;; these functions help me go back and forth
   ;; between whatever i'm doing
   ;; and my org-roam stuff

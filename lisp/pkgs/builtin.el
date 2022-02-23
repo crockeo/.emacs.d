@@ -38,6 +38,13 @@
       (push (expand-file-name path)
 	    exec-path)))
 
+  (setq
+   redisplay-dont-pause t
+   scroll-conservatively integer-width
+   scroll-margin 4
+   scroll-step 1
+   )
+
   (defun ch/builtin/garbage-collect ()
     (let ((original-gc-cons-threshold gc-cons-threshold))
       (setq gc-cons-threshold (* 1024 1024)) ;; 1MB
