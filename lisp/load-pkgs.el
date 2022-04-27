@@ -35,7 +35,7 @@
     go
     javascript
     lisp
-    org
+    ;; org
     proto
     python
     rust
