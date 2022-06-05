@@ -35,12 +35,13 @@
     go
     javascript
     lisp
-    ;; org
+    markdown
     proto
     python
     rust
     swift
-    yaml))
+    yaml
+    ))
 
 (ch/use-pkgs
   builtin
