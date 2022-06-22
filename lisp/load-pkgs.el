@@ -25,8 +25,8 @@
     notion
     olivetti
     projectile
-    which-key
-    zenburn))
+    theme
+    which-key))
 
 (ch/pkg languages
   (ch/use-pkgs
