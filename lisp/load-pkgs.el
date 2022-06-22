@@ -32,6 +32,7 @@
   (ch/use-pkgs
     bazel
     cpp
+    dockerfile
     go
     javascript
     lisp
@@ -41,6 +42,7 @@
     rust
     swift
     yaml
+    zig
     ))
 
 (ch/use-pkgs
