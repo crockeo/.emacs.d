@@ -8,4 +8,6 @@
     (projectile-discover-projects-in-search-path))
 
   (use-package counsel-projectile
-    :after (ivy projectile)))
+    :after (ivy projectile)
+    :config
+    (setq counsel-ag-base-command '("ag" "--hidden" "--vimgrep" "%s" "."))))

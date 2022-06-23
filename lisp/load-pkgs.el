@@ -25,13 +25,14 @@
     notion
     olivetti
     projectile
-    which-key
-    zenburn))
+    theme
+    which-key))
 
 (ch/pkg languages
   (ch/use-pkgs
     bazel
     cpp
+    dockerfile
     go
     javascript
     lisp
@@ -41,6 +42,7 @@
     rust
     swift
     yaml
+    zig
     ))
 
 (ch/use-pkgs
