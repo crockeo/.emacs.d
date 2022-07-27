@@ -9,7 +9,8 @@
     applescript
     dash
     request
-    s))
+    s
+    work))
 
 (ch/pkg interface
   (ch/use-pkgs
