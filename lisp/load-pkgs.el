@@ -27,7 +27,8 @@
     olivetti
     projectile
     theme
-    which-key))
+    which-key
+    winconf))
 
 (ch/pkg languages
   (ch/use-pkgs
