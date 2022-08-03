@@ -19,7 +19,7 @@
 		      t
 		      nil
 		      "-c"
-		      ". ~/.zprofile && echo $PATH")
+		      "export EMACS=1 && . ~/.zprofile && . ~/.zshrc && echo $PATH")
 	(buffer-string)))
      ":"))
 
