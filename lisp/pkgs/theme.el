@@ -19,13 +19,15 @@
     (pcase-let
 	((`(,hour ,_ ,_) (ch/theme/hour-min-sec)))
       (or (< hour 6)
-	  (> hour 18))))
+	  (>= hour 18))))
 
   (defun ch/theme/set-theme ()
     (if (ch/theme/use-darkmode)
-	(load-theme 'modus-vivendi)
-      (load-theme 'modus-operandi)))
+	(modus-themes-load-vivendi)
+      (modus-themes-load-operandi)))
 
+  ;; required to bootstrap modus-* content
+  (load-theme 'modus-operandi)
   (run-with-timer 0 (* 60 60) #'ch/theme/set-theme)
 
   ;; (use-package zenburn-theme
