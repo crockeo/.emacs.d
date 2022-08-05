@@ -24,6 +24,8 @@
 
   (defun ch/theme/use-darkmode ()
     ;; TODO: find out how to get time of sunset in current timezone / location
+    ;; Seattle lat/lng: 47.6062° N, 122.3321° W
+    ;; sunrise/sunset API: https://sunrise-sunset.org/api
     (pcase-let
 	((`(,hour ,_ ,_) (ch/theme/hour-min-sec)))
       (or (< hour 6)
