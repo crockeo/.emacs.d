@@ -1,6 +1,11 @@
 ;;; theme.el -*- lexical-binding: t; -*-
 
 (ch/pkg theme
+  (use-package zenburn-theme
+    :config
+    (setq zenburn-scale-org-headlines t
+	  zenburn-use-variable-pitch t))
+
   (setq modus-themes-hl-line 'accented)
 
   (defun ch/theme/current-local-time ()
@@ -23,19 +28,14 @@
 
   (defun ch/theme/set-theme ()
     (if (ch/theme/use-darkmode)
-	(modus-themes-load-vivendi)
-      (modus-themes-load-operandi)))
+	(progn
+	  (disable-theme 'modus-operandi)
+	  (load-theme 'zenburn t))
+      (progn
+	(disable-theme 'zenburn)
+	(load-theme 'modus-operandi))))
 
   ;; required to bootstrap modus-* content
   (load-theme 'modus-operandi)
   (run-with-timer 0 (* 60 60) #'ch/theme/set-theme)
-
-  ;; (use-package zenburn-theme
-  ;;   :config
-  ;;   (setq zenburn-scale-org-headlines t
-  ;; 	  zenburn-use-variable-pitch t)
-  ;;   (load-theme 'zenburn t))
-
-  ;; (defun ch/theme/zenburn-color (name)
-  ;;   (cdr (assoc (concat "zenburn-" name) zenburn-default-colors-alist)))
   )
