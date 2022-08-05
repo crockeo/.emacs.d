@@ -6,6 +6,9 @@
     (setq zenburn-scale-org-headlines t
 	  zenburn-use-variable-pitch t))
 
+  (defvar ch/theme/day-theme 'modus-operandi)
+  (defvar ch/theme/night-theme 'zenburn)
+
   (setq modus-themes-hl-line 'accented)
 
   (defun ch/theme/current-local-time ()
@@ -29,13 +32,10 @@
   (defun ch/theme/set-theme ()
     (if (ch/theme/use-darkmode)
 	(progn
-	  (disable-theme 'modus-operandi)
-	  (load-theme 'zenburn t))
+	  (disable-theme ch/theme/day-theme)
+	  (load-theme ch/theme/night-theme t))
       (progn
-	(disable-theme 'zenburn)
-	(load-theme 'modus-operandi))))
+	(disable-theme ch/theme/night-theme)
+	(load-theme ch/theme/day-theme t))))
 
-  ;; required to bootstrap modus-* content
-  (load-theme 'modus-operandi)
-  (run-with-timer 0 (* 60 60) #'ch/theme/set-theme)
-  )
+  (run-with-timer 0 (* 60 60) #'ch/theme/set-theme))
