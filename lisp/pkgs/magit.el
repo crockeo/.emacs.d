@@ -18,4 +18,10 @@
   (use-package magit
     :config
     (define-key magit-mode-map "h" #'ch/magit/visit-pr)
-    (setq magit-clone-default-directory (expand-file-name "~/src/"))))
+    (setq magit-clone-default-directory (expand-file-name "~/src/")))
+
+  (advice-add
+   'magit-clone-internal
+   :after
+   (lambda (&rest _args)
+     (projectile-discover-projects-in-search-path))))
