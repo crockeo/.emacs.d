@@ -95,6 +95,7 @@
       ;; after i figure out performance issues
       (kbd "C-c p p") 'projectile-switch-project
       (kbd "C-c p r") 'projectile-discover-projects-in-search-path
+      (kbd "C-c p s") 'projectile-replace-regexp
 
       (kbd "C-c k") 'ch/evil/kill-buffers
 
