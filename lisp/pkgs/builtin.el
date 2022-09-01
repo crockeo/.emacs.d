@@ -1,8 +1,15 @@
 (ch/pkg builtin
   (add-hook 'before-save-hook #'delete-trailing-whitespace)
 
-  (set-face-attribute 'default nil
-		      :height 140)
+  (let ((font-face "Input Mono")
+	(font-size 120))
+   (condition-case nil
+       (set-face-attribute 'default nil
+			   :font font-face
+			   :height font-size)
+     (error
+      (set-face-attribute 'default nil
+			  :height font-size))))
 
   (setq backup-directory-alist `(("." . ,(concat user-emacs-directory "backups")))
 	exec-path (split-string (getenv "PATH") ":")
