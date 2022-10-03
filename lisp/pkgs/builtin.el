@@ -3,7 +3,7 @@
 (ch/pkg builtin
   (add-hook 'before-save-hook #'delete-trailing-whitespace)
 
-  (let ((font-face "Input Mono")
+  (let ((font-face "Menlo")
 	(font-size 120))
    (condition-case nil
        (set-face-attribute 'default nil
