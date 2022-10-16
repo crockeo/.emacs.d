@@ -40,4 +40,10 @@
     (display-line-numbers-mode -1)
     (org-indent-mode))
 
-  (add-hook 'org-mode-hook #'ch/org/config))
+  (add-hook 'org-mode-hook #'ch/org/config)
+
+  (defun ch/org/go-home ()
+    (interactive)
+    (ch/winconf/save)
+    (find-file (expand-file-name "~/org/home.org"))
+    (delete-other-windows)))
