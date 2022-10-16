@@ -25,6 +25,7 @@
     magit
     notion
     olivetti
+    org
     projectile
     theme
     which-key
