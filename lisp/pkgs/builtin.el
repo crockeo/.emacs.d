@@ -66,16 +66,4 @@
   (global-auto-revert-mode 1)
   (global-display-line-numbers-mode 1)
   (global-eldoc-mode -1)
-  (setq eldoc-documentation-function #'ignore)
-
-  ;; tabs!!!!!!
-  ;; TODO: move this over to evil.el(?)
-  (dolist (num '(1 2 3 4 5 6 7 8))
-    (let ((num num))
-     (global-set-key
-      (kbd (format "s-%d" num))
-      (lambda () (interactive) (tab-bar-select-tab num)))))
-
-  (global-set-key (kbd "s-9") #'last-tab)
-  (global-set-key (kbd "s-t") #'tab-new)
-  (global-set-key (kbd "s-w") #'tab-close))
+  (setq eldoc-documentation-function #'ignore))
