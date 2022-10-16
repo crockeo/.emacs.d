@@ -70,6 +70,9 @@
     (evil-define-key nil evil-normal-state-map
       ";" 'ch/evil/last-file-buffer
 
+      (kbd "C-c 1") 'profiler-start
+      (kbd "C-c 2") 'profiler-stop
+
       (kbd "C-c c") 'evilnc-comment-or-uncomment-lines
 
       (kbd "C-c f l") 'ch/evil/copy-file-link
