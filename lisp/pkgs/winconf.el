@@ -12,11 +12,12 @@
 	     (or winconf (current-window-configuration)))
        (message "Saved current window configuration."))))
 
-  (defun ch/winconf/pop ()
+  (defun ch/winconf/pop (&optional winconf)
     (interactive)
-    (if ch/winconf/state
-	(progn
-	  (set-window-configuration ch/winconf/state)
-	  (setq ch/winconf/state nil)
-	  (message "Restored prior window configuration."))
-      (message "No prior window configuration."))))
+    (let ((target (or winconf ch/winconf/state)))
+     (if target
+	 (progn
+	   (set-window-configuration target)
+	   (setq ch/winconf/state nil)
+	   (message "Restored prior window configuration."))
+       (message "No prior window configuration.")))))

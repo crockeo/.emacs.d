@@ -31,6 +31,11 @@
 	     :foreground "white"
 	     :background "green4"))))
 
+  (use-package org-roam
+    :after org
+    :config
+    (setq org-roam-directory (expand-file-name org-directory)))
+
   (use-package org-transclusion
     :after org
     :bind ("C-c o t" . org-transclusion-add))
@@ -44,6 +49,17 @@
 
   (defun ch/org/go-home ()
     (interactive)
-    (ch/winconf/save)
-    (find-file (expand-file-name "~/org/home.org"))
-    (delete-other-windows)))
+    (let ((winconf (current-window-configuration)))
+      (condition-case nil
+	  (progn
+	    (find-file (expand-file-name "~/org/home.org"))
+	    (delete-other-windows)
+	    (ch/winconf/save winconf))
+	(error (ch/winconf/pop winconf)))))
+
+  (defun ch/org/go-node ()
+    (interactive)
+    (let ((winconf (current-window-configuration)))
+      (org-roam-node-find)
+      (delete-other-windows)
+      (ch/winconf/save winconf))))
