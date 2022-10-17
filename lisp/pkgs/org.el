@@ -1,8 +1,8 @@
 ;;; org.el -*- lexical-binding: t; -*-
 
 (ch/pkg org
-  (defvar ch/org/directory
-    (file-name-as-directory (expand-file-name "~/org")))
+  (defvar ch/org/directory (file-name-as-directory (expand-file-name "~/org")))
+  (setq org-directory ch/org/directory)
 
   (use-package org
     :config
@@ -49,6 +49,13 @@
     (setq org-roam-directory ch/org/directory)
     (org-roam-db-autosync-mode 1))
 
+  (use-package org-super-agenda
+    :after org
+    :config
+    (setq org-super-agenda-groups
+	  '((:auto-map (lambda (item) (ch/org/category)))))
+    :hook (org-agenda-mode . org-super-agenda-mode))
+
   (use-package org-transclusion
     :after org)
 
@@ -62,6 +69,16 @@
   (defun ch/org/capture ()
     (interactive)
     (org-capture nil "t"))
+
+  (defun ch/org/get-buffer-prop (name)
+    ;; shamelessly stolen from
+    ;; https://d12frosted.io/posts/2020-06-24-task-management-with-roam-vol2.html
+    (org-with-point-at 1
+      (when (re-search-forward (concat "^#\\+" name ": \\(.*\\)")
+                               (point-max) t)
+	(buffer-substring-no-properties
+	 (match-beginning 1)
+	 (match-end 1)))))
 
   (defun ch/org/category (&optional max-length)
     ;; inspired
@@ -94,46 +111,82 @@
 
   (defmacro ch/org/go (&rest body)
     (declare (indent defun))
-    `(let ((winconf (current-window-configuration)))
-       (condition-case nil
+    `(let ((winconf (current-window-configuration))
+	   (error nil))
+       (unwind-protect
 	   (progn
 	     ,@body
 	     (delete-other-windows)
 	     (ch/winconf/save winconf))
-	 (error (ch/winconf/pop winconf)))))
+	 (when error
+	   (ch/winconf/pop winconf)
+	   (message "%s" error)))))
 
-  (defun ch/org/go-home ()
+  (defun ch/org/files ()
+    (--> (directory-files ch/org/directory)
+      (-filter (lambda (name) (string-match-p (regexp-quote ".org") name)) it)
+      (-map (lambda (name) (concat ch/org/directory name)) it)))
+
+  ;;
+  ;; Step 1. Temporal!
+  ;;
+  ;; - Inbox = things I haven't looked at yet
+  ;; - Today = things I should do today
+  ;; - Someday = things that can be done any time
+  ;; - Oneday = things that I'm putting off
+  ;; - Logbook = things which have been done recently
+  ;;
+  (defun ch/org/go-inbox ()
     (interactive)
     (ch/org/go
-      (find-file (expand-file-name "~/org/home.org"))))
+      (find-file (concat ch/org/directory "inbox.org"))))
 
-  (defun ch/org/go-node ()
+  (defun ch/org/go-today ()
     (interactive)
     (ch/org/go
-      (org-roam-node-find
-       nil nil
-       (ch/org/roam-node-predicate nil ch/org/go-blocklist))))
+      (org-ql-search
+	(ch/org/files)
+	'(and (ts-active :on today) (todo))
+	:title "Today"
+	:super-groups '((:auto-map (lambda (item) (ch/org/category)))))))
 
-  (defun ch/org/go-project ()
+  (defun ch/org/go-someday ()
     (interactive)
     (ch/org/go
-      (org-roam-node-find
-       nil nil
-       (ch/org/roam-node-predicate '("project") ch/org/go-blocklist))))
+      (org-ql-search
+	(ch/org/files)
+	'(and (todo)
+	      (not (ts-active))
+	      (not (tags "oneday")))
+	:title "Someday"
+	:super-groups '((:auto-map (lambda (item) (ch/org/category)))))))
 
-  (defun ch/org/go-week ()
+  (defun ch/org/go-oneday ()
     (interactive)
     (ch/org/go
-      (org-ql-view-recent-items
-       :num-days 7
-       :type 'closed
-       :groups '((:auto-map (lambda (item) (ch/org/category)))))))
+      (org-ql-search
+	(ch/org/files)
+	'(and (todo)
+	      (not (ts-active))
+	      (tags "oneday"))
+	:title "Oneday"
+	:super-groups '((:auto-map (lambda (item) (ch/org/category)))))))
 
-  (defun ch/org/go-yesterday ()
+  (defun ch/org/go-logbook ()
     (interactive)
     (ch/org/go
-      (org-ql-view-recent-items
-       :num-days 1
-       :type 'closed
-       :groups '((:auto-map (lambda (item) (ch/org/category)))))))
-  )
+      (org-ql-search
+	(ch/org/files)
+	'(and (done))
+	:title "Inbox"
+	:sort 'date ;; TODO: descending?
+	)
+      ))
+
+  (ch/crockeo/register-keys
+    ("C-c C-w C-i" . ch/org/go-inbox)
+    ("C-c C-w C-t" . ch/org/go-today)
+    ("C-c C-w C-s" . ch/org/go-someday)
+    ("C-c C-w C-o" . ch/org/go-oneday)
+    ("C-c C-w C-l" . ch/org/go-logbook)
+    ))
