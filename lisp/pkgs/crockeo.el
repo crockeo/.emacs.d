@@ -25,6 +25,8 @@
     ("C-c C-w C-h" . ch/org/go-home)
     ("C-c C-w C-p" . ch/org/go-project)
     ("C-c C-w C-q" . ch/winconf/pop)
+    ("C-c C-w C-w" . ch/org/go-week)
+    ("C-c C-w C-y" . ch/org/go-yesterday)
     )
 
   (crockeo-mode 1))

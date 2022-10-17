@@ -37,6 +37,9 @@
 	     :foreground "white"
 	     :background "green4"))))
 
+  (use-package org-ql
+    :after org)
+
   (use-package org-roam
     :after org
     :bind
@@ -59,6 +62,18 @@
   (defun ch/org/capture ()
     (interactive)
     (org-capture nil "t"))
+
+  (defun ch/org/category (&optional max-length)
+    ;; inspired
+    ;; https://d12frosted.io/posts/2020-06-24-task-management-with-roam-vol2.html
+    (let* ((title (ch/org/get-buffer-prop "title"))
+	   (category (org-get-category))
+	   (file-name (when buffer-file-name (file-name-sans-extension (file-name-nondirectory buffer-file-name))))
+	   (result (or title category file-name "")))
+      (if (and max-length
+	       (> (length result) max-length))
+	  (concat (substring result 0 (- max-length 3)) "...")
+	result)))
 
   (defun ch/org/add-filetags ()
     (interactive)
@@ -105,4 +120,20 @@
       (org-roam-node-find
        nil nil
        (ch/org/roam-node-predicate '("project") ch/org/go-blocklist))))
+
+  (defun ch/org/go-week ()
+    (interactive)
+    (ch/org/go
+      (org-ql-view-recent-items
+       :num-days 7
+       :type 'closed
+       :groups '((:auto-map (lambda (item) (ch/org/category)))))))
+
+  (defun ch/org/go-yesterday ()
+    (interactive)
+    (ch/org/go
+      (org-ql-view-recent-items
+       :num-days 1
+       :type 'closed
+       :groups '((:auto-map (lambda (item) (ch/org/category)))))))
   )
