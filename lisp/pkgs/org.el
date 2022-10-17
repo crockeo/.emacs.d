@@ -1,11 +1,12 @@
 ;;; org.el -*- lexical-binding: t; -*-
 
 (ch/pkg org
-  ;;;;;;;;;;;;;;;;;;;;;;;;;
-  ;; Installing Packages ;;
-  ;;;;;;;;;;;;;;;;;;;;;;;;;
+  (defvar ch/org/directory
+    (file-name-as-directory (expand-file-name "~/org")))
+
   (use-package org
     :config
+    (setq org-default-notes-file (concat ch/org/directory "inbox.org"))
     (setq org-capture-bookmark nil)
     (setq org-todo-keywords '((sequence "TODO" "NEXT" "WAITING" "|" "DONE")))
     (setq org-log-done 'time))
@@ -38,18 +39,16 @@
 
   (use-package org-roam
     :after org
-    :bind ("C-c o i" . org-roam-node-insert)
+    :bind
+    ("C-c o i" . org-roam-node-insert)
+    ("C-c o t" . ch/org/add-filetags)
     :config
-    (setq org-roam-directory (expand-file-name org-directory))
+    (setq org-roam-directory ch/org/directory)
     (org-roam-db-autosync-mode 1))
 
   (use-package org-transclusion
-    :after org
-    :bind ("C-c o t" . org-transclusion-add))
+    :after org)
 
-  ;;;;;;;;;;;;;;;;;;;;;;;;
-  ;; Vanilla Org Config ;;
-  ;;;;;;;;;;;;;;;;;;;;;;;;
   (defun ch/org/config ()
     (diff-hl-mode -1)
     (display-line-numbers-mode -1)
@@ -57,9 +56,15 @@
 
   (add-hook 'org-mode-hook #'ch/org/config)
 
-  ;;;;;;;;;;;;;;;;
-  ;; Navigation ;;
-  ;;;;;;;;;;;;;;;;
+  (defun ch/org/capture ()
+    (interactive)
+    (org-capture nil "t"))
+
+  (defun ch/org/add-filetags ()
+    (interactive)
+    (when-let ((tags (call-interactively #'org-roam-tag-add)))
+      (ch/org/ensure-filetags tags)))
+
   (defun ch/org/roam-node-predicate (pos-tags neg-tags)
     ;; Constructs a predicate that requires an org roam node
     ;; has all of the required `pos-tags`
@@ -69,29 +74,35 @@
 	(and (-all? (-partial #'seq-contains-p tags) pos-tags)
 	     (not (-any? (-partial #'seq-contains-p tags) neg-tags))))))
 
+  (defvar ch/org/go-blocklist
+    '("archive" "backlog" "done"))
+
+  (defmacro ch/org/go (&rest body)
+    (declare (indent defun))
+    `(let ((winconf (current-window-configuration)))
+       (condition-case nil
+	   (progn
+	     ,@body
+	     (delete-other-windows)
+	     (ch/winconf/save winconf))
+	 (error (ch/winconf/pop winconf)))))
+
   (defun ch/org/go-home ()
     (interactive)
-    (let ((winconf (current-window-configuration)))
-      (condition-case nil
-	  (progn
-	    (find-file (expand-file-name "~/org/home.org"))
-	    (delete-other-windows)
-	    (ch/winconf/save winconf))
-	(error (ch/winconf/pop winconf)))))
+    (ch/org/go
+      (find-file (expand-file-name "~/org/home.org"))))
 
   (defun ch/org/go-node ()
     (interactive)
-    (let ((winconf (current-window-configuration)))
-      (org-roam-node-find nil nil (ch/org/roam-node-predicate nil '("done" "archive")))
-      (delete-other-windows)
-      (ch/winconf/save winconf)))
+    (ch/org/go
+      (org-roam-node-find
+       nil nil
+       (ch/org/roam-node-predicate nil ch/org/go-blocklist))))
 
-  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-  ;; Interacting with Org Content ;;
-  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-  (defun ch/org/add-filetags ()
+  (defun ch/org/go-project ()
     (interactive)
-    (when-let ((tags (call-interactively #'org-roam-tag-add)))
-      (ch/org/ensure-filetags tags)))
-
+    (ch/org/go
+      (org-roam-node-find
+       nil nil
+       (ch/org/roam-node-predicate '("project") ch/org/go-blocklist))))
   )

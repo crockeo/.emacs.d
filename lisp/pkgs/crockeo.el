@@ -20,9 +20,10 @@
     `(mapc #'ch/crockeo/register-keys/impl ',keymaps))
 
   (ch/crockeo/register-keys
+    ("C-c C-w C-c" . ch/org/capture)
     ("C-c C-w C-f" . ch/org/go-node)
     ("C-c C-w C-h" . ch/org/go-home)
-    ("C-c C-w C-p" . ch/winconf/save)
+    ("C-c C-w C-p" . ch/org/go-project)
     ("C-c C-w C-q" . ch/winconf/pop)
     )
 
