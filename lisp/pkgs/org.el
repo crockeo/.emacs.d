@@ -130,17 +130,14 @@
   ;;
   ;; Step 1. Temporal!
   ;;
-  ;; - Inbox = things I haven't looked at yet
+  ;; When do I need to do something
+  ;; or when did I do something?
+  ;;
   ;; - Today = things I should do today
   ;; - Someday = things that can be done any time
   ;; - Oneday = things that I'm putting off
   ;; - Logbook = things which have been done recently
   ;;
-  (defun ch/org/go-inbox ()
-    (interactive)
-    (ch/org/go
-      (find-file (concat ch/org/directory "inbox.org"))))
-
   (defun ch/org/go-today ()
     (interactive)
     (ch/org/go
@@ -183,10 +180,41 @@
 	)
       ))
 
+  ;;
+  ;; Step 2. Spatial
+  ;;
+  ;; Where do I put things?
+  ;;
+  ;; - Inbox = things I haven't looked at yet
+  (defun ch/org/capture ()
+    (interactive)
+    (ch/org/go
+      (org-capture nil "t")))
+
+  (defun ch/org/go-find-node ()
+    (interactive)
+    (ch/org/go
+      (org-roam-node-find)))
+
+  (defun ch/org/go-inbox ()
+    (interactive)
+    (ch/org/go
+      (find-file (concat ch/org/directory "inbox.org"))))
+
   (ch/crockeo/register-keys
-    ("C-c C-w C-i" . ch/org/go-inbox)
+    ;; Temporal
     ("C-c C-w C-t" . ch/org/go-today)
     ("C-c C-w C-s" . ch/org/go-someday)
     ("C-c C-w C-o" . ch/org/go-oneday)
     ("C-c C-w C-l" . ch/org/go-logbook)
-    ))
+
+    ;; Spatial
+    ("C-c C-w C-c" . ch/org/capture)
+    ("C-c C-w C-f" . ch/org/go-find-node)
+    ("C-c C-w C-i" . ch/org/go-inbox)
+    ("C-c C-w C-k" . ch/org/go-knowledge)
+
+    ;; Misc
+    ("C-c C-w C-q" . ch/winconf/pop)
+    )
+  )
