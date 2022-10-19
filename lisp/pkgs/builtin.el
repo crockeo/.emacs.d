@@ -4,7 +4,7 @@
   (add-hook 'before-save-hook #'delete-trailing-whitespace)
 
   (let ((font-face "Menlo")
-	(font-size 120))
+	(font-size 130))
    (condition-case nil
        (set-face-attribute 'default nil
 			   :font font-face
