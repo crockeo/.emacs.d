@@ -9,14 +9,19 @@
     (setq org-default-notes-file (concat ch/org/directory "inbox.org"))
     (setq org-capture-bookmark nil)
     (setq org-todo-keywords '((sequence "TODO" "NEXT" "WAITING" "|" "DONE")))
-    (setq org-log-done 'time))
+    (setq org-log-done 'time)
+
+    ;; After we're done with an org-capture, we want to come home.
+    (advice-add 'org-capture-finalize :after #'ch/winconf/pop)
+    )
 
   (use-package org-contrib
     :after org)
 
   (use-package org-modern
     :after org
-    :hook (org-mode . org-modern-mode)
+    :hook ((org-mode . org-modern-mode)
+	   (org-agenda-mode . org-modern-mode))
     :config
     (setq org-modern-label-border 1)
     (setq org-modern-todo-faces
@@ -143,7 +148,9 @@
     (ch/org/go
       (org-ql-search
 	(ch/org/files)
-	'(and (ts-active :on today) (todo))
+	'(and (or (ts :on today)
+		  (ts :before today))
+	      (todo))
 	:title "Today"
 	:super-groups '((:auto-map (lambda (item) (ch/org/category)))))))
 
@@ -215,6 +222,7 @@
     ("C-c C-w C-k" . ch/org/go-knowledge)
 
     ;; Misc
+    ("C-c C-w C-p" . ch/winconf/push)
     ("C-c C-w C-q" . ch/winconf/pop)
     )
   )
