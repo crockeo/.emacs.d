@@ -193,6 +193,8 @@
   ;; Where do I put things?
   ;;
   ;; - Inbox = things I haven't looked at yet
+  ;; - Areas = collections of multiple projects and tasks
+  ;; - Projects = collections of multiple tasks
   (defun ch/org/capture ()
     (interactive)
     (ch/org/go
@@ -202,6 +204,18 @@
     (interactive)
     (ch/org/go
       (org-roam-node-find)))
+
+  (defun ch/org/go-find-area ()
+    (interactive)
+    (ch/org/go
+      (org-roam-node-find nil nil
+			  (ch/org/roam-node-predicate '("area") nil))))
+
+  (defun ch/org/go-find-project ()
+    (interactive)
+    (ch/org/go
+      (org-roam-node-find nil nil
+			  (ch/org/roam-node-predicate '("project") nil))))
 
   (defun ch/org/go-inbox ()
     (interactive)
@@ -216,13 +230,14 @@
     ("C-c C-w C-l" . ch/org/go-logbook)
 
     ;; Spatial
+    ("C-c C-w C-a" . ch/org/go-find-area)
     ("C-c C-w C-c" . ch/org/capture)
     ("C-c C-w C-f" . ch/org/go-find-node)
     ("C-c C-w C-i" . ch/org/go-inbox)
     ("C-c C-w C-k" . ch/org/go-knowledge)
+    ("C-c C-w C-p" . ch/org/go-find-project)
 
     ;; Misc
-    ("C-c C-w C-p" . ch/winconf/push)
     ("C-c C-w C-q" . ch/winconf/pop)
     )
   )
