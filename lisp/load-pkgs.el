@@ -28,6 +28,7 @@
     org
     projectile
     theme
+    vterm
     which-key
     winconf))
 
