@@ -64,6 +64,7 @@ def fetch_dependencies():
             "brew",
             "install",
 	    "autoconf",
+            "cmake",
             "gcc",
 	    "gnutls",
 	    "jansson",
