@@ -18,7 +18,15 @@
   (use-package magit
     :config
     (define-key magit-mode-map "h" #'ch/magit/visit-pr)
-    (setq magit-clone-default-directory (expand-file-name "~/src/")))
+    (setq magit-clone-default-directory (expand-file-name "~/src/"))
+
+    ;; don't refresh status buffer.
+    ;; makes things slightly faster
+    (setq magit-refresh-status-buffer nil)
+
+    ;; don't see diff when comitting.
+    (remove-hook 'server-switch-hook 'magit-commit-diff)
+    (remove-hook 'with-editor-filter-visit-hook 'magit-commit-diff))
 
   (advice-add
    'magit-clone-internal
