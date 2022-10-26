@@ -3,6 +3,11 @@
 (ch/pkg builtin
   (add-hook 'before-save-hook #'delete-trailing-whitespace)
 
+  ;; used when starting vterm
+  ;; so we don't connect to tmux.
+  ;; see .zshrc for info
+  (setenv "EMACS" "true")
+
   (let ((font-face "Menlo")
 	(font-size 130))
    (condition-case nil
