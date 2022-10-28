@@ -2,9 +2,7 @@
   (use-package projectile
     :init
     (setq projectile-project-search-path
-	  (->> '("~/src/" "~/src/personal/" "~/src/tmp/")
-	    (-map #'expand-file-name)
-	    (-filter #'file-exists-p)))
+	  `((,(expand-file-name "~/src/") . 2)))
     (projectile-discover-projects-in-search-path))
 
   (use-package counsel-projectile
