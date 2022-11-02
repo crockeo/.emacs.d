@@ -4,7 +4,9 @@
   (use-package modus-themes
     :config
     (modus-themes-load-themes)
-    (setq modus-themes-hl-line '(accented)))
+    (setq modus-themes-hl-line '(accented))
+    (setq modus-themes-vivendi-color-overrides
+	  '((bg-main . "#222222"))))
 
   (use-package circadian
     :config
