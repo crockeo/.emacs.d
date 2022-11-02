@@ -10,7 +10,7 @@
     :config
     (require 'solar)
     (setq calendar-latitude 47.6
-          calendar-longitude 122.3)
+          calendar-longitude -122.3)
     (setq circadian-themes '((:sunrise . modus-operandi)
                              (:sunset  . modus-vivendi)))
 
