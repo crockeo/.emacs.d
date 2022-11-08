@@ -6,10 +6,17 @@
 
   (use-package org
     :config
-    (setq org-default-notes-file (concat ch/org/directory "inbox.org"))
-    (setq org-capture-bookmark nil)
-    (setq org-todo-keywords '((sequence "TODO" "NEXT" "WAITING" "|" "DONE")))
-    (setq org-log-done 'time)
+
+    (setq
+     org-auto-align-tags nil
+     org-capture-bookmark nil
+     org-default-notes-file (concat ch/org/directory "inbox.org")
+     org-log-done 'time
+     org-tags-column 0
+     org-todo-keywords '((sequence "TODO" "NEXT" "WAITING" "|" "DONE"))
+
+     org-agenda-tags-column 0
+     )
 
     ;; After we're done with an org-capture, we want to come home.
     (advice-add 'org-capture-finalize :after #'ch/winconf/pop)
@@ -25,7 +32,7 @@
   (use-package org-modern
     :after org
     :hook ((org-mode . org-modern-mode)
-	   (org-agenda-mode . org-modern-mode))
+	   (org-agenda-finalize . org-modern-mode))
     :config
     (setq org-modern-label-border 1)
     (setq org-modern-todo-faces
