@@ -107,6 +107,8 @@
 
       (kbd "C-c s") 'lsp-format-buffer
 
+      (kbd "C-c t j") 'json-pretty-print
+
       "u" 'undo-fu-only-undo
       (kbd "C-r") 'undo-fu-only-redo
 
