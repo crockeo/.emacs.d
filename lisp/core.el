@@ -31,7 +31,10 @@
 
 (defun ch/use-pkgs-impl (packages)
   (dolist (package packages)
-    (funcall (cdr (assoc package ch/pkg-list)))))
+    (let ((package-impl (assoc package ch/pkg-list)))
+      (if package-impl
+	  (funcall (cdr (assoc package ch/pkg-list)))
+	(message "WARNING: package `%s` is missing from ch/pkg-list!" package)))))
 
 (defmacro ch/use-pkgs (&rest packages)
   (declare (indent defun))

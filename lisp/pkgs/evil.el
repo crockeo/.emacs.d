@@ -77,6 +77,9 @@
 
       (kbd "C-c f l") 'ch/evil/copy-file-link
 
+      (kbd "C-c g c") 'magit-clone
+      (kbd "C-c g l") 'lgc  ;; spooky, what does it mean!?
+
       (kbd "C-c i d") 'ch/org/download-files
       (kbd "C-c i s") 'ch/org/sync-files
       (kbd "C-c i u") 'ch/org/upload-files
