@@ -15,6 +15,10 @@
     (advice-add 'org-capture-finalize :after #'ch/winconf/pop)
     )
 
+  (use-package org-autolist
+    :after org
+    :hook (org-mode . org-autolist-mode))
+
   (use-package org-contrib
     :after org)
 
@@ -67,7 +71,8 @@
   (defun ch/org/config ()
     (diff-hl-mode -1)
     (display-line-numbers-mode -1)
-    (org-indent-mode))
+    (org-indent-mode)
+    (setq olivetti-minimum-body-width 80))
 
   (add-hook 'org-mode-hook #'ch/org/config)
 

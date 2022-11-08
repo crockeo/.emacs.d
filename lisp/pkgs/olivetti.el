@@ -3,7 +3,8 @@
 (ch/pkg olivetti
   (use-package olivetti
     :config
-    (setq olivetti-minimum-body-width 120))
+    (setq olivetti-minimum-body-width 120)
+    (make-variable-buffer-local 'olivetti-minimum-body-width))
 
   (defvar ch/olivetti/enabled nil)
 
