@@ -18,6 +18,15 @@
      org-agenda-tags-column 0
      )
 
+    ;; Make org headings {{B I G}}
+    (dolist (pair '((org-level-1 . 1.3)
+		    (org-level-2 . 1.2)
+		    (org-level-3 . 1.1)
+		    ))
+      (set-face-attribute (car pair)
+			  nil
+			  :height (cdr pair)))
+
     ;; After we're done with an org-capture, we want to come home.
     (advice-add 'org-capture-finalize :after #'ch/winconf/pop)
     )
@@ -81,7 +90,13 @@
     (org-indent-mode)
     (setq olivetti-minimum-body-width 80))
 
+  (defun ch/org/config-agenda ()
+    (diff-hl-mode -1)
+    (display-line-numbers-mode -1)
+    (setq olivetti-minimum-body-width 80))
+
   (add-hook 'org-mode-hook #'ch/org/config)
+  (add-hook 'org-agenda-finalize-hook #'ch/org/config-agenda)
 
   (defun ch/org/capture ()
     (interactive)
