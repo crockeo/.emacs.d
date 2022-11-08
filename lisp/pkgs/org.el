@@ -159,7 +159,7 @@
 	:title "Today"
 	:super-groups '((:auto-map (lambda (item) (ch/org/category)))))))
 
-  (defun ch/org/go-someday ()
+  (defun ch/org/go-anytime ()
     (interactive)
     (ch/org/go
       (org-ql-search
@@ -167,7 +167,7 @@
 	'(and (todo)
 	      (not (ts-active))
 	      (not (tags "oneday")))
-	:title "Someday"
+	:title "Anytime"
 	:super-groups '((:auto-map (lambda (item) (ch/org/category)))))))
 
   (defun ch/org/go-oneday ()
@@ -200,6 +200,8 @@
   ;; - Inbox = things I haven't looked at yet
   ;; - Areas = collections of multiple projects and tasks
   ;; - Projects = collections of multiple tasks
+  (defvar ch/org/done-tags '("done" "cancelled"))
+
   (defun ch/org/capture ()
     (interactive)
     (ch/org/go
@@ -208,19 +210,21 @@
   (defun ch/org/go-find-node ()
     (interactive)
     (ch/org/go
-      (org-roam-node-find)))
-
-  (defun ch/org/go-find-area ()
-    (interactive)
-    (ch/org/go
       (org-roam-node-find nil nil
-			  (ch/org/roam-node-predicate '("area") nil))))
+			  (ch/org/roam-node-predicate nil ch/org/done-tags))))
 
-  (defun ch/org/go-find-project ()
-    (interactive)
-    (ch/org/go
-      (org-roam-node-find nil nil
-			  (ch/org/roam-node-predicate '("project") nil))))
+  ;; TODO: decide if i need this
+  ;; (defun ch/org/go-find-area ()
+  ;;   (interactive)
+  ;;   (ch/org/go
+  ;;     (org-roam-node-find nil nil
+  ;; 			  (ch/org/roam-node-predicate '("area") nil))))
+
+  ;; (defun ch/org/go-find-project ()
+  ;;   (interactive)
+  ;;   (ch/org/go
+  ;;     (org-roam-node-find nil nil
+  ;; 			  (ch/org/roam-node-predicate '("project") nil))))
 
   (defun ch/org/go-inbox ()
     (interactive)
@@ -230,17 +234,18 @@
   (ch/crockeo/register-keys
     ;; Temporal
     ("C-c C-w C-t" . ch/org/go-today)
-    ("C-c C-w C-s" . ch/org/go-someday)
+    ("C-c C-w C-a" . ch/org/go-anytime)
     ("C-c C-w C-o" . ch/org/go-oneday)
     ("C-c C-w C-l" . ch/org/go-logbook)
 
     ;; Spatial
-    ("C-c C-w C-a" . ch/org/go-find-area)
     ("C-c C-w C-c" . ch/org/capture)
     ("C-c C-w C-f" . ch/org/go-find-node)
     ("C-c C-w C-i" . ch/org/go-inbox)
-    ("C-c C-w C-k" . ch/org/go-knowledge)
-    ("C-c C-w C-p" . ch/org/go-find-project)
+
+    ;; TODO: decide if i need this
+    ;; ("C-c C-w C-a" . ch/org/go-find-area)
+    ;; ("C-c C-w C-p" . ch/org/go-find-project)
 
     ;; Misc
     ("C-c C-w C-q" . ch/winconf/pop)
