@@ -13,19 +13,11 @@
      org-default-notes-file (concat ch/org/directory "inbox.org")
      org-log-done 'time
      org-tags-column 0
+     org-tags-exclude-from-inheritance '("project" "area" "reference")
      org-todo-keywords '((sequence "TODO" "NEXT" "WAITING" "|" "DONE"))
 
      org-agenda-tags-column 0
      )
-
-    ;; Make org headings {{B I G}}
-    (dolist (pair '((org-level-1 . 1.3)
-		    (org-level-2 . 1.2)
-		    (org-level-3 . 1.1)
-		    ))
-      (set-face-attribute (car pair)
-			  nil
-			  :height (cdr pair)))
 
     ;; After we're done with an org-capture, we want to come home.
     (advice-add 'org-capture-finalize :after #'ch/winconf/pop)
@@ -88,7 +80,24 @@
     (diff-hl-mode -1)
     (display-line-numbers-mode -1)
     (org-indent-mode)
-    (setq olivetti-minimum-body-width 80))
+    (setq olivetti-minimum-body-width 80)
+    (setq org-hide-emphasis-markers t)
+
+    ;; Make org headings {{B I G}}
+    (dolist (pair '((org-level-1 . 1.3)
+		    (org-level-2 . 1.2)
+		    (org-level-3 . 1.1)
+		    ))
+      (set-face-attribute (car pair)
+			  nil
+			  :height (cdr pair)))
+
+    ;; Make code look like code
+    (set-face-attribute 'org-code
+			nil
+			:background (modus-themes-color 'bg-inactive))
+
+    )
 
   (defun ch/org/config-agenda ()
     (diff-hl-mode -1)
