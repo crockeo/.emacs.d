@@ -10,18 +10,6 @@
 	  (start-process "lyftvenv" "*lyftvenv*"
 			 "lyftvenv")))))
 
-  (use-package lsp-pyright
-    :init (setq lsp-pyright-multi-root nil)
-    :hook (python-mode . (lambda ()
-			   (require 'lsp-pyright)
-			   (let ((venv-dir (concat (projectile-project-root) "venv")))
-			     (when (file-directory-p venv-dir)
-			       (pyvenv-activate venv-dir)))
-			   (lsp-deferred)))
-    :config
-    (setq lsp-pyright-log-level "error"
-	  lsp-pyright-multi-root nil))
-
   (use-package pyvenv)
 
   (defun ch/python/indentation-override (orig-fun &rest args)
@@ -42,4 +30,16 @@
 
 	(_ (apply orig-fun args)))))
 
-  (advice-add 'python-indent--calculate-indentation :around #'ch/python/indentation-override))
+  (advice-add 'python-indent--calculate-indentation :around #'ch/python/indentation-override)
+
+  (defun ch/python/start-lsp ()
+    (interactive)
+
+    (let ((venv-dir (concat (projectile-project-root) "venv")))
+      (when (file-directory-p venv-dir)
+	(pyvenv-activate venv-dir))
+      (eglot)))
+
+  (add-hook 'python-mode-hook #'ch/python/start-lsp)
+
+  )

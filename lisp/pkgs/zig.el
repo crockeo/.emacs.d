@@ -5,4 +5,4 @@
     :config
     (setq zig-format-on-save nil))
 
-  (add-hook 'zig-mode-hook #'lsp-deferred))
+  (add-hook 'zig-mode-hook #'eglot))

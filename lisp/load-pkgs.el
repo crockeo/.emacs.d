@@ -44,7 +44,6 @@
     proto
     python
     rust
-    swift
     terraform
     yaml
     zig
@@ -55,4 +54,5 @@
   core
   interface
   languages
-  lsp)
+  eglot
+  )
