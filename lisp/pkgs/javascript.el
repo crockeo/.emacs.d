@@ -15,7 +15,7 @@
 
   (defun ch/javascript/on-load ()
     (ch/javascript/configure-indentation)
-    (eglot))
+    (eglot-ensure))
 
   (add-hook 'js-mode-hook #'ch/javascript/on-load)
   (add-hook 'typescript-mode-hook #'ch/javascript/on-load))
