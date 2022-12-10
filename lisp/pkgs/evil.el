@@ -85,10 +85,10 @@
       (kbd "C-c i u") 'ch/org/upload-files
 
       (kbd "C-c j b") 'xref-pop-marker-stack
-      (kbd "C-c j g") 'lsp-find-definition
-      (kbd "C-c j i") 'lsp-find-implementation
-      (kbd "C-c j q") 'lsp-rename
-      (kbd "C-c j r") 'lsp-find-references
+      (kbd "C-c j g") 'eglot-find-declaration
+      (kbd "C-c j i") 'eglot-find-implementation
+      (kbd "C-c j q") 'eglot-rename
+      (kbd "C-c j r") 'xref-find-references
 
       (kbd "C-c n d") 'org-roam-dailies-capture-today
       (kbd "C-c n t") 'org-roam-dailies-capture-tomorrow
@@ -105,7 +105,7 @@
 
       (kbd "C-c k") 'ch/evil/kill-buffers
 
-      (kbd "C-c s") 'lsp-format-buffer
+      (kbd "C-c s") 'eglot-format-buffer
 
       (kbd "C-c t j") 'json-pretty-print
 
