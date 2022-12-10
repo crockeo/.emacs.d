@@ -41,6 +41,7 @@
     javascript
     lisp
     markdown
+    nix
     proto
     python
     rust
