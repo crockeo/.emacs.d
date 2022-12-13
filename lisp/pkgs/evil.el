@@ -35,11 +35,19 @@
 			     (company-box--is-box-buffer buffer))))
 		  buffer-list)))
 
+  (defun ch/evil/kill-buffer (buffer)
+    (when (buffer-live-p buffer)
+      (with-current-buffer buffer
+	(let ((server (eglot-current-server)))
+	  (when server
+	    (eglot-shutdown server))))
+      (kill-buffer buffer)))
+
   (defun ch/evil/kill-buffers ()
     (interactive)
     (when (yes-or-no-p "Close all buffers? ")
       (switch-to-buffer "*scratch*")
-      (mapc #'kill-buffer
+      (mapc #'ch/evil/kill-buffer
 	    (ch/evil/kill-buffers/filter (buffer-list)))))
 
   (defun ch/evil/copy-file-link ()
