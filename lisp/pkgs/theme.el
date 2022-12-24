@@ -19,13 +19,13 @@
     ;;
     ;; Amsterdam
     ;;
-    ;; (setq calendar-latitude 52.4
-    ;; 	  calendar-longitude 4.9)
+    (setq calendar-latitude 52.4
+	  calendar-longitude 4.9)
     ;;
     ;; Gdansk
     ;;
-    (setq calendar-latitude 54.4
-	  calendar-longitude 18.6)
+    ;; (setq calendar-latitude 54.4
+    ;; 	  calendar-longitude 18.6)
 
     (setq circadian-themes '((:sunrise . modus-operandi)
                              (:sunset  . modus-vivendi)))
