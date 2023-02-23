@@ -101,7 +101,8 @@
       (kbd "C-c n d") 'org-roam-dailies-capture-today
       (kbd "C-c n t") 'org-roam-dailies-capture-tomorrow
 
-      (kbd "C-c l") 'ch/olivetti/toggle-ensure
+      (kbd "C-c l l") 'ch/olivetti/toggle-ensure
+      (kbd "C-c l p") 'ch/builtin/toggle-present
 
       (kbd "C-c p a") 'counsel-projectile-ag
       (kbd "C-c p f") 'counsel-projectile-find-file

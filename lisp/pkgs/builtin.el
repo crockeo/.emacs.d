@@ -8,15 +8,31 @@
   ;; see .zshrc for info
   (setenv "EMACS" "true")
 
-  (let ((font-face "Menlo")
-	(font-size 130))
-   (condition-case nil
+  (defun ch/builtin/set-font (font-size)
+    (condition-case nil
+	(set-face-attribute 'default nil
+			    :font "Menlo"
+			    :height font-size)
+      (error
        (set-face-attribute 'default nil
-			   :font font-face
-			   :height font-size)
-     (error
-      (set-face-attribute 'default nil
-			  :height font-size))))
+			   :height font-size))))
+
+  (defvar ch/builtin/presentation-font-size 200)
+  (defvar ch/builtin/normal-font-size 130)
+
+  (defvar ch/builtin/is-presenting nil)
+
+  (defun ch/builtin/toggle-present ()
+    (interactive)
+    (if ch/builtin/is-presenting
+	(progn
+	  (setq ch/builtin/is-presenting nil)
+	  (ch/builtin/set-font ch/builtin/presentation-font-size))
+      (progn
+	(setq ch/builtin/is-presenting t)
+	(ch/builtin/set-font ch/builtin/normal-font-size))))
+
+  (ch/builtin/set-font ch/builtin/normal-font-size)
 
   (setq backup-directory-alist `(("." . ,(concat user-emacs-directory "backups")))
 	exec-path (split-string (getenv "PATH") ":")
