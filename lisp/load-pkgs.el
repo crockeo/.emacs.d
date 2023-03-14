@@ -38,6 +38,7 @@
     cpp
     dockerfile
     go
+    godot
     javascript
     lisp
     markdown

@@ -92,7 +92,7 @@
       (kbd "C-c i s") 'ch/org/sync-files
       (kbd "C-c i u") 'ch/org/upload-files
 
-      (kbd "C-c j b") 'xref-pop-marker-stack
+      (kbd "C-c j b") 'xref-go-back
       (kbd "C-c j g") 'xref-find-definitions
       (kbd "C-c j i") 'eglot-find-implementation
       (kbd "C-c j q") 'eglot-rename
