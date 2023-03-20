@@ -93,6 +93,7 @@
       (kbd "C-c i u") 'ch/org/upload-files
 
       (kbd "C-c j b") 'xref-pop-marker-stack
+      (kbd "C-c j d") 'eglot-code-actions
       (kbd "C-c j g") 'xref-find-definitions
       (kbd "C-c j i") 'eglot-find-implementation
       (kbd "C-c j q") 'eglot-rename

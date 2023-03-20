@@ -9,7 +9,7 @@
 		(remove #'flymake-eldoc-function eldoc-documentation-functions))
 
 	  eldoc-documentation-strategy
-	  #'eldoc-documentation-default))
+	  #'eldoc-documentation-compose))
 
   (add-hook 'eglot-managed-mode-hook #'ch/eglot/config)
 
