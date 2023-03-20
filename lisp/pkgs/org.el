@@ -11,13 +11,18 @@
      org-auto-align-tags nil
      org-capture-bookmark nil
      org-default-notes-file (concat ch/org/directory "inbox.org")
+     org-element-use-cache nil
      org-log-done 'time
+     org-startup-truncated nil
      org-tags-column 0
      org-tags-exclude-from-inheritance '("project" "area" "reference")
      org-todo-keywords '((sequence "TODO" "NEXT" "WAITING" "|" "DONE"))
 
      org-agenda-tags-column 0
      )
+
+    (evil-define-key 'normal org-mode-map
+      (kbd "<tab>") #'org-cycle)
 
     ;; After we're done with an org-capture, we want to come home.
     (advice-add 'org-capture-finalize :after #'ch/winconf/pop)
