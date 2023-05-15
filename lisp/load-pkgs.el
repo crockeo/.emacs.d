@@ -16,6 +16,7 @@
   (ch/use-pkgs
     crockeo
     company
+    copilot
     evil
     flycheck
     diff-hl
