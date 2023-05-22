@@ -16,7 +16,6 @@
   (ch/use-pkgs
     crockeo
     company
-    copilot
     evil
     flycheck
     diff-hl
@@ -26,7 +25,12 @@
     magit
     notion
     olivetti
+    ;; org has to sit before copilot
+    ;; because copilot imports org
+    ;; and if copilot imports the built-in org
+    ;; then emacs gets sad :(
     org
+    copilot
     projectile
     theme
     vterm
