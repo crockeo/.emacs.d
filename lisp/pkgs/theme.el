@@ -3,7 +3,10 @@
 (ch/pkg theme
   (use-package modus-themes
     :config
-    (modus-themes-load-themes)
+    ;; emacs can't find this function on newer versions of modus
+    ;; was it deleted?
+    ;; something to figure out later
+    ;; (modus-themes-load-themes)
     (setq modus-themes-hl-line '(accented))
     (setq modus-themes-vivendi-color-overrides
 	  '((bg-main . "#222222"))))
