@@ -98,9 +98,10 @@
 			  :height (cdr pair)))
 
     ;; Make code look like code
-    (set-face-attribute 'org-code
-			nil
-			:background (modus-themes-color 'bg-inactive))
+    ;; TODO: re-enable this one i can figure out what's different with modus
+    ;; (set-face-attribute 'org-code
+    ;; 			nil
+    ;; 			:background (modus-themes-color 'bg-inactive))
 
     )
 
@@ -267,6 +268,10 @@
     (ch/org/go
       (find-file (concat ch/org/directory "inbox.org"))))
 
+  (defun ch/org/refile ()
+    (interactive)
+    (org-roam-refile))
+
   (ch/crockeo/register-keys
     ;; Temporal
     ("C-c C-w C-t" . ch/org/go-today)
@@ -278,6 +283,7 @@
     ("C-c C-w C-c" . ch/org/capture)
     ("C-c C-w C-f" . ch/org/go-find-node)
     ("C-c C-w C-i" . ch/org/go-inbox)
+    ("C-c C-w C-m" . ch/org/refile)
 
     ;; TODO: decide if i need this
     ;; ("C-c C-w C-a" . ch/org/go-find-area)
