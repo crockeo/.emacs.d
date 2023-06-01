@@ -6,10 +6,11 @@
     ;; emacs can't find this function on newer versions of modus
     ;; was it deleted?
     ;; something to figure out later
-    ;; (modus-themes-load-themes)
-    (setq modus-themes-hl-line '(accented))
-    (setq modus-themes-vivendi-color-overrides
-	  '((bg-main . "#222222"))))
+    (setq modus-themes-common-palette-overrides
+	  '((bg-main "#222222")
+	    (bg-hl-line bg-dim)
+	    ,@modus-themes-preset-overrides
+	    )))
 
   (use-package circadian
     :config

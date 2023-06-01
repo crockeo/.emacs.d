@@ -99,9 +99,9 @@
 
     ;; Make code look like code
     ;; TODO: re-enable this one i can figure out what's different with modus
-    ;; (set-face-attribute 'org-code
-    ;; 			nil
-    ;; 			:background (modus-themes-color 'bg-inactive))
+    (set-face-attribute 'org-code
+			nil
+			:background (modus-themes-get-color-value 'bg-inactive))
 
     )
 
