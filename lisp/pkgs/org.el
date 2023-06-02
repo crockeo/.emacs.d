@@ -5,28 +5,46 @@
   (setq org-directory ch/org/directory)
 
   (use-package org
+    :custom
+    (org-agenda-hide-tags-regexp ".")
+    (org-agenda-tags-column 0)
+    (org-auto-align-tags nil)
+    (org-capture-bookmark nil)
+    (org-default-notes-file (concat ch/org/directory "inbox.org"))
+    (org-element-use-cache nil)
+    (org-hide-emphasis-markers t)
+    (org-link-descriptive t)
+    (org-log-done 'time)
+    (org-startup-folded t)
+    (org-startup-truncated nil)
+    (org-tags-column 0)
+    (org-tags-exclude-from-inheritance '("project" "area" "reference"))
+    (org-todo-keywords '((sequence "TODO" "NEXT" "WAITING" "|" "DONE")))
+
+    :custom-face
+    (org-code ((t (:background ,(modus-themes-get-color-value 'bg-inactive)))))
+    (org-level-1 ((t (:height 1.15))))
+    (org-level-2 ((t (:height 1.10))))
+    (org-level-3 ((t (:heihgt 1.05))))
+
     :config
-
-    (setq
-     org-auto-align-tags nil
-     org-capture-bookmark nil
-     org-default-notes-file (concat ch/org/directory "inbox.org")
-     org-element-use-cache nil
-     org-log-done 'time
-     org-startup-truncated nil
-     org-tags-column 0
-     org-tags-exclude-from-inheritance '("project" "area" "reference")
-     org-todo-keywords '((sequence "TODO" "NEXT" "WAITING" "|" "DONE"))
-
-     org-agenda-tags-column 0
-     )
-
     (evil-define-key 'normal org-mode-map
-      (kbd "<tab>") #'org-cycle)
+      (kbd "<tab>") #'org-cycle))
 
-    ;; After we're done with an org-capture, we want to come home.
-    (advice-add 'org-capture-finalize :after #'ch/winconf/pop)
-    )
+  (use-package org-appear
+    :after org
+    :hook (org-mode . org-appear-mode)
+    :config
+    (setq
+     org-appear-trigger 'manual
+     org-appear-autoemphasis t
+     org-appear-autolinks t
+     )
+    (add-hook
+     'org-mode-hook
+     (lambda ()
+       (add-hook 'evil-insert-state-entry-hook #'org-appear-manual-start nil t)
+       (add-hook 'evil-insert-state-exit-hook #'org-appear-manual-stop nil t))))
 
   (use-package org-autolist
     :after org
@@ -86,19 +104,8 @@
     (display-line-numbers-mode -1)
     (org-indent-mode)
     (setq olivetti-minimum-body-width 80)
-    (setq org-hide-emphasis-markers t)
-
-    ;; Make org headings {{B I G}}
-    (dolist (pair '((org-level-1 . 1.3)
-		    (org-level-2 . 1.2)
-		    (org-level-3 . 1.1)
-		    ))
-      (set-face-attribute (car pair)
-			  nil
-			  :height (cdr pair)))
 
     ;; Make code look like code
-    ;; TODO: re-enable this one i can figure out what's different with modus
     (set-face-attribute 'org-code
 			nil
 			:background (modus-themes-get-color-value 'bg-inactive))
@@ -174,6 +181,20 @@
       (-filter (lambda (name) (string-match-p (regexp-quote ".org") name)) it)
       (-map (lambda (name) (concat ch/org/directory name)) it)))
 
+  ;; Step 0) Separate work from life
+  (defvar ch/org/mode "home")
+
+  (defun ch/org/mode-other ()
+    (pcase ch/org/mode
+      ("home" "work")
+      ("work" "home")))
+
+  (defun ch/org/swap-mode ()
+    (interactive)
+    (let ((new-mode
+	   (setq ch/org/mode (ch/org/mode-other))))
+      (message "Now in mode `%s`." new-mode)))
+
   ;;
   ;; Step 1. Temporal!
   ;;
@@ -190,9 +211,10 @@
     (ch/org/go
       (org-ql-search
 	(ch/org/files)
-	'(and (or (ts :on today)
+	`(and (or (ts :on today)
 		  (ts :before today))
-	      (todo))
+	      (todo)
+	      (not (tags ,(ch/org/mode-other))))
 	:title "Today"
 	:super-groups '((:auto-map (lambda (item) (ch/org/category)))))))
 
@@ -201,9 +223,10 @@
     (ch/org/go
       (org-ql-search
 	(ch/org/files)
-	'(and (todo)
+	`(and (todo)
 	      (not (ts-active))
-	      (not (tags "oneday")))
+	      (not (tags "oneday"))
+	      (not (tags ,(ch/org/mode-other))))
 	:title "Anytime"
 	:super-groups '((:auto-map (lambda (item) (ch/org/category)))))))
 
@@ -212,9 +235,10 @@
     (ch/org/go
       (org-ql-search
 	(ch/org/files)
-	'(and (todo)
+	`(and (todo)
 	      (not (ts-active))
-	      (tags "oneday"))
+	      (tags "oneday")
+	      (not (tags ,(ch/org/mode-other))))
 	:title "Oneday"
 	:super-groups '((:auto-map (lambda (item) (ch/org/category)))))))
 
@@ -223,7 +247,8 @@
     (ch/org/go
       (org-ql-search
 	(ch/org/files)
-	'(and (done))
+	`(and (done)
+	      (not (tags ,(ch/org/mode-other))))
 	:title "Inbox"
 	:sort 'date ;; TODO: descending?
 	)
@@ -237,8 +262,6 @@
   ;; - Inbox = things I haven't looked at yet
   ;; - Areas = collections of multiple projects and tasks
   ;; - Projects = collections of multiple tasks
-  (defvar ch/org/done-tags '("done" "cancelled"))
-
   (defun ch/org/capture ()
     (interactive)
     (ch/org/go
@@ -247,8 +270,39 @@
   (defun ch/org/go-find-node ()
     (interactive)
     (ch/org/go
-      (org-roam-node-find nil nil
-			  (ch/org/roam-node-predicate nil ch/org/done-tags))))
+      (org-roam-node-find
+       nil
+       ""
+       (ch/org/roam-node-predicate
+	'("project")
+	`(,(ch/org/mode-other)
+	  ,@ch/org/go-blocklist)))))
+
+  (defun ch/org/go-find-knowledge ()
+    (interactive)
+    (ch/org/go
+      (org-roam-node-find
+       nil
+       ""
+       (ch/org/roam-node-predicate
+	nil
+	(list "project" (ch/org/mode-other))
+	))))
+
+  ;; Step 1) Separate kinds of things I'm looking for
+  (defun ch/org/find-current-mode ()
+    (interactive)
+    (org-roam-node-find
+     nil
+     ""
+     (ch/org/roam-node-predicate
+      '("project")
+      `(
+	,(ch/org/mode-other)
+	,@ch/org/go-blocklist))))
+
+  (defun ch/org/find-knowledge ()
+    )
 
   ;; TODO: decide if i need this
   ;; (defun ch/org/go-find-area ()
@@ -273,6 +327,9 @@
     (org-roam-refile))
 
   (ch/crockeo/register-keys
+    ;; Work-life balance :)
+    ("C-c C-w C-w" . ch/org/swap-mode)
+
     ;; Temporal
     ("C-c C-w C-t" . ch/org/go-today)
     ("C-c C-w C-a" . ch/org/go-anytime)
@@ -282,6 +339,7 @@
     ;; Spatial
     ("C-c C-w C-c" . ch/org/capture)
     ("C-c C-w C-f" . ch/org/go-find-node)
+    ("C-c C-w C-k" . ch/org/go-find-knowledge)
     ("C-c C-w C-i" . ch/org/go-inbox)
     ("C-c C-w C-m" . ch/org/refile)
 

@@ -8,7 +8,6 @@
     ;; something to figure out later
     (setq modus-themes-common-palette-overrides
 	  '((bg-main "#222222")
-	    (bg-hl-line bg-dim)
 	    ,@modus-themes-preset-overrides
 	    )))
 

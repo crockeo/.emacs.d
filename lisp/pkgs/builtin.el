@@ -87,5 +87,4 @@
   (global-auto-revert-mode 1)
   (global-display-line-numbers-mode 1)
   (global-eldoc-mode -1)
-  (global-hl-line-mode 1)
   (setq eldoc-documentation-function #'ignore))

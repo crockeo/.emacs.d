@@ -25,6 +25,9 @@
     magit
     notion
     olivetti
+    ;; theme has to sit before org
+    ;; because we use modus-themes functions
+    theme
     ;; org has to sit before copilot
     ;; because copilot imports org
     ;; and if copilot imports the built-in org
@@ -32,7 +35,6 @@
     org
     copilot
     projectile
-    theme
     vterm
     which-key
     winconf))
