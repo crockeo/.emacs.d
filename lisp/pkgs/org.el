@@ -1,25 +1,29 @@
 ;;; org.el -*- lexical-binding: t; -*-
 
 (ch/pkg org
-  (defvar ch/org/directory (file-name-as-directory (expand-file-name "~/org")))
-  (setq org-directory ch/org/directory)
+  (defvar ch/org/directory
+    (file-name-as-directory (expand-file-name "~/org")))
 
   (use-package org
     :custom
+    (org-agenda-files (list ch/org/directory))
+    (org-agenda-file-regexp ".*\\.org")
     (org-agenda-hide-tags-regexp ".")
     (org-agenda-tags-column 0)
     (org-auto-align-tags nil)
     (org-capture-bookmark nil)
     (org-default-notes-file (concat ch/org/directory "inbox.org"))
+    (org-directory ch/org/directory)
     (org-element-use-cache nil)
     (org-hide-emphasis-markers t)
     (org-link-descriptive t)
     (org-log-done 'time)
+    (org-log-repeat nil)
     (org-startup-folded t)
     (org-startup-truncated nil)
     (org-tags-column 0)
     (org-tags-exclude-from-inheritance '("project" "area" "reference"))
-    (org-todo-keywords '((sequence "TODO" "NEXT" "WAITING" "|" "DONE")))
+    (org-todo-keywords '((sequence "TODO" | "DONE")))
 
     :custom-face
     (org-code ((t (:background ,(modus-themes-get-color-value 'bg-inactive)))))
@@ -64,14 +68,6 @@
 	     :weight bold
 	     :foreground "gray30"
 	     :background "gray90")
-	    ("NEXT"
-	     :weight bold
-	     :foreground "white"
-	     :background "DodgerBlue1")
-	    ("WAITING"
-	     :weight bold
-	     :foreground "white"
-	     :background "gray50")
 	    ("DONE"
 	     :weight bold
 	     :foreground "white"
@@ -211,8 +207,8 @@
     (ch/org/go
       (org-ql-search
 	(ch/org/files)
-	`(and (or (ts :on today)
-		  (ts :before today))
+	`(and (or (ts-active :on today)
+		  (ts-active :before today))
 	      (todo)
 	      (not (tags ,(ch/org/mode-other))))
 	:title "Today"
