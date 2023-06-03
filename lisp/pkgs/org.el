@@ -14,6 +14,11 @@
     (org-agenda-files (ch/org/files))
     (org-agenda-hide-tags-regexp ".*")
     (org-agenda-tags-column 0)
+    (org-agenda-prefix-format
+     '((agenda . "  ")
+       (todo . "  ")
+       (tags . "  ")
+       (search . " ")))
     (org-auto-align-tags nil)
     (org-capture-bookmark nil)
     (org-default-notes-file (concat ch/org/directory "inbox.org"))
@@ -89,19 +94,16 @@
     (diff-hl-mode -1)
     (display-line-numbers-mode -1)
     (org-indent-mode)
+
     (setq olivetti-minimum-body-width 80)
-
-    ;; Make code look like code
-    (set-face-attribute 'org-code
-			nil
-			:background (modus-themes-get-color-value 'bg-inactive))
-
-    )
+    (olivetti-mode 1))
 
   (defun ch/org/config-agenda ()
     (diff-hl-mode -1)
     (display-line-numbers-mode -1)
-    (setq olivetti-minimum-body-width 80))
+
+    (setq olivetti-minimum-body-width 80)
+    (olivetti-mode 1))
 
   (add-hook 'org-mode-hook #'ch/org/config)
   (add-hook 'org-agenda-finalize-hook #'ch/org/config-agenda)
@@ -190,8 +192,7 @@
   (defun ch/org/go-today ()
     (interactive)
     (ch/org/go
-      (org-agenda nil "a")
-      (olivetti-mode 1)))
+      (org-agenda nil "a")))
 
   (defun ch/org/go-anytime ()
     (interactive)
