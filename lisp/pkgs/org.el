@@ -4,11 +4,15 @@
   (defvar ch/org/directory
     (file-name-as-directory (expand-file-name "~/org")))
 
+  (defun ch/org/files ()
+    (--> (directory-files ch/org/directory)
+      (-filter (lambda (name) (string-match-p (regexp-quote ".org") name)) it)
+      (-map (lambda (name) (concat ch/org/directory name)) it)))
+
   (use-package org
     :custom
-    (org-agenda-files (list ch/org/directory))
-    (org-agenda-file-regexp ".*\\.org")
-    (org-agenda-hide-tags-regexp ".")
+    (org-agenda-files (ch/org/files))
+    (org-agenda-hide-tags-regexp ".*")
     (org-agenda-tags-column 0)
     (org-auto-align-tags nil)
     (org-capture-bookmark nil)
@@ -23,7 +27,7 @@
     (org-startup-truncated nil)
     (org-tags-column 0)
     (org-tags-exclude-from-inheritance '("project" "area" "reference"))
-    (org-todo-keywords '((sequence "TODO" | "DONE")))
+    (org-todo-keywords '((sequence "TODO" "|" "DONE")))
 
     :custom-face
     (org-code ((t (:background ,(modus-themes-get-color-value 'bg-inactive)))))
@@ -60,18 +64,7 @@
   (use-package org-modern
     :after org
     :hook ((org-mode . org-modern-mode)
-	   (org-agenda-finalize . org-modern-agenda))
-    :config
-    (setq org-modern-label-border 1)
-    (setq org-modern-todo-faces
-	  '(("TODO"
-	     :weight bold
-	     :foreground "gray30"
-	     :background "gray90")
-	    ("DONE"
-	     :weight bold
-	     :foreground "white"
-	     :background "green4"))))
+	   (org-agenda-finalize . org-modern-agenda)))
 
   (use-package org-ql
     :after org)
@@ -91,9 +84,6 @@
     (setq org-super-agenda-groups
 	  '((:auto-map (lambda (item) (ch/org/category)))))
     :hook (org-agenda-mode . org-super-agenda-mode))
-
-  (use-package org-transclusion
-    :after org)
 
   (defun ch/org/config ()
     (diff-hl-mode -1)
@@ -172,11 +162,6 @@
 	   (ch/winconf/pop winconf)
 	   (message "%s" error)))))
 
-  (defun ch/org/files ()
-    (--> (directory-files ch/org/directory)
-      (-filter (lambda (name) (string-match-p (regexp-quote ".org") name)) it)
-      (-map (lambda (name) (concat ch/org/directory name)) it)))
-
   ;; Step 0) Separate work from life
   (defvar ch/org/mode "home")
 
@@ -205,14 +190,8 @@
   (defun ch/org/go-today ()
     (interactive)
     (ch/org/go
-      (org-ql-search
-	(ch/org/files)
-	`(and (or (ts-active :on today)
-		  (ts-active :before today))
-	      (todo)
-	      (not (tags ,(ch/org/mode-other))))
-	:title "Today"
-	:super-groups '((:auto-map (lambda (item) (ch/org/category)))))))
+      (org-agenda nil "a")
+      (olivetti-mode 1)))
 
   (defun ch/org/go-anytime ()
     (interactive)
@@ -270,6 +249,16 @@
        nil
        ""
        (ch/org/roam-node-predicate
+	nil
+	ch/org/go-blocklist))))
+
+  (defun ch/org/go-find-project ()
+    (interactive)
+    (ch/org/go
+      (org-roam-node-find
+       nil
+       ""
+       (ch/org/roam-node-predicate
 	'("project")
 	`(,(ch/org/mode-other)
 	  ,@ch/org/go-blocklist)))))
@@ -284,34 +273,6 @@
 	nil
 	(list "project" (ch/org/mode-other))
 	))))
-
-  ;; Step 1) Separate kinds of things I'm looking for
-  (defun ch/org/find-current-mode ()
-    (interactive)
-    (org-roam-node-find
-     nil
-     ""
-     (ch/org/roam-node-predicate
-      '("project")
-      `(
-	,(ch/org/mode-other)
-	,@ch/org/go-blocklist))))
-
-  (defun ch/org/find-knowledge ()
-    )
-
-  ;; TODO: decide if i need this
-  ;; (defun ch/org/go-find-area ()
-  ;;   (interactive)
-  ;;   (ch/org/go
-  ;;     (org-roam-node-find nil nil
-  ;; 			  (ch/org/roam-node-predicate '("area") nil))))
-
-  ;; (defun ch/org/go-find-project ()
-  ;;   (interactive)
-  ;;   (ch/org/go
-  ;;     (org-roam-node-find nil nil
-  ;; 			  (ch/org/roam-node-predicate '("project") nil))))
 
   (defun ch/org/go-inbox ()
     (interactive)
@@ -335,9 +296,10 @@
     ;; Spatial
     ("C-c C-w C-c" . ch/org/capture)
     ("C-c C-w C-f" . ch/org/go-find-node)
-    ("C-c C-w C-k" . ch/org/go-find-knowledge)
     ("C-c C-w C-i" . ch/org/go-inbox)
+    ("C-c C-w C-k" . ch/org/go-find-knowledge)
     ("C-c C-w C-m" . ch/org/refile)
+    ("C-c C-w C-p" . ch/org/go-find-project)
 
     ;; TODO: decide if i need this
     ;; ("C-c C-w C-a" . ch/org/go-find-area)
