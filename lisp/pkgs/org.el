@@ -19,6 +19,11 @@
        (todo . "  ")
        (tags . "  ")
        (search . " ")))
+    (org-agenda-format-date
+     (lambda (date)
+       (concat
+	"\n\n"
+	(org-agenda-format-date-aligned date))))
     (org-auto-align-tags nil)
     (org-capture-bookmark nil)
     (org-default-notes-file (concat ch/org/directory "inbox.org"))
@@ -65,11 +70,6 @@
 
   (use-package org-contrib
     :after org)
-
-  (use-package org-modern
-    :after org
-    :hook ((org-mode . org-modern-mode)
-	   (org-agenda-finalize . org-modern-agenda)))
 
   (use-package org-ql
     :after org)
