@@ -21,6 +21,7 @@
     diff-hl
     dired-sidebar
     doom-modeline
+    dtrt-indent
     ivy
     magit
     notion

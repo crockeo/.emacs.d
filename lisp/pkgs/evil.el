@@ -61,9 +61,11 @@
 
   (defun ch/evil/complete ()
     (interactive)
-    (if (copilot-current-completion)
-	(copilot-accept-completion)
-      (company-complete)))
+    ;; (if (copilot-current-completion)
+    ;; 	(copilot-accept-completion)
+      (company-complete)
+      ;; )
+    )
 
   (use-package undo-fu)
 

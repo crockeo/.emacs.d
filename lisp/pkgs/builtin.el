@@ -18,7 +18,7 @@
 			   :height font-size))))
 
   (defvar ch/builtin/presentation-font-size 200)
-  (defvar ch/builtin/normal-font-size 130)
+  (defvar ch/builtin/normal-font-size 120)
 
   (defvar ch/builtin/is-presenting nil)
 

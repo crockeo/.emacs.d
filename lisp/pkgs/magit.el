@@ -24,6 +24,8 @@
     ;; makes things slightly faster
     (setq magit-refresh-status-buffer nil)
 
+    (remove-hook 'magit-refs-sections-hook 'magit-insert-tags)
+
     ;; don't see diff when comitting.
     (remove-hook 'server-switch-hook 'magit-commit-diff)
     (remove-hook 'with-editor-filter-visit-hook 'magit-commit-diff))
