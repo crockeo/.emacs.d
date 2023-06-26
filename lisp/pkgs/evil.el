@@ -61,10 +61,10 @@
 
   (defun ch/evil/complete ()
     (interactive)
-    ;; (if (copilot-current-completion)
-    ;; 	(copilot-accept-completion)
+    (if (copilot-current-completion)
+	(copilot-accept-completion)
       (company-complete)
-      ;; )
+      )
     )
 
   (use-package undo-fu)
@@ -123,7 +123,7 @@
 
       (kbd "C-c k") 'ch/evil/kill-buffers
 
-      (kbd "C-c s") 'eglot-format-buffer
+      (kbd "C-c s") 'eglot-format
 
       (kbd "C-c t j") 'json-pretty-print
 
