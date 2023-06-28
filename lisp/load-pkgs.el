@@ -43,6 +43,7 @@
 (ch/pkg languages
   (ch/use-pkgs
     bazel
+    clojure
     cpp
     dockerfile
     go
