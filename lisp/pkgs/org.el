@@ -49,21 +49,6 @@
     (evil-define-key 'normal org-mode-map
       (kbd "<tab>") #'org-cycle))
 
-  (use-package org-appear
-    :after org
-    :hook (org-mode . org-appear-mode)
-    :config
-    (setq
-     org-appear-trigger 'manual
-     org-appear-autoemphasis t
-     org-appear-autolinks t
-     )
-    (add-hook
-     'org-mode-hook
-     (lambda ()
-       (add-hook 'evil-insert-state-entry-hook #'org-appear-manual-start nil t)
-       (add-hook 'evil-insert-state-exit-hook #'org-appear-manual-stop nil t))))
-
   (use-package org-autolist
     :after org
     :hook (org-mode . org-autolist-mode))
