@@ -9,9 +9,16 @@
       (-filter (lambda (name) (string-match-p (regexp-quote ".org") name)) it)
       (-map (lambda (name) (concat ch/org/directory name)) it)))
 
+  (defun ch/org/cycle (&rest args)
+    (interactive)
+    (unless (org-at-heading-or-item-p)
+      (org-previous-visible-heading 1))
+    (org-cycle))
+
+  (setq org-agenda-files (ch/org/files))
+
   (use-package org
     :custom
-    (org-agenda-files (ch/org/files))
     (org-agenda-hide-tags-regexp ".*")
     (org-agenda-tags-column 0)
     (org-agenda-prefix-format
@@ -37,17 +44,22 @@
     (org-startup-truncated nil)
     (org-tags-column 0)
     (org-tags-exclude-from-inheritance '("project" "area" "reference"))
-    (org-todo-keywords '((sequence "TODO" "|" "DONE")))
+    (org-todo-keywords '((sequence "TODO" "WIP" "|" "DONE")))
+    (org-todo-keyword-faces '(("TODO" . org-todo)
+			      ("WIP" . org-warning)
+			      ("DONE" . org-done)))
 
     :custom-face
     (org-code ((t (:background ,(modus-themes-get-color-value 'bg-inactive)))))
+    (org-done ((t (:foreground ,(modus-themes-get-color-value 'bg-active)))))
+    (org-done-headline ((t (:foreground ,(modus-themes-get-color-value 'bg-active)))))
     (org-level-1 ((t (:height 1.15))))
     (org-level-2 ((t (:height 1.10))))
     (org-level-3 ((t (:heihgt 1.05))))
 
     :config
     (evil-define-key 'normal org-mode-map
-      (kbd "<tab>") #'org-cycle))
+      (kbd "<tab>") #'ch/org/cycle))
 
   (use-package org-autolist
     :after org
@@ -143,10 +155,11 @@
        (unwind-protect
 	   (progn
 	     ,@body
-	     (delete-other-windows)
-	     (ch/winconf/save winconf))
+	     ;; (delete-other-windows)
+	     ;; (ch/winconf/save winconf)
+	     )
 	 (when error
-	   (ch/winconf/pop winconf)
+	   ;; (ch/winconf/pop winconf)
 	   (message "%s" error)))))
 
   ;; Step 0) Separate work from life
