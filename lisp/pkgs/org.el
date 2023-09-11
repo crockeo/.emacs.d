@@ -170,7 +170,7 @@
   (defvar test-heading nil)
 
   (defun ch/org/todo-sort/todo-keyword (headline)
-    (let* ((todo-keyword (plist-get (cadr headline) :todo-keyword))
+    (let* ((todo-keyword (org-element-property :todo-keyword headline))
 	   (start 0)
 	   (end (length todo-keyword)))
       (set-text-properties start end nil todo-keyword)
@@ -241,10 +241,8 @@
 	(ch/org/files)
 	'(done)
 	:title "Logbook"
-	:sort '(date reverse) ;; TODO: descending:?
-	:super-groups '((:date))
-	)
-      ))
+	:sort '(closed reverse)
+	:super-groups '((:auto-ts reverse)))))
 
   ;;
   ;; Step 2. Spatial
@@ -277,8 +275,7 @@
        ""
        (ch/org/roam-node-predicate
 	'("project")
-	`(,(ch/org/mode-other)
-	  ,@ch/org/go-blocklist)))))
+	ch/org/go-blocklist))))
 
   (defun ch/org/go-find-knowledge ()
     (interactive)
@@ -288,8 +285,7 @@
        ""
        (ch/org/roam-node-predicate
 	nil
-	(list "project" (ch/org/mode-other))
-	))))
+	'("person" "project")))))
 
   (defun ch/org/go-inbox ()
     (interactive)
@@ -301,9 +297,6 @@
     (org-roam-refile))
 
   (ch/crockeo/register-keys
-    ;; Work-life balance :)
-    ("C-c C-w C-w" . ch/org/swap-mode)
-
     ;; Temporal
     ("C-c C-w C-t" . ch/org/go-today)
     ("C-c C-w C-a" . ch/org/go-anytime)
@@ -317,10 +310,6 @@
     ("C-c C-w C-k" . ch/org/go-find-knowledge)
     ("C-c C-w C-m" . ch/org/refile)
     ("C-c C-w C-p" . ch/org/go-find-project)
-
-    ;; TODO: decide if i need this
-    ;; ("C-c C-w C-a" . ch/org/go-find-area)
-    ;; ("C-c C-w C-p" . ch/org/go-find-project)
 
     ;; Misc
     ("C-c C-w C-q" . ch/winconf/pop)
