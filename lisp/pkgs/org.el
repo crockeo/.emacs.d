@@ -44,9 +44,9 @@
     (org-startup-truncated nil)
     (org-tags-column 0)
     (org-tags-exclude-from-inheritance '("project" "area" "reference"))
-    (org-todo-keywords '((sequence "TODO" "WIP" "|" "DONE")))
+    (org-todo-keywords '((sequence "TODO" "NEXT" "|" "DONE")))
     (org-todo-keyword-faces '(("TODO" . org-todo)
-			      ("WIP" . org-warning)
+			      ("NEXT" . org-warning)
 			      ("DONE" . org-done)))
 
     :custom-face
@@ -90,17 +90,11 @@
   (defun ch/org/config ()
     (diff-hl-mode -1)
     (display-line-numbers-mode -1)
-    (org-indent-mode)
-
-    (setq olivetti-minimum-body-width 80)
-    (olivetti-mode 1))
+    (org-indent-mode))
 
   (defun ch/org/config-agenda ()
     (diff-hl-mode -1)
-    (display-line-numbers-mode -1)
-
-    (setq olivetti-minimum-body-width 80)
-    (olivetti-mode 1))
+    (display-line-numbers-mode -1))
 
   (add-hook 'org-mode-hook #'ch/org/config)
   (add-hook 'org-agenda-finalize-hook #'ch/org/config-agenda)
@@ -155,26 +149,12 @@
        (unwind-protect
 	   (progn
 	     ,@body
-	     ;; (delete-other-windows)
-	     ;; (ch/winconf/save winconf)
+	     (delete-other-windows)
+	     (ch/winconf/save winconf)
 	     )
 	 (when error
-	   ;; (ch/winconf/pop winconf)
+	   (ch/winconf/pop winconf)
 	   (message "%s" error)))))
-
-  ;; Step 0) Separate work from life
-  (defvar ch/org/mode "home")
-
-  (defun ch/org/mode-other ()
-    (pcase ch/org/mode
-      ("home" "work")
-      ("work" "home")))
-
-  (defun ch/org/swap-mode ()
-    (interactive)
-    (let ((new-mode
-	   (setq ch/org/mode (ch/org/mode-other))))
-      (message "Now in mode `%s`." new-mode)))
 
   ;;
   ;; Step 1. Temporal!
@@ -187,10 +167,48 @@
   ;; - Oneday = things that I'm putting off
   ;; - Logbook = things which have been done recently
   ;;
+  (defvar test-heading nil)
+
+  (defun ch/org/todo-sort/todo-keyword (headline)
+    (let* ((todo-keyword (plist-get (cadr headline) :todo-keyword))
+	   (start 0)
+	   (end (length todo-keyword)))
+      (set-text-properties start end nil todo-keyword)
+      todo-keyword))
+
+  (defun ch/org/todo-sort/todo-keyword-cmp (headline)
+    (let ((todo-keyword (ch/org/todo-sort/todo-keyword headline)))
+      (pcase todo-keyword
+	("NEXT" 0)
+	("TODO" 1)
+	("DONE" 2))))
+
+  (defun ch/org/todo-sort/cmp-todo-keyword (headline1 headline2)
+    (let ((headline1-cmp (ch/org/todo-sort/todo-keyword-cmp headline1))
+	  (headline2-cmp (ch/org/todo-sort/todo-keyword-cmp headline2)))
+      (pcase (- headline1-cmp headline2-cmp)
+	((pred (< 0)) 1)
+	((pred (> 0)) -1)
+	(0 0))))
+
+  (defun ch/org/todo-sort (headline1 headline2)
+    (cl-block "todo-sort"
+      (cl-ecase (ch/org/todo-sort/cmp-todo-keyword headline1 headline2)
+	(-1 (cl-return-from "todo-sort" nil))
+	(1 (cl-return-from "todo-sort" t))
+	(0 nil))))
+
   (defun ch/org/go-today ()
     (interactive)
     (ch/org/go
-      (org-agenda nil "a")))
+      (org-ql-search
+	(ch/org/files)
+	'(or (and (todo)
+		  (scheduled :to today))
+	     (and (done)
+		  (closed :on today)))
+	:super-groups '((:auto-map (lambda (item) (ch/org/category))))
+	:sort #'ch/org/todo-sort)))
 
   (defun ch/org/go-anytime ()
     (interactive)
@@ -198,21 +216,21 @@
       (org-ql-search
 	(ch/org/files)
 	`(and (todo)
-	      (not (ts-active))
+	      (not (scheduled))
 	      (not (tags "oneday"))
-	      (not (tags ,(ch/org/mode-other))))
+	      (not (ancestors (todo))))
 	:title "Anytime"
-	:super-groups '((:auto-map (lambda (item) (ch/org/category)))))))
+	:super-groups '((:auto-map (lambda (item) (ch/org/category))))
+	:sort #'ch/org/todo-sort)))
 
   (defun ch/org/go-oneday ()
     (interactive)
     (ch/org/go
       (org-ql-search
 	(ch/org/files)
-	`(and (todo)
+	'(and (todo)
 	      (not (ts-active))
-	      (tags "oneday")
-	      (not (tags ,(ch/org/mode-other))))
+	      (tags "oneday"))
 	:title "Oneday"
 	:super-groups '((:auto-map (lambda (item) (ch/org/category)))))))
 
@@ -221,10 +239,10 @@
     (ch/org/go
       (org-ql-search
 	(ch/org/files)
-	`(and (done)
-	      (not (tags ,(ch/org/mode-other))))
-	:title "Inbox"
-	:sort 'date ;; TODO: descending?
+	'(done)
+	:title "Logbook"
+	:sort '(date reverse) ;; TODO: descending:?
+	:super-groups '((:date))
 	)
       ))
 
@@ -306,5 +324,4 @@
 
     ;; Misc
     ("C-c C-w C-q" . ch/winconf/pop)
-    )
-  )
+    ))
