@@ -187,8 +187,8 @@
     (let ((headline1-cmp (ch/org/todo-sort/todo-keyword-cmp headline1))
 	  (headline2-cmp (ch/org/todo-sort/todo-keyword-cmp headline2)))
       (pcase (- headline1-cmp headline2-cmp)
-	((pred (< 0)) 1)
-	((pred (> 0)) -1)
+	((pred (< 0)) -1)
+	((pred (> 0)) 1)
 	(0 0))))
 
   (defun ch/org/todo-sort (headline1 headline2)
