@@ -42,6 +42,8 @@
 
 (ch/pkg languages
   (ch/use-pkgs
+    treesitter
+
     bazel
     clojure
     cpp
