@@ -210,6 +210,16 @@
 	:super-groups '((:auto-map (lambda (item) (ch/org/category))))
 	:sort #'ch/org/todo-sort)))
 
+  (defun ch/org/go-upcoming ()
+    (interactive)
+    (ch/org/go
+      (org-ql-search
+	(ch/org/files)
+	'(and (todo)
+	      (scheduled :from today))
+	:super-groups '((:auto-ts))
+	:sort #'ch/org/todo-sort)))
+
   (defun ch/org/go-anytime ()
     (interactive)
     (ch/org/go
@@ -299,6 +309,7 @@
   (ch/crockeo/register-keys
     ;; Temporal
     ("C-c C-w C-t" . ch/org/go-today)
+    ("C-c C-w C-u" . ch/org/go-upcoming)
     ("C-c C-w C-a" . ch/org/go-anytime)
     ("C-c C-w C-o" . ch/org/go-oneday)
     ("C-c C-w C-l" . ch/org/go-logbook)
