@@ -216,7 +216,8 @@
       (org-ql-search
 	(ch/org/files)
 	'(and (todo)
-	      (scheduled :from today))
+	      (or (scheduled :from today)
+		  (deadline :from today)))
 	:super-groups '((:auto-ts))
 	:sort #'ch/org/todo-sort)))
 
@@ -227,6 +228,7 @@
 	(ch/org/files)
 	`(and (todo)
 	      (not (scheduled))
+	      (not (deadline))
 	      (not (tags "oneday"))
 	      (not (ancestors (todo))))
 	:title "Anytime"
