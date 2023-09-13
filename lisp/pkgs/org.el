@@ -203,10 +203,8 @@
     (ch/org/go
       (org-ql-search
 	(ch/org/files)
-	'(or (and (todo)
-		  (scheduled :to today))
-	     (and (done)
-		  (closed :on today)))
+	'(and (todo)
+	      (scheduled :on today))
 	:super-groups '((:auto-map (lambda (item) (ch/org/category))))
 	:sort #'ch/org/todo-sort)))
 
