@@ -59,7 +59,11 @@
 
     :config
     (evil-define-key 'normal org-mode-map
-      (kbd "<tab>") #'ch/org/cycle))
+      (kbd "<tab>") #'ch/org/cycle)
+
+    (setq org-capture-templates
+	  `(("t" "TODO" entry (file+headline ,(concat ch/org/directory "inbox.org") "Tasks")
+	     "* TODO %?\n"))))
 
   (use-package org-autolist
     :after org
@@ -306,22 +310,36 @@
     (interactive)
     (org-roam-refile))
 
-  (ch/crockeo/register-keys
-    ;; Temporal
-    ("C-c C-w C-t" . ch/org/go-today)
-    ("C-c C-w C-u" . ch/org/go-upcoming)
-    ("C-c C-w C-a" . ch/org/go-anytime)
-    ("C-c C-w C-o" . ch/org/go-oneday)
-    ("C-c C-w C-l" . ch/org/go-logbook)
+  (defun ch/org/go-todo-candidates ()
+    (mapcar
+     (lambda (headline)
+       (list (org-element-property :raw-value headline)
+	     (org-element-property :org-marker headline)))
+     (org-ql-select (ch/org/files)
+       '(todo)
+       :action 'element-with-markers)))
 
-    ;; Spatial
+  (defun ch/org/go-todo ()
+    (interactive)
+    (ch/org/go
+     (ivy-read "Goto: " (ch/org/go-todo-candidates)
+	       :action (lambda (x) (org-goto-marker-or-bmk (cadr x)))
+	       :caller 'ch/org/go-todo)))
+
+  (ch/crockeo/register-keys
+    ("C-c C-w C-a" . ch/org/go-anytime)
     ("C-c C-w C-c" . ch/org/capture)
     ("C-c C-w C-f" . ch/org/go-find-node)
+    ("C-c C-w C-g" . ch/org/go-todo)
     ("C-c C-w C-i" . ch/org/go-inbox)
     ("C-c C-w C-k" . ch/org/go-find-knowledge)
+    ("C-c C-w C-l" . ch/org/go-logbook)
     ("C-c C-w C-m" . ch/org/refile)
+    ("C-c C-w C-o" . ch/org/go-oneday)
     ("C-c C-w C-p" . ch/org/go-find-project)
-
-    ;; Misc
     ("C-c C-w C-q" . ch/winconf/pop)
-    ))
+    ("C-c C-w C-t" . ch/org/go-today)
+    ("C-c C-w C-u" . ch/org/go-upcoming)
+    ("C-c C-w C-x" . org-archive-subtree)
+    )
+  )
