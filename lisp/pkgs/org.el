@@ -185,7 +185,8 @@
       (pcase todo-keyword
 	("NEXT" 0)
 	("TODO" 1)
-	("DONE" 2))))
+	("DONE" 2)
+	(_ (error "Invalid todo-keyword. Is there a naked TODO without a headline?")))))
 
   (defun ch/org/todo-sort/cmp-todo-keyword (headline1 headline2)
     (let ((headline1-cmp (ch/org/todo-sort/todo-keyword-cmp headline1))
@@ -208,7 +209,7 @@
       (org-ql-search
 	(ch/org/files)
 	'(and (todo)
-	      (scheduled :on today))
+	      (scheduled :to today))
 	:super-groups '((:auto-map (lambda (item) (ch/org/category))))
 	:sort #'ch/org/todo-sort)))
 
