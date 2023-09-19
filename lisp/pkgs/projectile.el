@@ -25,6 +25,15 @@
 
 	  project-dirs))))
 
+  (defun ch/projectile/current-file ()
+    (file-relative-name (buffer-file-name) (projectile-project-root)))
+
+  (defun ch/projectile/copy-current-file ()
+    (interactive)
+    (let ((filename (ch/projectile/current-file)))
+      (kill-new filename)
+      (message "Copied to clipboard: '%s'" filename)))
+
   (use-package projectile
     :init
     (setq projectile-project-search-path

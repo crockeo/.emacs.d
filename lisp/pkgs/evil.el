@@ -117,6 +117,7 @@
       (kbd "C-c p f") 'counsel-projectile-find-file
       ;; TODO: come back and use counsel
       ;; after i figure out performance issues
+      (kbd "C-c p c") 'ch/projectile/copy-current-file
       (kbd "C-c p p") 'projectile-switch-project
       (kbd "C-c p r") 'projectile-discover-projects-in-search-path
       (kbd "C-c p s") 'projectile-replace-regexp
