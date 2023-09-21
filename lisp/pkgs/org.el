@@ -148,17 +148,18 @@
 
   (defmacro ch/org/go (&rest body)
     (declare (indent defun))
-    `(let ((winconf (current-window-configuration))
-	   (error nil))
-       (unwind-protect
-	   (progn
-	     ,@body
-	     (delete-other-windows)
-	     (ch/winconf/save winconf)
-	     )
-	 (when error
-	   (ch/winconf/pop winconf)
-	   (message "%s" error)))))
+    `(if ch/winconf/state
+	 (progn ,@body)
+       (let ((winconf (current-window-configuration))
+	     (error nil))
+	 (unwind-protect
+	     (progn
+	       ,@body
+	       (delete-other-windows)
+	       (ch/winconf/save winconf))
+	   (when error
+	     (ch/winconf/pop winconf)
+	     (message "%s" error))))))
 
   ;;
   ;; Step 1. Temporal!
