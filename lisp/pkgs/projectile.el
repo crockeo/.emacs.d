@@ -38,7 +38,9 @@
     :init
     (setq projectile-project-search-path
 	  `((,(expand-file-name "~/src/") . 2)))
-    (projectile-discover-projects-in-search-path))
+    (projectile-discover-projects-in-search-path)
+    :config
+    (setq projectile-indexing-method 'alien))
 
   (use-package counsel-projectile
     :after (ivy projectile)
