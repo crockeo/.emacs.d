@@ -1,6 +1,6 @@
 ;;; early-init.el -*- lexical-binding: t; -*-
 
-(setq gc-cons-threshold (* 1024 1024 1024)) ;; 1GB
+(setq gc-cons-threshold (* 4 1024 1024 1024)) ;; 4GB
 
 (setq frame-inhibit-implied-resize t
       menu-bar-mode nil
