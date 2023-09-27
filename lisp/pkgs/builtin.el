@@ -8,6 +8,10 @@
   ;; see .zshrc for info
   (setenv "EMACS" "true")
 
+  ;; In general: use spaces.
+  ;; Can use tabs for specific modes.
+  (setq-default indent-tabs-mode nil)
+
   (defun ch/builtin/set-font (font-size)
     (condition-case nil
 	(set-face-attribute 'default nil
