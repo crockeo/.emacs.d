@@ -10,17 +10,6 @@
 	       ,@body))
 	  states)))
 
-  (defun ch/evil/start-of-line ()
-    (interactive)
-    (evil-first-non-blank))
-
-  (defun ch/evil/end-of-line ()
-    (interactive)
-    (evil-end-of-line)
-    (unless (or (eq evil-state 'visual)
-		(equal "" (buffer-substring (line-beginning-position) (line-end-position))))
-      (forward-char)))
-
   (defun ch/evil/last-file-buffer ()
     (interactive)
     (let* ((file-buffers (seq-filter #'buffer-file-name (buffer-list)))
@@ -76,8 +65,8 @@
     (evil-set-initial-state 'xref--xref-buffer-mode 'emacs)
 
     (ch/evil/define-key-all (evil-insert-state-map evil-normal-state-map evil-visual-state-map)
-      "\C-a" 'ch/evil/start-of-line
-      "\C-e" 'ch/evil/end-of-line)
+      "\C-a" 'evil-first-non-blank-of-visual-line
+      "\C-e" 'evil-end-of-visual-line)
 
     (evil-define-key nil evil-insert-state-map
       "\C-f" 'evil-normal-state
@@ -114,9 +103,7 @@
       (kbd "C-c l p") 'ch/builtin/toggle-present
 
       (kbd "C-c p a") 'counsel-projectile-ag
-      (kbd "C-c p f") 'counsel-projectile-find-file
-      ;; TODO: come back and use counsel
-      ;; after i figure out performance issues
+      (kbd "C-c p f") 'projectile-find-file
       (kbd "C-c p c") 'ch/projectile/copy-current-file
       (kbd "C-c p p") 'projectile-switch-project
       (kbd "C-c p r") 'projectile-discover-projects-in-search-path
@@ -136,5 +123,16 @@
       (kbd "C-s C-o") 'other-window
       (kbd "C-s %") 'split-window-right
       (kbd "C-s \"") 'split-window-below))
+
+  ;; For some reason evil-respect-visual-line-mode isn't working for me,
+  ;; so instead of debugging why I'm just doing the Emacs(tm) thing:
+  (defun ch/evil/respect-visual-line (visual-fn)
+    (lambda (orig-func &rest args)
+      (if visual-line-mode
+          (apply visual-fn args)
+        (apply orig-func args))))
+
+  (advice-add 'evil-next-line :around (ch/evil/respect-visual-line #'evil-next-visual-line))
+  (advice-add 'evil-previous-line :around (ch/evil/respect-visual-line #'evil-previous-visual-line))
 
   (use-package evil-nerd-commenter))
