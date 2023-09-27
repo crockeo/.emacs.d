@@ -31,6 +31,7 @@
        (concat
 	"\n\n"
 	(org-agenda-format-date-aligned date))))
+    (org-agenda-restore-windows-after-quit t)
     (org-auto-align-tags nil)
     (org-capture-bookmark nil)
     (org-default-notes-file (concat ch/org/directory "inbox.org"))
@@ -40,13 +41,14 @@
     (org-link-descriptive t)
     (org-log-done 'time)
     (org-log-repeat nil)
-    (org-startup-folded t)
+    (org-startup-folded 'content)
     (org-startup-truncated nil)
     (org-tags-column 0)
     (org-tags-exclude-from-inheritance '("project" "area" "reference"))
-    (org-todo-keywords '((sequence "TODO" "NEXT" "|" "DONE")))
+    (org-todo-keywords '((sequence "TODO" "NEXT" "WAITING" "|" "DONE")))
     (org-todo-keyword-faces '(("TODO" . org-todo)
 			      ("NEXT" . org-warning)
+			      ("WAITING" . org-agenda-dimmed-todo-face)
 			      ("DONE" . org-done)))
 
     :custom-face
@@ -94,11 +96,13 @@
   (defun ch/org/config ()
     (diff-hl-mode -1)
     (display-line-numbers-mode -1)
+    (visual-line-mode t)
     (org-indent-mode))
 
   (defun ch/org/config-agenda ()
     (diff-hl-mode -1)
-    (display-line-numbers-mode -1))
+    (display-line-numbers-mode -1)
+    (visual-line-mode t))
 
   (add-hook 'org-mode-hook #'ch/org/config)
   (add-hook 'org-agenda-finalize-hook #'ch/org/config-agenda)
@@ -186,7 +190,8 @@
       (pcase todo-keyword
 	("NEXT" 0)
 	("TODO" 1)
-	("DONE" 2)
+	("WAITING" 2)
+	("DONE" 3)
 	(_ (error "Invalid todo-keyword. Is there a naked TODO without a headline?")))))
 
   (defun ch/org/todo-sort/cmp-todo-keyword (headline1 headline2)
@@ -210,7 +215,8 @@
       (org-ql-search
 	(ch/org/files)
 	'(and (todo)
-	      (scheduled :to today))
+	      (or (scheduled :to today)
+		  (deadline :to today)))
 	:super-groups '((:auto-map (lambda (item) (ch/org/category))))
 	:sort #'ch/org/todo-sort)))
 
@@ -220,8 +226,7 @@
       (org-ql-search
 	(ch/org/files)
 	'(and (todo)
-	      (or (scheduled :from today)
-		  (deadline :from today)))
+	      (or (scheduled) (deadline)))
 	:super-groups '((:auto-ts))
 	:sort #'ch/org/todo-sort)))
 
@@ -324,9 +329,14 @@
   (defun ch/org/go-todo ()
     (interactive)
     (ch/org/go
-     (ivy-read "Goto: " (ch/org/go-todo-candidates)
-	       :action (lambda (x) (org-goto-marker-or-bmk (cadr x)))
-	       :caller 'ch/org/go-todo)))
+      (ivy-read "Goto: " (ch/org/go-todo-candidates)
+		:action (lambda (x) (org-goto-marker-or-bmk (cadr x)))
+		:caller 'ch/org/go-todo)))
+
+  (defun ch/org/go-search ()
+    (interactive)
+    (ch/org/go
+      (counsel-ag "" ch/org/directory)))
 
   (ch/crockeo/register-keys
     ("C-c C-w C-a" . ch/org/go-anytime)
@@ -340,6 +350,7 @@
     ("C-c C-w C-o" . ch/org/go-oneday)
     ("C-c C-w C-p" . ch/org/go-find-project)
     ("C-c C-w C-q" . ch/winconf/pop)
+    ("C-c C-W C-s" . ch/org/go-search)
     ("C-c C-w C-t" . ch/org/go-today)
     ("C-c C-w C-u" . ch/org/go-upcoming)
     ("C-c C-w C-x" . org-archive-subtree)
