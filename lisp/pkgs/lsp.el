@@ -1,12 +1,26 @@
 ;;; lsp.el -*- lexical-binding: t; -*-
 
 (ch/pkg lsp
-  (use-package lsp-mode)
+  ;; Setting to make LSP faster.
+  ;; Set before anything else to make sure that it gets included.
+  (setenv "LSP_USE_PLISTS" "true")
+  (setq lsp-use-plists t)
+
+  (use-package lsp-mode
+    :config
+    (setq lsp-enable-on-type-formatting nil
+	  lsp-enable-snippet nil
+	  lsp-enable-symbol-highlighting nil
+	  lsp-headerline-breadcrumb-enable nil
+	  lsp-idle-delay 0.25
+	  lsp-modeline-diagnostics-scope :file))
+
   (use-package lsp-ui
     :config
-    (setq lsp-ui-doc-show-with-cursor t))
-  (use-package lsp-ivy)
-  (use-package lsp-treemacs)
+    (setq lsp-ui-doc-position 'top
+          lsp-ui-doc-show-with-cursor t
+	  lsp-ui-doc-show-with-mouse nil))
+
   (use-package lsp-pyright)
 
   (with-eval-after-load 'lsp-mode
