@@ -41,7 +41,7 @@
   (setq backup-directory-alist `(("." . ,(concat user-emacs-directory "backups")))
 	exec-path (split-string (getenv "PATH") ":")
 	inhibit-startup-screen t
-	read-process-output-max (* 1024 1024 4) ;; 2MB
+	read-process-output-max (* 1024 1024 4) ;; 4MB
 	ring-bell-function 'ignore)
 
   (defun get-shell-path-entries ()
@@ -57,8 +57,10 @@
 	(buffer-string)))
      ":"))
 
-  (dolist (path (get-shell-path-entries))
-    (push path exec-path))
+  (let ((shell-path-entries (get-shell-path-entries)))
+    (setenv "PATH" (string-join shell-path-entries ":"))
+    (dolist (path shell-path-entries)
+      (push path exec-path)))
 
   (setq auto-save-file-name-transforms
 	'((".*" "~/.emacs.d/autosave/" t)))
