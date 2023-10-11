@@ -26,10 +26,11 @@
 
   (defun ch/evil/kill-buffer (buffer)
     (when (buffer-live-p buffer)
-      (with-current-buffer buffer
-	(let ((server (eglot-current-server)))
-	  (when server
-	    (eglot-shutdown server))))
+      ;; TODO(crockeo): fix this :(
+      ;; (with-current-buffer buffer
+      ;;   (let ((server (eglot-current-server)))
+      ;;     (when server
+      ;;       (eglot-shutdown server))))
       (kill-buffer buffer)))
 
   (defun ch/evil/kill-buffers ()
@@ -103,7 +104,7 @@
 
       (kbd "C-c k") 'ch/evil/kill-buffers
 
-      (kbd "C-c s") 'eglot-format
+      (kbd "C-c s") 'lsp-format-buffer
 
       (kbd "C-c t j") 'json-pretty-print
 

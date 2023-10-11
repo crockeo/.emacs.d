@@ -12,7 +12,6 @@
  ("dockerfile-mode" . "52c6c00da1d31c0b6c29c74335b3af63ed6bf06c")
  ("doom-modeline" . "66ccd690a5fa5925c21dda16e8aa224a0d8dbb24")
  ("dtrt-indent" . "be07f4979a5b402a0cf5311c86c30b89ca0e1ee4")
- ("eglot" . "8b5532dd32b25276c1857508030b207f765ef9b6")
  ("el-get" . "e1a3e59d800984ed7ef10469232b59b60244ae90")
  ("eldoc" . "a2aaed2b7c70c1f28dd212fe2f4304ce89c338d7")
  ("emacs-bazel-mode" . "c588c041004dff22ac1ba989a91ca01daefe459a")

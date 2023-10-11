@@ -3,4 +3,5 @@
 (ch/pkg elixir
   (use-package elixir-ts-mode
     :init
-    (add-hook 'elixir-ts-mode-hook #'lsp-deferred)))
+    (add-hook 'elixir-ts-mode-hook #'lsp-deferred)
+    (add-to-list 'exec-path (expand-file-name "~/bin/elixir-ls-folder/"))))
