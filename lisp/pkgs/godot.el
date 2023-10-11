@@ -7,4 +7,4 @@
                :host github
                :repo "godotengine/emacs-gdscript-mode"))
 
-  (add-hook 'gdscript-mode-hook #'eglot-ensure))
+  (add-hook 'gdscript-mode-hook #'lsp-deferred))

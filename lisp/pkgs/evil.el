@@ -48,14 +48,6 @@
       (kill-new file-link)
       (message "copied link: %s" file-link)))
 
-  (defun ch/evil/complete ()
-    (interactive)
-    (if (copilot-current-completion)
-	(copilot-accept-completion)
-      (company-complete)
-      )
-    )
-
   (use-package undo-fu)
 
   ;; TODO: move global hotkeys over to crockeo.el instead
@@ -70,7 +62,7 @@
 
     (evil-define-key nil evil-insert-state-map
       "\C-f" 'evil-normal-state
-      (kbd "C-SPC") 'ch/evil/complete)
+      (kbd "C-SPC") 'company-complete)
 
     (evil-define-key nil evil-normal-state-map
       ";" 'ch/evil/last-file-buffer
@@ -90,11 +82,11 @@
       (kbd "C-c i u") 'ch/org/upload-files
 
       (kbd "C-c j b") 'xref-go-back
-      (kbd "C-c j d") 'eglot-code-actions
-      (kbd "C-c j g") 'xref-find-definitions
-      (kbd "C-c j i") 'eglot-find-implementation
-      (kbd "C-c j q") 'eglot-rename
-      (kbd "C-c j r") 'xref-find-references
+      (kbd "C-c j d") 'lsp-code-actions-at-point
+      (kbd "C-c j g") 'lsp-find-definition
+      (kbd "C-c j i") 'lsp-find-implementation
+      (kbd "C-c j q") 'lsp-rename
+      (kbd "C-c j r") 'lsp-find-references
 
       (kbd "C-c n d") 'org-roam-dailies-capture-today
       (kbd "C-c n t") 'org-roam-dailies-capture-tomorrow

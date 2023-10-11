@@ -19,7 +19,6 @@
     evil
     flycheck
     diff-hl
-    dired-sidebar
     doom-modeline
     dtrt-indent
     ivy
@@ -34,8 +33,8 @@
     ;; and if copilot imports the built-in org
     ;; then emacs gets sad :(
     org
-    copilot
     projectile
+    treemacs
     vterm
     which-key
     winconf))
@@ -48,6 +47,7 @@
     clojure
     cpp
     dockerfile
+    elixir
     go
     godot
     javascript
@@ -67,5 +67,5 @@
   core
   interface
   languages
-  eglot
+  lsp
   )

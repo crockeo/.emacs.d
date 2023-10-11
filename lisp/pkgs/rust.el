@@ -3,4 +3,4 @@
 (ch/pkg rust
   (use-package rust-mode
     :config
-    :hook (rust-mode . eglot-ensure)))
+    :hook (rust-mode . lsp-deferred)))

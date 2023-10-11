@@ -29,8 +29,6 @@
     (let ((venv-dir (concat (projectile-project-root) "venv")))
       (when (file-directory-p venv-dir)
 	(pyvenv-activate venv-dir))
-      (eglot-ensure)))
+      (lsp-deferred)))
 
-  (add-hook 'python-mode-hook #'ch/python/start-lsp)
-
-  )
+  (add-hook 'python-mode-hook #'ch/python/start-lsp))
