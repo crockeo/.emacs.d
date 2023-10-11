@@ -1,28 +1,34 @@
 #!/usr/bin/env python3
 
+import contextlib
 import subprocess
 import sys
 from pathlib import Path
 
 
-EMACS_SHA = "db106ea88b41e7b293f18a587cbe43685cb769a6"
+# Emacs 29.1 stable release
+EMACS_SHA = "a9b28224af0f73d1fe0f422e9b318c5b91af889b"
 EMACS_DIR = Path.cwd() / "emacs"
 
 
 def fetch_sha():
     if not (EMACS_DIR / ".git").exists():
+        EMACS_DIR.mkdir(exist_ok=True)
         subprocess.run(["git", "init"], check=True, cwd=EMACS_DIR)
 
-    current_sha = subprocess.run(
-        ["git", "rev-parse", "HEAD"],
-        check=True,
-        cwd=EMACS_DIR,
-        stdout=subprocess.PIPE,
-        text=True,
-    )
-    current_sha_str = current_sha.stdout.strip()
-    if current_sha_str == EMACS_SHA:
-        return
+    try:
+        current_sha = subprocess.run(
+            ["git", "rev-parse", "HEAD"],
+            check=True,
+            cwd=EMACS_DIR,
+            stdout=subprocess.PIPE,
+            text=True,
+        )
+        current_sha_str = current_sha.stdout.strip()
+        if current_sha_str == EMACS_SHA:
+            return
+    except subprocess.CalledProcessError:
+        pass
 
     git_remote = subprocess.run(
         ["git", "remote"],
@@ -63,13 +69,13 @@ def fetch_dependencies():
         [
             "brew",
             "install",
-	    "autoconf",
+            "autoconf",
             "cmake",
             "gcc",
-	    "gnutls",
-	    "jansson",
-	    "libgccjit",
-	    "texinfo",
+            "gnutls",
+            "jansson",
+            "libgccjit",
+            "texinfo",
         ],
         check=True,
     )
