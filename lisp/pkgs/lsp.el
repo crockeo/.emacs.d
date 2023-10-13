@@ -13,7 +13,10 @@
 	  lsp-enable-symbol-highlighting nil
 	  lsp-headerline-breadcrumb-enable nil
 	  lsp-idle-delay 0.25
-	  lsp-modeline-diagnostics-scope :file))
+	  lsp-modeline-diagnostics-scope :file)
+
+    ;; Disable semgrep-ls, because it makes everything run slowwwwwly.
+    (setq lsp-semgrep-languages nil))
 
   (use-package lsp-ui
     :config
@@ -21,7 +24,10 @@
           lsp-ui-doc-show-with-cursor t
 	  lsp-ui-doc-show-with-mouse nil))
 
-  (use-package lsp-pyright)
+  (use-package lsp-pyright
+    :config
+    (setq lsp-pyright-multi-root nil)
+    )
 
   (with-eval-after-load 'lsp-mode
     ;; Ignore `venv` folders for watching files.
@@ -30,10 +36,10 @@
 	(push venv-str lsp-file-watch-ignored-directories)))
 
     ;; Prevent lsp-mode from opening all folders
-    ;; (advice-add
-    ;;  'lsp
-    ;;  :before
-    ;;  (lambda (&rest _args)
-    ;;    (setf (lsp-session-server-id->folders (lsp-session))
-    ;;          (ht))))
+    (advice-add
+     'lsp
+     :before
+     (lambda (&rest _args)
+       (setf (lsp-session-server-id->folders (lsp-session))
+             (ht))))
     ))

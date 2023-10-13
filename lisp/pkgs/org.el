@@ -296,7 +296,7 @@
        ""
        (ch/org/roam-node-predicate
 	'("project")
-	ch/org/go-blocklist))))
+	`("oneday" ,@ch/org/go-blocklist)))))
 
   (defun ch/org/go-find-knowledge ()
     (interactive)
