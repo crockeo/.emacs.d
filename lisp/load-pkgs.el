@@ -34,7 +34,6 @@
     ;; then emacs gets sad :(
     org
     projectile
-    treemacs
     vterm
     which-key
     winconf))
