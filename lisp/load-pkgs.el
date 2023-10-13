@@ -16,6 +16,7 @@
   (ch/use-pkgs
     crockeo
     company
+    dired-sidebar
     evil
     flycheck
     diff-hl
