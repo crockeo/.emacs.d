@@ -56,6 +56,7 @@
     :init (evil-mode 1)
     :config
     (evil-set-initial-state 'xref--xref-buffer-mode 'emacs)
+    (evil-set-leader 'normal (kbd "SPC"))
 
     (ch/evil/define-key-all (evil-insert-state-map evil-normal-state-map evil-visual-state-map)
       "\C-a" 'evil-first-non-blank-of-visual-line
@@ -96,7 +97,9 @@
       (kbd "C-c l p") 'ch/builtin/toggle-present
 
       (kbd "C-c p a") 'counsel-projectile-ag
+      (kbd "<leader>/") 'counsel-projectile-ag
       (kbd "C-c p f") 'projectile-find-file
+      (kbd "<leader>f") 'projectile-find-file
       (kbd "C-c p c") 'ch/projectile/copy-current-file
       (kbd "C-c p p") 'projectile-switch-project
       (kbd "C-c p r") 'projectile-discover-projects-in-search-path
