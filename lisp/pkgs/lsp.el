@@ -5,6 +5,7 @@
   ;; Set before anything else to make sure that it gets included.
   (setenv "LSP_USE_PLISTS" "true")
   (setq lsp-use-plists t)
+  (setq lsp-pyright-multi-root nil)
 
   (use-package lsp-mode
     :config
@@ -24,10 +25,8 @@
           lsp-ui-doc-show-with-cursor t
 	  lsp-ui-doc-show-with-mouse nil))
 
-  (use-package lsp-pyright
-    :config
-    (setq lsp-pyright-multi-root nil)
-    )
+
+  (use-package lsp-pyright)
 
   (with-eval-after-load 'lsp-mode
     ;; Ignore `venv` folders for watching files.
@@ -35,11 +34,11 @@
       (unless (member venv-str lsp-file-watch-ignored-directories)
 	(push venv-str lsp-file-watch-ignored-directories)))
 
-    ;; Prevent lsp-mode from opening all folders
-    (advice-add
-     'lsp
-     :before
-     (lambda (&rest _args)
-       (setf (lsp-session-server-id->folders (lsp-session))
-             (ht))))
+    ;; ;; Prevent lsp-mode from opening all folders
+    ;; (advice-add
+    ;;  'lsp
+    ;;  :before
+    ;;  (lambda (&rest _args)
+    ;;    (setf (lsp-session-server-id->folders (lsp-session))
+    ;;          (ht))))
     ))
