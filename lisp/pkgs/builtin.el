@@ -87,8 +87,12 @@
       (garbage-collect)
       (setq gc-cons-threshold original-gc-cons-threshold)))
 
+  (defun ch/builtin/garbage-collect-worker ()
+    (ch/builtin/garbage-collect)
+    (run-with-idle-timer 60 nil #'ch/builtin/garbage-collect-worker))
+
   (add-hook 'focus-out-hook #'ch/builtin/garbage-collect)
-  (run-with-idle-timer 1 t #'ch/builtin/garbage-collect)
+  (run-with-idle-timer 60 t #'ch/builtin/garbage-collect-worker)
 
   (global-auto-revert-mode 1)
   (global-display-line-numbers-mode 1)
