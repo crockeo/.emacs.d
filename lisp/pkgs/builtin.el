@@ -83,12 +83,13 @@
 
   (defun ch/builtin/garbage-collect ()
     (let ((original-gc-cons-threshold gc-cons-threshold))
-      (setq gc-cons-threshold (* 1024 1024)) ;; 1MB
+      (setq gc-cons-threshold (* 200 1024 1024)) ;; 200MB
       (garbage-collect)
       (setq gc-cons-threshold original-gc-cons-threshold)))
 
   (defun ch/builtin/garbage-collect-worker ()
-    (ch/builtin/garbage-collect)
+    (when (> (float-time (or (current-idle-time) 0)) 60)
+      (ch/builtin/garbage-collect))
     (run-with-idle-timer 60 nil #'ch/builtin/garbage-collect-worker))
 
   (add-hook 'focus-out-hook #'ch/builtin/garbage-collect)
