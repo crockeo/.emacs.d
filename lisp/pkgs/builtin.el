@@ -87,13 +87,20 @@
       (garbage-collect)
       (setq gc-cons-threshold original-gc-cons-threshold)))
 
+  (defvar ch/builtin/garbage-collect-periodicity-seconds 60)
+
   (defun ch/builtin/garbage-collect-worker ()
-    (when (> (float-time (or (current-idle-time) 0)) 60)
-      (ch/builtin/garbage-collect))
-    (run-with-idle-timer 60 nil #'ch/builtin/garbage-collect-worker))
+    (let ((idle-time (float-time (or (current-idle-time) 0))))
+      (when (> idle-time ch/builtin/garbage-collect-periodicity-seconds)
+        (message "Background garbage collection: %s" (current-time-string))
+        (ch/builtin/garbage-collect))
+      (run-with-idle-timer
+       (+ idle-time ch/builtin/garbage-collect-periodicity-seconds)
+       nil
+       #'ch/builtin/garbage-collect-worker)))
 
   (add-hook 'focus-out-hook #'ch/builtin/garbage-collect)
-  (run-with-idle-timer 60 t #'ch/builtin/garbage-collect-worker)
+  (run-with-idle-timer 60 nil #'ch/builtin/garbage-collect-worker)
 
   (global-auto-revert-mode 1)
   (global-display-line-numbers-mode 1)
