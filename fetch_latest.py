@@ -76,6 +76,7 @@ def fetch_dependencies():
             "jansson",
             "libgccjit",
             "texinfo",
+            "tree-sitter",
         ],
         check=True,
     )
@@ -96,6 +97,7 @@ def compile():
             "--with-cairo",
             "--with-json",
             "--with-native-compilation",
+            "--with-tree-sitter",
             "--with-x",
             "--without-mailutils",
             "CFLAGS=-O3 -mtune=native -fomit-frame-pointer -I/opt/homebrew/include",
