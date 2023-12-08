@@ -82,7 +82,11 @@
    )
 
   (defun ch/builtin/garbage-collect ()
-    (message "Background garbage collection: %s" (current-time-string))
+    ;; NOTE: can make this `when t` to debug background garbage collection.
+    ;; But it seems to be working pretty well :)
+    (when nil
+      (message "Background garbage collection: %s" (current-time-string)))
+
     (let ((original-gc-cons-threshold gc-cons-threshold))
       (setq gc-cons-threshold (* 200 1024 1024)) ;; 200MB
       (garbage-collect)
