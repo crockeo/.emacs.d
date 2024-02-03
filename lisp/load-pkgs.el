@@ -57,6 +57,7 @@
     proto
     python
     rust
+    swift
     terraform
     yaml
     zig
