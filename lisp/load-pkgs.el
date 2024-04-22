@@ -32,6 +32,7 @@
     org
     copilot
     prescient
+    project
     which-key
     winconf))
 
