@@ -49,6 +49,15 @@
       (kill-new file-link)
       (message "copied link: %s" file-link)))
 
+  (defun ch/evil/complete ()
+    (interactive)
+    (let ((has-copilot (and (fboundp 'copilot-current-completion)
+                            (fboundp 'copilot-accept-completion))))
+      (if (and has-copilot
+               (copilot-current-completion))
+          (copilot-accept-completion)
+        (company-complete))))
+
   (use-package undo-fu)
 
   ;; TODO: move global hotkeys over to crockeo.el instead
@@ -64,7 +73,7 @@
 
     (evil-define-key nil evil-insert-state-map
       "\C-f" 'evil-normal-state
-      (kbd "C-SPC") 'company-complete)
+      (kbd "C-SPC") 'ch/evil/complete)
 
     (evil-define-key nil evil-normal-state-map
       ";" 'ch/evil/last-file-buffer
@@ -98,7 +107,7 @@
 
       (kbd "C-c p a") 'counsel-projectile-ag
       (kbd "<leader>/") 'counsel-projectile-ag
-      (kbd "C-c p f") 'projectile-find-file
+      (kbd "C-c p f") 'counsel-projectile-find-file
       (kbd "<leader>f") 'projectile-find-file
       (kbd "C-c p c") 'ch/projectile/copy-current-file
       (kbd "C-c p p") 'projectile-switch-project

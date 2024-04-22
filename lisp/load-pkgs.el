@@ -34,6 +34,7 @@
     ;; and if copilot imports the built-in org
     ;; then emacs gets sad :(
     org
+    copilot
     projectile
     vterm
     which-key
