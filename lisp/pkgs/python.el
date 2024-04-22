@@ -26,7 +26,7 @@
   (defun ch/python/start-lsp ()
     (interactive)
 
-    (let ((venv-dir (concat (projectile-project-root) "venv")))
+    (let ((venv-dir (concat (expand-file-name (project-root (project-current))) "venv")))
       (when (file-directory-p venv-dir)
 	(pyvenv-activate venv-dir))
       (lsp-deferred)))

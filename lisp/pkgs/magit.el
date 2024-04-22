@@ -28,10 +28,4 @@
 
     ;; don't see diff when comitting.
     (remove-hook 'server-switch-hook 'magit-commit-diff)
-    (remove-hook 'with-editor-filter-visit-hook 'magit-commit-diff))
-
-  (advice-add
-   'magit-clone-internal
-   :after
-   (lambda (&rest _args)
-     (projectile-discover-projects-in-search-path))))
+    (remove-hook 'with-editor-filter-visit-hook 'magit-commit-diff)))

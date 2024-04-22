@@ -31,7 +31,7 @@
     ;; then emacs gets sad :(
     org
     copilot
-    projectile
+    prescient
     which-key
     winconf))
 

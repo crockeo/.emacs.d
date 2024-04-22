@@ -105,12 +105,12 @@
       (kbd "C-c l l") 'ch/olivetti/toggle-ensure
       (kbd "C-c l p") 'ch/builtin/toggle-present
 
-      (kbd "C-c p a") 'counsel-projectile-ag
-      (kbd "C-c p f") 'counsel-projectile-find-file
-      (kbd "C-c p c") 'ch/projectile/copy-current-file
-      (kbd "C-c p p") 'projectile-switch-project
-      (kbd "C-c p r") 'projectile-discover-projects-in-search-path
-      (kbd "C-c p s") 'projectile-replace-regexp
+      (kbd "C-c p a") 'counsel-rg
+      (kbd "C-c p f") 'project-find-file
+      (kbd "C-c p c") 'ch/builtin/copy-current-file
+      (kbd "C-c p p") 'project-switch-project
+      (kbd "C-c p r") 'ch/builtin/discover-projects
+      (kbd "C-c p s") 'project-query-replace-regexp
 
       (kbd "C-c k") 'ch/evil/kill-buffers
 

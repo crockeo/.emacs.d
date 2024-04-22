@@ -336,7 +336,7 @@
   (defun ch/org/go-search ()
     (interactive)
     (ch/org/go
-      (counsel-ag "" ch/org/directory)))
+      (counsel-rg "" ch/org/directory)))
 
   (ch/crockeo/register-keys
     ("C-c C-w C-a" . ch/org/go-anytime)
