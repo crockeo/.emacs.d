@@ -39,38 +39,3 @@
 (defmacro ch/use-pkgs (&rest packages)
   (declare (indent defun))
   `(ch/use-pkgs-impl ',packages))
-
-;; Set up some commonly used helper functions.
-(defun ch/vec-to-list (vec)
-  "Capturing this little hack I got from @neeasade
-in a self-documenting function."
-  (append vec nil))
-
-(defmacro ch/callproc (&rest procs)
-  "A simpler version of call-process which doesn't have any of the \
-very valuable cruft that I don't need."
-  `(progn
-     ,@(-map
-	(lambda (args) `(call-process ,(car args) nil nil nil ,@(cdr args)))
-	procs)))
-
-(defmacro ch/under-dir (dir &rest body)
-  "Perform some action while assuming the directory `dir`."
-  (declare (indent defun))
-  `(let ((pwd default-directory)
-	 (result-slot nil))
-     (condition-case err
-	 (progn
-	   (cd ,dir)
-	   (setq result-slot
-	    (progn ,@body))
-	   (cd pwd)
-	   result-slot)
-       (error
-	(progn
-	  (cd pwd)
-	  (signal (car err) (cdr err)))))))
-
-(defmacro ch/comment (&rest body)
-  (declare (indent defun))
-  nil)
