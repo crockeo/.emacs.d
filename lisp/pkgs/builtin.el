@@ -31,10 +31,10 @@
     (if ch/builtin/is-presenting
 	(progn
 	  (setq ch/builtin/is-presenting nil)
-	  (ch/builtin/set-font ch/builtin/presentation-font-size))
+	  (ch/builtin/set-font ch/builtin/normal-font-size))
       (progn
 	(setq ch/builtin/is-presenting t)
-	(ch/builtin/set-font ch/builtin/normal-font-size))))
+	(ch/builtin/set-font ch/builtin/presentation-font-size))))
 
   (ch/builtin/set-font ch/builtin/normal-font-size)
 
@@ -75,7 +75,6 @@
 	    exec-path)))
 
   (setq
-   redisplay-dont-pause t
    scroll-conservatively integer-width
    scroll-margin 4
    scroll-step 1

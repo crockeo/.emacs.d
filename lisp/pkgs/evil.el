@@ -106,9 +106,7 @@
       (kbd "C-c l p") 'ch/builtin/toggle-present
 
       (kbd "C-c p a") 'counsel-projectile-ag
-      (kbd "<leader>/") 'counsel-projectile-ag
       (kbd "C-c p f") 'counsel-projectile-find-file
-      (kbd "<leader>f") 'projectile-find-file
       (kbd "C-c p c") 'ch/projectile/copy-current-file
       (kbd "C-c p p") 'projectile-switch-project
       (kbd "C-c p r") 'projectile-discover-projects-in-search-path
@@ -123,7 +121,6 @@
       "u" 'undo-fu-only-undo
       (kbd "C-r") 'undo-fu-only-redo
 
-      (kbd "C-s C-n") 'ch/evil/vterm
       (kbd "C-s o") 'other-window
       (kbd "C-s C-o") 'other-window
       (kbd "C-s %") 'split-window-right

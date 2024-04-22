@@ -6,25 +6,20 @@
 
 (ch/pkg core
   (ch/use-pkgs
-    applescript
     dash
-    request
     s
     work))
 
 (ch/pkg interface
   (ch/use-pkgs
-    crockeo
     company
     dired-sidebar
     evil
     flycheck
     diff-hl
-    doom-modeline
     dtrt-indent
     ivy
     magit
-    notion
     olivetti
     ;; theme has to sit before org
     ;; because we use modus-themes functions
@@ -36,7 +31,6 @@
     org
     copilot
     projectile
-    vterm
     which-key
     winconf))
 
@@ -45,7 +39,6 @@
     treesitter
 
     bazel
-    clojure
     cpp
     dockerfile
     elixir
