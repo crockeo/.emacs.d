@@ -8,8 +8,8 @@
     ;; something to figure out later
     (setq modus-themes-common-palette-overrides
 	  '((bg-main "#222222")
-	    ,@modus-themes-preset-overrides
-	    )))
+	    ,@modus-themes-preset-overrides))
+    (modus-themes-load-theme 'modus-vivendi))
 
   ;; TODO: re-enable if using circadian again
   ;; (use-package circadian
