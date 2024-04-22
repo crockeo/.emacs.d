@@ -13,6 +13,7 @@
 (ch/pkg interface
   (ch/use-pkgs
     company
+    crockeo
     dired-sidebar
     evil
     flycheck

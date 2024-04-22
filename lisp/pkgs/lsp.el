@@ -3,18 +3,20 @@
 (ch/pkg lsp
   ;; Setting to make LSP faster.
   ;; Set before anything else to make sure that it gets included.
-  (setenv "LSP_USE_PLISTS" "true")
-  (setq lsp-use-plists t)
   (setq lsp-pyright-multi-root nil)
 
   (use-package lsp-mode
+    :init
+    (setq lsp-use-plists t)
+
     :config
-    (setq lsp-enable-on-type-formatting nil
-	  lsp-enable-snippet nil
-	  lsp-enable-symbol-highlighting nil
-	  lsp-headerline-breadcrumb-enable nil
-	  lsp-idle-delay 0.25
-	  lsp-modeline-diagnostics-scope :file)
+    (setq lsp-completion-provider :none
+          lsp-enable-on-type-formatting nil
+          lsp-enable-snippet nil
+          lsp-enable-symbol-highlighting nil
+          lsp-headerline-breadcrumb-enable nil
+          lsp-idle-delay 0.25
+          lsp-modeline-diagnostics-scope :file)
 
     ;; Disable semgrep-ls, because it makes everything run slowwwwwly.
     (setq lsp-semgrep-languages nil))
@@ -24,7 +26,6 @@
     (setq lsp-ui-doc-position 'top
           lsp-ui-doc-show-with-cursor t
 	  lsp-ui-doc-show-with-mouse nil))
-
 
   (use-package lsp-pyright)
 
