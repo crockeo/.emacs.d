@@ -14,12 +14,12 @@
   (ch/use-pkgs
     company
     crockeo
+    selection
     dired-sidebar
     evil
     flycheck
     diff-hl
     dtrt-indent
-    ivy
     magit
     olivetti
     ;; theme has to sit before org

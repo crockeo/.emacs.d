@@ -1,18 +1,27 @@
 ;;; project.el -*- lexical-binding: t; -*-
 
 (ch/pkg project
-  (require 'project)
-  (with-eval-after-load 'project
-    (defun ch/builtin/current-file ()
+  (use-package project
+    :bind
+    (
+     ("C-c p c" . ch/project/copy-current-file)
+     ("C-c p f" . project-find-file)
+     ("C-c p p" . project-switch-project)
+     ("C-c p r" . ch/project/discover-projects)
+     ("C-c p s" . project-query-replace-regexp)
+     )
+
+    :config
+    (defun ch/project/current-file ()
       (file-relative-name (buffer-file-name) (project-root (project-current))))
 
-    (defun ch/builtin/copy-current-file ()
+    (defun ch/project/copy-current-file ()
       (interactive)
-      (let ((filename (ch/builtin/current-file)))
+      (let ((filename (ch/project/current-file)))
         (kill-new filename)
         (message "Copied to clipboard: '%s'" filename)))
 
-    (defun ch/builtin/project-dirs (&optional root-dir depth)
+    (defun ch/project/project-dirs (&optional root-dir depth)
       "Discovers all of the projects under ROOT-DIR."
       (cl-block project-dirs
         (let* ((depth (or depth 0))
@@ -30,17 +39,17 @@
 		  (when (file-directory-p qualified-name)
 		    (setf project-dirs
 			  (append project-dirs
-				  (ch/builtin/project-dirs qualified-name
+				  (ch/project/project-dirs qualified-name
 							   (+ depth 1))))))))
 
 	    project-dirs))))
 
-    (defun ch/builtin/discover-projects ()
+    (defun ch/project/discover-projects ()
       "Discovers all of the projects under the known project roots and adds them to project.el."
       (dolist (project (project-known-project-roots))
         (project-forget-project project))
-      (dolist (project (ch/builtin/project-dirs))
+      (dolist (project (ch/project/project-dirs))
         (project-remember-projects-under project)))
 
-    (ch/builtin/discover-projects)
+    (ch/project/discover-projects)
     (setq project-switch-commands #'project-find-file)))
