@@ -4,6 +4,6 @@
   (use-package copilot
     :after org
     :straight (:host github :repo "zerolfx/copilot.el" :files ("dist" "*.el"))
-    :ensure t)
-
-  (add-hook 'prog-mode-hook #'copilot-mode))
+    :ensure t
+    :bind
+    (("C-c a" . copilot-mode))))
