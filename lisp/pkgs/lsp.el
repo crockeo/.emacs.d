@@ -14,6 +14,7 @@
           lsp-enable-on-type-formatting nil
           lsp-enable-snippet nil
           lsp-enable-symbol-highlighting nil
+          lsp-file-watch-threshold 30000
           lsp-headerline-breadcrumb-enable nil
           lsp-idle-delay 0.25
           lsp-modeline-diagnostics-scope :file)
@@ -33,13 +34,4 @@
     ;; Ignore `venv` folders for watching files.
     (let ((venv-str "[/\\\\]\\venv\\'"))
       (unless (member venv-str lsp-file-watch-ignored-directories)
-	(push venv-str lsp-file-watch-ignored-directories)))
-
-    ;; ;; Prevent lsp-mode from opening all folders
-    ;; (advice-add
-    ;;  'lsp
-    ;;  :before
-    ;;  (lambda (&rest _args)
-    ;;    (setf (lsp-session-server-id->folders (lsp-session))
-    ;;          (ht))))
-    ))
+	(push venv-str lsp-file-watch-ignored-directories)))))
