@@ -1,8 +1,10 @@
 ;;; selection.el -*- lexical-binding: t; -*-
 
 (ch/pkg selection
-  "Provides packages that help with selecting and finding text.
-E.g. finding files in a project, choosing options in a list, etc."
+  "
+  Provides packages that help with selecting and finding text.
+  E.g. finding files in a project, choosing options in a list, etc.
+  "
 
   ;; https://github.com/minad/consult
   (use-package consult

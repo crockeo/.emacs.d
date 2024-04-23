@@ -31,7 +31,6 @@
     ;; then emacs gets sad :(
     org
     copilot
-    prescient
     project
     which-key
     winconf))
