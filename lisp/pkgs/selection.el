@@ -28,4 +28,11 @@
     :init
     (vertico-mode)
     (vertico-multiform-mode))
+
+  ;; https://github.com/oantolin/orderless
+  (use-package orderless
+    :custom
+    (completion-styles '(orderless basic))
+    (completion-category-defaults nil)
+    (completion-category-overrides '((file (styles basic partial-completion)))))
   )
