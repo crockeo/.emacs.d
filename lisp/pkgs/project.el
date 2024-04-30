@@ -46,6 +46,7 @@
 
     (defun ch/project/discover-projects ()
       "Discovers all of the projects under the known project roots and adds them to project.el."
+      (interactive)
       (dolist (project (project-known-project-roots))
         (project-forget-project project))
       (dolist (project (ch/project/project-dirs))
