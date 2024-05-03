@@ -6,6 +6,7 @@
     (
      ("C-c p c" . ch/project/copy-current-file)
      ("C-c p f" . project-find-file)
+     ("C-c p m" . ch/project/copy-current-module)
      ("C-c p p" . project-switch-project)
      ("C-c p r" . ch/project/discover-projects)
      ("C-c p s" . project-query-replace-regexp)
@@ -20,6 +21,19 @@
       (let ((filename (ch/project/current-file)))
         (kill-new filename)
         (message "Copied to clipboard: '%s'" filename)))
+
+    (defun ch/project/current-module ()
+      "Gets the current module name, assuming a Python-style module syntax"
+      (--> (ch/project/current-file)
+           (s-chop-suffix ".py" it)
+           (s-chop-suffix "/__init__" it)
+           (s-replace "/" "." it)))
+
+    (defun ch/project/copy-current-module ()
+      (interactive)
+      (let ((module-name (ch/project/current-module)))
+        (kill-new module-name)
+        (message "Copied to clipboard: '%s'" module-name)))
 
     (defun ch/project/project-dirs (&optional root-dir depth)
       "Discovers all of the projects under ROOT-DIR."
