@@ -15,6 +15,11 @@
      ("C-c p l" . consult-line)
      ("C-x b" . consult-buffer))
 
+    :config
+    (let ((extra-args " --hidden --glob \"!**/.git/**\""))
+      (unless (s-contains-p extra-args consult-ripgrep-args)
+        (setq consult-ripgrep-args (concat consult-ripgrep-args extra-args))))
+
     :init
     (setq consult-async-min-input 0
           consult-async-refresh-delay 0)
