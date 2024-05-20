@@ -60,16 +60,19 @@
     (org-level-3 ((t (:heihgt 1.05))))
 
     :config
+    (require 'org-lister)
+
+    (evil-define-key 'insert org-mode-map
+      (kbd "<return>") #'org-lister-return
+      (kbd "<tab>") #'org-lister-tab
+      (kbd "S-<tab>") #'org-lister-shift-tab)
+
     (evil-define-key 'normal org-mode-map
       (kbd "<tab>") #'ch/org/cycle)
 
     (setq org-capture-templates
 	  `(("t" "TODO" entry (file+headline ,(concat ch/org/directory "inbox.org") "Tasks")
 	     "* TODO %?\n"))))
-
-  (use-package org-autolist
-    :after org
-    :hook (org-mode . org-autolist-mode))
 
   (use-package org-contrib
     :after org)
