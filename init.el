@@ -4,3 +4,4 @@
 (load "~/.emacs.d/lisp/load-pkgs")
 
 (switch-to-buffer "*scratch*")
+(org-mode)

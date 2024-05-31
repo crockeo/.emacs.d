@@ -316,6 +316,11 @@
     (ch/org/go
       (find-file (concat ch/org/directory "inbox.org"))))
 
+  (defun ch/org/go-home ()
+    (interactive)
+    (ch/org/go
+      (find-file (concat ch/org/directory "home.org"))))
+
   (defun ch/org/refile ()
     (interactive)
     (org-roam-refile))
@@ -346,6 +351,7 @@
     ("C-c C-w C-c" . ch/org/capture)
     ("C-c C-w C-f" . ch/org/go-find-node)
     ("C-c C-w C-g" . ch/org/go-todo)
+    ("C-c C-w C-h" . ch/org/go-home)
     ("C-c C-w C-i" . ch/org/go-inbox)
     ("C-c C-w C-k" . ch/org/go-find-knowledge)
     ("C-c C-w C-l" . ch/org/go-logbook)
